@@ -1,0 +1,16 @@
+{
+  "name": "gpml-to-cx2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "runconverter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "js2xmlparser": "^5.0.0",
+    "xml2js": "^0.6.2"
+  }
+}
