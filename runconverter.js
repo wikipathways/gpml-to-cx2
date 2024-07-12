@@ -94,6 +94,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     "Color": { "d": "string" },
     "name": { "d": "string" },
     "interaction": { "d": "string" },
+    "Interaction": { "d": "string" },
     "selected": { "d": "boolean" }
   }
 },
@@ -119,13 +120,15 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           id: dataNode.$.GraphId, 
           x: parseFloat(dataNode.Graphics[0].$.CenterX), 
           y: parseFloat(dataNode.Graphics[0].$.CenterY), 
-          z: parseInt(dataNode.Graphics[0].$.ZOrder), 
+          z: parseInt(dataNode.Graphics[0].$.ZOrder) || 0, 
           v: {
             FillColor: dataNode.Graphics[0].$.FillColor || "#ffffff",
             Shape: dataNode.Graphics[0].$.Shape || "None",
             BorderThickness: parseFloat(dataNode.Graphics[0].$.BorderThickness) || 0,
             Color: dataNode.Graphics[0].$.Color || "#000000",
+            ChEBI: xrefId,
             GraphId: dataNode.$.GraphId,
+            "Border Width" : parseFloat(dataNode.Graphics[0].$.BorderThickness) || 0,
             LabelSize: parseInt(dataNode.Graphics[0].$.LabelSize),
             XrefDatasource: xrefDatasource,
             LabelFont: dataNode.Graphics[0].$.LabelFont  || "Dialog.plain",
@@ -134,8 +137,8 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             XrefId: xrefId,
             name: dataNode.$.TextLabel,
             Height: parseFloat(dataNode.Graphics[0].$.Height),
-            Ensembl: dataNode.$.Ensembl,
-            Width: parseFloat(dataNode.Graphics[0].$.Width),
+            Ensembl: dataNode.$.Ensembl || "",
+            "Node Size": parseFloat(dataNode.Graphics[0].$.Width),
           
           }
         };
@@ -144,36 +147,63 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     }
 
 
-     if (pathway.Interaction) {
-      pathway.Interaction.forEach(interaction => {
-        const points = interaction.Graphics[0].Point;
-        const start = points[0];
-        const end = points[1];
-        const xref = interaction.Xref ? { database: interaction.Xref[0].$.Database, id: interaction.Xref[0].$.ID } : { database: '', id: '' };
-        const cx2Edge = {
-          id: interaction.$.GraphId,
-          source: start.$.GraphRef,
-          target: end.$.GraphRef,
-          z: parseInt(interaction.Graphics[0].$.ZOrder),
-          v: {
-            lineThickness: parseFloat(interaction.Graphics[0].$.LineThickness),
-            arrowHead: end.$.ArrowHead ? end.$.ArrowHead : 'None',
-            startPoint: {
-              x: parseFloat(start.$.X),
-              y: parseFloat(start.$.Y),
-              relX: parseFloat(start.$.RelX),
-              relY: parseFloat(start.$.RelY)
-            },
-            endPoint: {
-              x: parseFloat(end.$.X),
-              y: parseFloat(end.$.Y),
-              relX: parseFloat(end.$.RelX),
-              relY: parseFloat(end.$.RelY),
-              arrowHead: end.$.ArrowHead ? end.$.ArrowHead : 'None'
-            },
-            xref: xref
-          }
-        };
+    //  if (pathway.Interaction) {
+    //   pathway.Interaction.forEach(interaction => {
+    //     const points = interaction.Graphics[0].Point;
+    //     const start = points[0];
+    //     const end = points[1];
+    //     const xref = interaction.Xref ? { database: interaction.Xref[0].$.Database, id: interaction.Xref[0].$.ID } : { database: '', id: '' };
+    //     const cx2Edge = {
+    //       id: interaction.$.GraphId,
+    //       source: start.$.GraphRef,
+    //       target: end.$.GraphRef,
+    //       z: parseInt(interaction.Graphics[0].$.ZOrder),
+    //       v: {
+    //         lineThickness: parseFloat(interaction.Graphics[0].$.LineThickness),
+    //         arrowHead: end.$.ArrowHead ? end.$.ArrowHead : 'None',
+    //         startPoint: {
+    //           x: parseFloat(start.$.X),
+    //           y: parseFloat(start.$.Y),
+    //           relX: parseFloat(start.$.RelX),
+    //           relY: parseFloat(start.$.RelY)
+    //         },
+    //         endPoint: {
+    //           x: parseFloat(end.$.X),
+    //           y: parseFloat(end.$.Y),
+    //           relX: parseFloat(end.$.RelX),
+    //           relY: parseFloat(end.$.RelY),
+    //           arrowHead: end.$.ArrowHead ? end.$.ArrowHead : 'None'
+    //         },
+    //         xref: xref
+    //       }
+    //     };
+    if (pathway.Interaction) {
+  pathway.Interaction.forEach(interaction => {
+    const points = interaction.Graphics[0].Point;
+    const start = points[0];
+    const end = points[1];
+    const xref = interaction.Xref ? { database: interaction.Xref[0].$.Database, id: interaction.Xref[0].$.ID } : { database: '', id: '' };
+    const arrowHead = end.$.ArrowHead ? end.$.ArrowHead : "None"; 
+    let shape = "None";
+    if (interaction.Graphics && interaction.Graphics[0].Anchor && interaction.Graphics[0].Anchor.length > 0) {
+    const anchor = interaction.Graphics[0].Anchor[0];
+    const shape = anchor.$.Shape
+    }
+    // New cx2Edge structure
+    const cx2Edge = {
+      id: interaction.$.GraphId,
+      s: start.$.GraphRef,
+      t: end.$.GraphRef,
+      v: {
+        LineStyle: "Solid",
+        "Source Arrow Shape": shape,
+        Color: "#000000",
+        interaction: arrowHead,
+        "Target Arrow Shape": arrowHead,
+        Width: 1.0060088996034258,
+        "WP.type": arrowHead
+      }
+    };
         cx2Data.elements.edges.push(cx2Edge);
       });
     }
