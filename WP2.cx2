@@ -1,0 +1,1241 @@
+[
+  {
+    "CXVersion": "2.0",
+    "hasFragments": false
+  },
+  {
+    "metaData": [
+      {
+        "name": "attributeDeclarations",
+        "elementCount": 1
+      },
+      {
+        "name": "networkAttributes",
+        "elementCount": 1
+      },
+      {
+        "name": "edges",
+        "elementCount": 23
+      },
+      {
+        "name": "nodes",
+        "elementCount": 24
+      },
+      {
+        "name": "visualProperties",
+        "elementCount": 1
+      },
+      {
+        "name": "visualEditorProperties",
+        "elementCount": 1
+      },
+      {
+        "name": "edgeBypasses"
+      },
+      {
+        "name": "nodeBypasses"
+      },
+      {
+        "name": "tableVisualProperties"
+      }
+    ]
+  },
+  {
+    "attributeDeclarations": [
+      {
+        "nodes": {
+          "XrefDatasource": {
+            "d": "string"
+          },
+          "Node Size": {
+            "d": "double"
+          },
+          "Label Font Size": {
+            "d": "double"
+          },
+          "Type": {
+            "d": "string"
+          },
+          "XrefId": {
+            "d": "string"
+          },
+          "GraphID": {
+            "d": "string"
+          },
+          "Color": {
+            "d": "string"
+          },
+          "ChEBI": {
+            "d": "string"
+          },
+          "name": {
+            "d": "string"
+          },
+          "Border Width": {
+            "d": "double"
+          },
+          "Ensembl": {
+            "d": "string"
+          },
+          "selected": {
+            "d": "boolean"
+          }
+        },
+        "networkAttributes": {
+          "shared name": {
+            "d": "string"
+          },
+          "__Annotations": {
+            "d": "list_of_string"
+          },
+          "name": {
+            "d": "string"
+          },
+          "selected": {
+            "d": "boolean"
+          }
+        },
+        "edges": {
+          "shared name": {
+            "d": "string"
+          },
+          "shared interaction": {
+            "d": "string"
+          },
+          "LineStyle": {
+            "d": "string"
+          },
+          "Source Arrow Shape": {
+            "d": "string"
+          },
+          "Color": {
+            "d": "string"
+          },
+          "name": {
+            "d": "string"
+          },
+          "interaction": {
+            "d": "string"
+          },
+          "Target Arrow Shape": {
+            "d": "string"
+          },
+          "Width": {
+            "d": "double"
+          },
+          "selected": {
+            "d": "boolean"
+          },
+          "WP.type": {
+            "d": "string"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "networkAttributes": [
+      {
+        "name": "Valine biosynthesis - Saccharomyces cerevisiae_1"
+      }
+    ]
+  },
+  {
+    "nodes": [
+      {
+        "id": 2655,
+        "x": 391.38375125328696,
+        "y": 14.543784062067658,
+        "v": {
+          "GraphID": "db839",
+          "Type": "Anchor"
+        }
+      },
+      {
+        "id": 2652,
+        "x": -367.0243908365568,
+        "y": -109.72058971722922,
+        "v": {
+          "GraphID": "e5ecd",
+          "Type": "Anchor"
+        }
+      },
+      {
+        "id": 2649,
+        "x": -138.89331783850992,
+        "y": 71.16832629839578,
+        "v": {
+          "GraphID": "eb792",
+          "Type": "Anchor"
+        }
+      },
+      {
+        "id": 2646,
+        "x": 134.24664054314292,
+        "y": 82.42822925249735,
+        "v": {
+          "GraphID": "ce99f",
+          "Type": "Anchor"
+        }
+      },
+      {
+        "id": 2639,
+        "x": -156.65888180335367,
+        "y": -29.027505000432342,
+        "v": {
+          "GraphID": "f6020",
+          "Type": "Group",
+          "name": "group_H+_NADPH"
+        }
+      },
+      {
+        "id": 2632,
+        "x": -495.6969067056974,
+        "y": -119.33710583051047,
+        "v": {
+          "GraphID": "f4f53",
+          "Type": "Group",
+          "name": "group_ILV6_ILV2"
+        }
+      },
+      {
+        "id": 2625,
+        "x": 449.18404422203696,
+        "y": 128.69962207476297,
+        "v": {
+          "GraphID": "e977b",
+          "Type": "Group",
+          "name": "group_BAT1_BAT2"
+        }
+      },
+      {
+        "id": 2622,
+        "x": 505.81502566734946,
+        "y": -3.9181147416432793,
+        "v": {
+          "Color": "#0000ff",
+          "ChEBI": "CHEBI:16414",
+          "GraphID": "c5346",
+          "Border Width": 1,
+          "Node Size": 95.33333333333333,
+          "XrefDatasource": "ChEBI",
+          "Type": "Metabolite",
+          "XrefId": "CHEBI:16414",
+          "name": "L-valine"
+        }
+      },
+      {
+        "id": 2619,
+        "x": 343.60767398277915,
+        "y": -93.21228893597922,
+        "v": {
+          "Color": "#0000ff",
+          "ChEBI": "CHEBI:16810",
+          "GraphID": "f9e4e",
+          "Border Width": 1,
+          "Node Size": 80,
+          "XrefDatasource": "ChEBI",
+          "Type": "Metabolite",
+          "XrefId": "CHEBI:16810",
+          "name": "2-oxoglutarate"
+        }
+      },
+      {
+        "id": 2616,
+        "x": -234.04303707679117,
+        "y": 64.77823535601297,
+        "v": {
+          "Color": "#0000ff",
+          "ChEBI": "CHEBI:15378",
+          "GraphID": "f39c9",
+          "Border Width": 1,
+          "Node Size": 65,
+          "XrefDatasource": "ChEBI",
+          "Type": "Metabolite",
+          "XrefId": "CHEBI:15378",
+          "name": "H+"
+        }
+      },
+      {
+        "id": 2613,
+        "x": 419.0644763509432,
+        "y": 239.3979882399241,
+        "v": {
+          "Color": "#000000",
+          "GraphID": "ed7",
+          "Border Width": 1,
+          "Node Size": 40,
+          "XrefDatasource": "SGD",
+          "Type": "GeneProduct",
+          "XrefId": "S000003909",
+          "name": "BAT2",
+          "Ensembl": "YJR148W"
+        }
+      },
+      {
+        "id": 2610,
+        "x": 123.7586811582247,
+        "y": -27.344536860783904,
+        "v": {
+          "Color": "#0000ff",
+          "ChEBI": "CHEBI:15377",
+          "GraphID": "e7b7a",
+          "Border Width": 1,
+          "Node Size": 80,
+          "XrefDatasource": "ChEBI",
+          "Type": "Metabolite",
+          "XrefId": "CHEBI:15377",
+          "name": "H2O"
+        }
+      },
+      {
+        "id": 2607,
+        "x": 451.43010745445883,
+        "y": -89.78699596722922,
+        "v": {
+          "Color": "#0000ff",
+          "ChEBI": "CHEBI:16015",
+          "GraphID": "e41",
+          "Border Width": 1,
+          "Node Size": 95.33333333333333,
+          "XrefDatasource": "CAS",
+          "Type": "Metabolite",
+          "XrefId": "56-86-0",
+          "name": "L-glutamate"
+        }
+      },
+      {
+        "id": 2604,
+        "x": 547.9691089193026,
+        "y": 189.6550969282786,
+        "v": {
+          "Color": "#000000",
+          "GraphID": "e3d",
+          "Border Width": 1,
+          "Node Size": 40,
+          "XrefDatasource": "SGD",
+          "Type": "GeneProduct",
+          "XrefId": "S000001251",
+          "name": "BAT1",
+          "Ensembl": "YHR208W"
+        }
+      },
+      {
+        "id": 2601,
+        "x": 144.22211108605063,
+        "y": 196.38739482561746,
+        "v": {
+          "Color": "#000000",
+          "GraphID": "e36",
+          "Border Width": 1,
+          "Node Size": 40,
+          "XrefDatasource": "SGD",
+          "Type": "GeneProduct",
+          "XrefId": "S000003777",
+          "name": "ILV3",
+          "Ensembl": "YJR016C"
+        }
+      },
+      {
+        "id": 2598,
+        "x": -262.61588253577554,
+        "y": -18.69094189008078,
+        "v": {
+          "Color": "#0000ff",
+          "ChEBI": "CHEBI:58476",
+          "GraphID": "d75c1",
+          "Border Width": 1,
+          "Node Size": 80,
+          "XrefDatasource": "PubChem-compound",
+          "Type": "Metabolite",
+          "XrefId": "13999770",
+          "name": "2-aceto-lactate"
+        }
+      },
+      {
+        "id": 2595,
+        "x": -594.7722851236662,
+        "y": -59.99402721722922,
+        "v": {
+          "Color": "#000000",
+          "GraphID": "cc2",
+          "Border Width": 1,
+          "Node Size": 40,
+          "XrefDatasource": "SGD",
+          "Type": "GeneProduct",
+          "XrefId": "S000004714",
+          "name": "ILV2",
+          "Ensembl": "YMR108W"
+        }
+      },
+      {
+        "id": 2592,
+        "x": -401.49445309241617,
+        "y": -222.3595972855886,
+        "v": {
+          "Color": "#0000ff",
+          "ChEBI": "CHEBI:16526",
+          "GraphID": "c9f44",
+          "Border Width": 1,
+          "Node Size": 39,
+          "XrefDatasource": "ChEBI",
+          "Type": "Metabolite",
+          "XrefId": "CHEBI:16526",
+          "name": "CO2"
+        }
+      },
+      {
+        "id": 2589,
+        "x": 264.0459674398104,
+        "y": 49.96573535601297,
+        "v": {
+          "Color": "#0000ff",
+          "ChEBI": "CHEBI:11851",
+          "GraphID": "b5f43",
+          "Border Width": 1,
+          "Node Size": 125,
+          "XrefDatasource": "ChEBI",
+          "Type": "Metabolite",
+          "XrefId": "CHEBI:11851",
+          "name": "2-keto-isovalerate"
+        }
+      },
+      {
+        "id": 2586,
+        "x": -152.91626705725992,
+        "y": 189.65365688006082,
+        "v": {
+          "Color": "#0000ff",
+          "ChEBI": "CHEBI:44409",
+          "GraphID": "b396e",
+          "Border Width": 1,
+          "Node Size": 80,
+          "XrefDatasource": "HMDB",
+          "Type": "Metabolite",
+          "XrefId": "HMDB0000217",
+          "name": "NADP"
+        }
+      },
+      {
+        "id": 2583,
+        "x": -1.580863614877103,
+        "y": 84.2841252485911,
+        "v": {
+          "Color": "#0000ff",
+          "ChEBI": "CHEBI:49072",
+          "GraphID": "b1e8a",
+          "Border Width": 1,
+          "Node Size": 129,
+          "XrefDatasource": "ChEBI",
+          "Type": "Metabolite",
+          "XrefId": "CHEBI:49072",
+          "name": "2,3-dihydroxy-isovalerate"
+        }
+      },
+      {
+        "id": 2580,
+        "x": -293.8208080728849,
+        "y": -199.09449108441672,
+        "v": {
+          "Color": "#0000ff",
+          "ChEBI": "CHEBI:15361",
+          "GraphID": "b113c",
+          "Border Width": 1,
+          "Node Size": 80,
+          "XrefDatasource": "ChEBI",
+          "Type": "Metabolite",
+          "XrefId": "CHEBI:15361",
+          "name": "2 pyruvate"
+        }
+      },
+      {
+        "id": 2577,
+        "x": -572.2621532877287,
+        "y": -207.82914074261984,
+        "v": {
+          "Color": "#000000",
+          "GraphID": "a74",
+          "Border Width": 1,
+          "Node Size": 40,
+          "XrefDatasource": "SGD",
+          "Type": "GeneProduct",
+          "XrefId": "S000000515",
+          "name": "ILV6",
+          "Ensembl": "YCL009C"
+        }
+      },
+      {
+        "id": 2574,
+        "x": -102.94834103186929,
+        "y": -130.64685924847922,
+        "v": {
+          "Color": "#0000ff",
+          "ChEBI": "CHEBI:16474",
+          "GraphID": "a57",
+          "Border Width": 1,
+          "Node Size": 65,
+          "XrefDatasource": "CAS",
+          "Type": "Metabolite",
+          "XrefId": "53-57-6",
+          "name": "NADPH"
+        }
+      }
+    ]
+  },
+  {
+    "edges": [
+      {
+        "id": 2706,
+        "s": 2655,
+        "t": 2622,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "Arrow",
+          "Target Arrow Shape": "Arrow",
+          "Width": 1.0060088996034258,
+          "WP.type": "Arrow"
+        }
+      },
+      {
+        "id": 2667,
+        "s": 2655,
+        "t": 2619,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-conversion",
+          "Target Arrow Shape": "mim-conversion",
+          "Width": 1.0007938741935742,
+          "WP.type": "mim-conversion"
+        }
+      },
+      {
+        "id": 2664,
+        "s": 2655,
+        "t": 2607,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "Line",
+          "Target Arrow Shape": "Line",
+          "Width": 1.0017867697795968,
+          "WP.type": "Line"
+        }
+      },
+      {
+        "id": 2694,
+        "s": 2652,
+        "t": 2598,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-conversion",
+          "Target Arrow Shape": "mim-conversion",
+          "Width": 1.0089233093767649,
+          "WP.type": "mim-conversion"
+        }
+      },
+      {
+        "id": 2688,
+        "s": 2652,
+        "t": 2592,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-conversion",
+          "Target Arrow Shape": "mim-conversion",
+          "Width": 1.0090642452882794,
+          "WP.type": "mim-conversion"
+        }
+      },
+      {
+        "id": 2685,
+        "s": 2649,
+        "t": 2583,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-conversion",
+          "Target Arrow Shape": "mim-conversion",
+          "Width": 1.0042358793460588,
+          "WP.type": "mim-conversion"
+        }
+      },
+      {
+        "id": 2661,
+        "s": 2649,
+        "t": 2586,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-conversion",
+          "Target Arrow Shape": "mim-conversion",
+          "Width": 1.000168270804623,
+          "WP.type": "mim-conversion"
+        }
+      },
+      {
+        "id": 2658,
+        "s": 2649,
+        "t": 2639,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "Line",
+          "Target Arrow Shape": "Line",
+          "Width": 1.0087259628728242,
+          "WP.type": "Line"
+        }
+      },
+      {
+        "id": 2697,
+        "s": 2646,
+        "t": 2610,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-conversion",
+          "Target Arrow Shape": "mim-conversion",
+          "Width": 1.0081250763230551,
+          "WP.type": "mim-conversion"
+        }
+      },
+      {
+        "id": 2676,
+        "s": 2646,
+        "t": 2589,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-conversion",
+          "Target Arrow Shape": "mim-conversion",
+          "Width": 1.006242751382283,
+          "WP.type": "mim-conversion"
+        }
+      },
+      {
+        "id": 2679,
+        "s": 2632,
+        "t": 2652,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-catalysis",
+          "Target Arrow Shape": "mim-catalysis",
+          "Width": 1.0083294055535288,
+          "WP.type": "mim-catalysis"
+        }
+      },
+      {
+        "id": 2670,
+        "s": 2625,
+        "t": 2655,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-catalysis",
+          "Target Arrow Shape": "mim-catalysis",
+          "Width": 1.0046862914928605,
+          "WP.type": "mim-catalysis"
+        }
+      },
+      {
+        "id": 2641,
+        "s": 2616,
+        "t": 2639
+      },
+      {
+        "id": 2629,
+        "s": 2613,
+        "t": 2625
+      },
+      {
+        "id": 2627,
+        "s": 2604,
+        "t": 2625
+      },
+      {
+        "id": 2700,
+        "s": 2601,
+        "t": 2646,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-catalysis",
+          "Target Arrow Shape": "mim-catalysis",
+          "Width": 1.0012659607535164,
+          "WP.type": "mim-catalysis"
+        }
+      },
+      {
+        "id": 2682,
+        "s": 2598,
+        "t": 2649,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-conversion",
+          "Target Arrow Shape": "mim-conversion",
+          "Width": 1.0014432756144558,
+          "WP.type": "mim-conversion"
+        }
+      },
+      {
+        "id": 2636,
+        "s": 2595,
+        "t": 2632
+      },
+      {
+        "id": 2703,
+        "s": 2589,
+        "t": 2655,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "Arrow",
+          "Target Arrow Shape": "Arrow",
+          "Width": 1.0005309985968458,
+          "WP.type": "Arrow"
+        }
+      },
+      {
+        "id": 2673,
+        "s": 2583,
+        "t": 2646,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-conversion",
+          "Target Arrow Shape": "mim-conversion",
+          "Width": 1.0022043467584232,
+          "WP.type": "mim-conversion"
+        }
+      },
+      {
+        "id": 2691,
+        "s": 2580,
+        "t": 2652,
+        "v": {
+          "LineStyle": "Solid",
+          "Source Arrow Shape": "Line",
+          "Color": "#000000",
+          "interaction": "mim-conversion",
+          "Target Arrow Shape": "mim-conversion",
+          "Width": 1.0009157909544302,
+          "WP.type": "mim-conversion"
+        }
+      },
+      {
+        "id": 2634,
+        "s": 2577,
+        "t": 2632
+      },
+      {
+        "id": 2643,
+        "s": 2574,
+        "t": 2639
+      }
+    ]
+  },
+  {
+    "visualEditorProperties": [
+      {
+        "properties": {
+          "nodeSizeLocked": true,
+          "arrowColorMatchesEdge": true,
+          "nodeCustomGraphicsSizeSync": true,
+          "NETWORK_CENTER_Y_LOCATION": 0,
+          "NETWORK_CENTER_X_LOCATION": 0,
+          "NETWORK_SCALE_FACTOR": 1
+        }
+      }
+    ]
+  },
+  {
+    "visualProperties": [
+      {
+        "default": {
+          "edge": {
+            "EDGE_SOURCE_ARROW_SIZE": 6,
+            "EDGE_SOURCE_ARROW_SELECTED_PAINT": "#FFFF00",
+            "EDGE_LABEL_OPACITY": 1,
+            "EDGE_TARGET_ARROW_SELECTED_PAINT": "#FFFF00",
+            "EDGE_TARGET_ARROW_SHAPE": "none",
+            "EDGE_LABEL_BACKGROUND_OPACITY": 1,
+            "EDGE_LABEL_POSITION": {
+              "JUSTIFICATION": "center",
+              "MARGIN_X": 0,
+              "MARGIN_Y": 0,
+              "EDGE_ANCHOR": "C",
+              "LABEL_ANCHOR": "C"
+            },
+            "EDGE_Z_ORDER": 0,
+            "EDGE_LABEL_MAX_WIDTH": 200,
+            "EDGE_LABEL_BACKGROUND_COLOR": "#B6B6B6",
+            "EDGE_LABEL_ROTATION": 0,
+            "EDGE_VISIBILITY": "element",
+            "EDGE_LABEL_FONT_SIZE": 10,
+            "EDGE_LABEL_COLOR": "#000000",
+            "EDGE_SELECTED_PAINT": "#FF0000",
+            "EDGE_SELECTED": "false",
+            "EDGE_STACKING_DENSITY": 0.5,
+            "EDGE_SOURCE_ARROW_COLOR": "#CCCCCC",
+            "EDGE_TARGET_ARROW_COLOR": "#CCCCCC",
+            "EDGE_STROKE_SELECTED_PAINT": "#FF0000",
+            "EDGE_WIDTH": 2,
+            "EDGE_SOURCE_ARROW_SHAPE": "none",
+            "EDGE_LINE_COLOR": "#CCCCCC",
+            "EDGE_OPACITY": 1,
+            "EDGE_LABEL_BACKGROUND_SHAPE": "NONE",
+            "EDGE_LABEL_FONT_FACE": {
+              "FONT_FAMILY": "sans-serif",
+              "FONT_STYLE": "normal",
+              "FONT_WEIGHT": "normal",
+              "FONT_NAME": "Dialog.plain"
+            },
+            "EDGE_STACKING": "AUTO_BEND",
+            "EDGE_LABEL_AUTOROTATE": false,
+            "EDGE_LINE_STYLE": "solid",
+            "EDGE_CURVED": true,
+            "EDGE_TARGET_ARROW_SIZE": 6
+          },
+          "network": {
+            "NETWORK_BACKGROUND_COLOR": "#FFFFFF"
+          },
+          "node": {
+            "NODE_Y_LOCATION": 0,
+            "NODE_BACKGROUND_COLOR": "#FFFFFF",
+            "NODE_LABEL_BACKGROUND_COLOR": "#B6B6B6",
+            "NODE_WIDTH": 50,
+            "NODE_CUSTOMGRAPHICS_SIZE_7": 50,
+            "COMPOUND_NODE_SHAPE": "ROUND_RECTANGLE",
+            "NODE_CUSTOMGRAPHICS_SIZE_6": 50,
+            "NODE_LABEL_POSITION": {
+              "HORIZONTAL_ALIGN": "center",
+              "VERTICAL_ALIGN": "center",
+              "HORIZONTAL_ANCHOR": "center",
+              "VERTICAL_ANCHOR": "center",
+              "MARGIN_X": 0,
+              "MARGIN_Y": 0,
+              "JUSTIFICATION": "center"
+            },
+            "NODE_Z_LOCATION": 0,
+            "NODE_CUSTOMGRAPHICS_SIZE_5": 50,
+            "NODE_CUSTOMGRAPHICS_SIZE_4": 50,
+            "NODE_CUSTOMGRAPHICS_SIZE_3": 50,
+            "NODE_CUSTOMGRAPHICS_SIZE_2": 50,
+            "NODE_VISIBILITY": "element",
+            "NODE_CUSTOMGRAPHICS_SIZE_1": 50,
+            "NODE_BORDER_STYLE": "solid",
+            "NODE_BACKGROUND_OPACITY": 1,
+            "NODE_LABEL_COLOR": "#000000",
+            "NODE_SELECTED": true,
+            "NODE_BORDER_COLOR": "#C0C0C0",
+            "NODE_CUSTOMGRAPHICS_POSITION_8": {
+              "JUSTIFICATION": "center",
+              "MARGIN_X": 0,
+              "MARGIN_Y": 0,
+              "ENTITY_ANCHOR": "C",
+              "GRAPHICS_ANCHOR": "C"
+            },
+            "NODE_CUSTOMGRAPHICS_POSITION_9": {
+              "JUSTIFICATION": "center",
+              "MARGIN_X": 0,
+              "MARGIN_Y": 0,
+              "ENTITY_ANCHOR": "C",
+              "GRAPHICS_ANCHOR": "C"
+            },
+            "NODE_CUSTOMGRAPHICS_POSITION_4": {
+              "JUSTIFICATION": "center",
+              "MARGIN_X": 0,
+              "MARGIN_Y": 0,
+              "ENTITY_ANCHOR": "C",
+              "GRAPHICS_ANCHOR": "C"
+            },
+            "NODE_SHAPE": "ellipse",
+            "NODE_CUSTOMGRAPHICS_POSITION_5": {
+              "JUSTIFICATION": "center",
+              "MARGIN_X": 0,
+              "MARGIN_Y": 0,
+              "ENTITY_ANCHOR": "C",
+              "GRAPHICS_ANCHOR": "C"
+            },
+            "NODE_CUSTOMGRAPHICS_POSITION_6": {
+              "JUSTIFICATION": "center",
+              "MARGIN_X": 0,
+              "MARGIN_Y": 0,
+              "ENTITY_ANCHOR": "C",
+              "GRAPHICS_ANCHOR": "C"
+            },
+            "NODE_CUSTOMGRAPHICS_POSITION_7": {
+              "JUSTIFICATION": "center",
+              "MARGIN_X": 0,
+              "MARGIN_Y": 0,
+              "ENTITY_ANCHOR": "C",
+              "GRAPHICS_ANCHOR": "C"
+            },
+            "NODE_X_LOCATION": 0,
+            "NODE_LABEL_FONT_SIZE": 12,
+            "NODE_CUSTOMGRAPHICS_POSITION_1": {
+              "JUSTIFICATION": "center",
+              "MARGIN_X": 0,
+              "MARGIN_Y": 0,
+              "ENTITY_ANCHOR": "C",
+              "GRAPHICS_ANCHOR": "C"
+            },
+            "NODE_BORDER_OPACITY": 1,
+            "NODE_CUSTOMGRAPHICS_POSITION_2": {
+              "JUSTIFICATION": "center",
+              "MARGIN_X": 0,
+              "MARGIN_Y": 0,
+              "ENTITY_ANCHOR": "C",
+              "GRAPHICS_ANCHOR": "C"
+            },
+            "NODE_CUSTOMGRAPHICS_SIZE_9": 50,
+            "NODE_LABEL_ROTATION": 0,
+            "NODE_CUSTOMGRAPHICS_POSITION_3": {
+              "JUSTIFICATION": "center",
+              "MARGIN_X": 0,
+              "MARGIN_Y": 0,
+              "ENTITY_ANCHOR": "C",
+              "GRAPHICS_ANCHOR": "C"
+            },
+            "NODE_CUSTOMGRAPHICS_SIZE_8": 50,
+            "NODE_BORDER_WIDTH": 2,
+            "NODE_LABEL_OPACITY": 1,
+            "NODE_HEIGHT": 50,
+            "NODE_LABEL_BACKGROUND_SHAPE": "NONE",
+            "COMPOUND_NODE_PADDING": "10.0",
+            "NODE_LABEL_BACKGROUND_OPACITY": 1,
+            "NODE_LABEL_FONT_FACE": {
+              "FONT_FAMILY": "sans-serif",
+              "FONT_STYLE": "normal",
+              "FONT_WEIGHT": "normal",
+              "FONT_NAME": "SansSerif.plain"
+            },
+            "NODE_SELECTED_PAINT": "#FFFF00",
+            "NODE_LABEL_MAX_WIDTH": 200
+          }
+        },
+        "edgeMapping": {
+          "EDGE_TARGET_ARROW_SHAPE": {
+            "type": "DISCRETE",
+            "definition": {
+              "map": [
+                {
+                  "v": "Arrow",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-branching-right",
+                  "vp": "triangle-cross"
+                },
+                {
+                  "v": "mim-covalent-bond",
+                  "vp": "triangle-cross"
+                },
+                {
+                  "v": "mim-branching-left",
+                  "vp": "triangle-cross"
+                },
+                {
+                  "v": "mim-transcription-translation",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-binding",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "Line",
+                  "vp": "none"
+                },
+                {
+                  "v": "mim-cleavage",
+                  "vp": "diamond"
+                },
+                {
+                  "v": "mim-gap",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-stimulation",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-catalysis",
+                  "vp": "circle"
+                },
+                {
+                  "v": "mim-inhibition",
+                  "vp": "tee"
+                },
+                {
+                  "v": "TBar",
+                  "vp": "tee"
+                },
+                {
+                  "v": "mim-modification",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-necessary-stimulation",
+                  "vp": "triangle-cross"
+                },
+                {
+                  "v": "mim-conversion",
+                  "vp": "triangle"
+                }
+              ],
+              "attribute": "Target Arrow Shape",
+              "type": "string"
+            }
+          },
+          "EDGE_WIDTH": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Width",
+              "type": "double"
+            }
+          },
+          "EDGE_SOURCE_ARROW_SHAPE": {
+            "type": "DISCRETE",
+            "definition": {
+              "map": [
+                {
+                  "v": "Arrow",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-branching-right",
+                  "vp": "triangle-cross"
+                },
+                {
+                  "v": "mim-covalent-bond",
+                  "vp": "triangle-cross"
+                },
+                {
+                  "v": "mim-branching-left",
+                  "vp": "triangle-cross"
+                },
+                {
+                  "v": "mim-transcription-translation",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-binding",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "Line",
+                  "vp": "none"
+                },
+                {
+                  "v": "mim-cleavage",
+                  "vp": "diamond"
+                },
+                {
+                  "v": "mim-gap",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-stimulation",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-catalysis",
+                  "vp": "circle"
+                },
+                {
+                  "v": "mim-inhibition",
+                  "vp": "tee"
+                },
+                {
+                  "v": "TBar",
+                  "vp": "tee"
+                },
+                {
+                  "v": "mim-modification",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-necessary-stimulation",
+                  "vp": "triangle-cross"
+                },
+                {
+                  "v": "mim-conversion",
+                  "vp": "triangle"
+                }
+              ],
+              "attribute": "Source Arrow Shape",
+              "type": "string"
+            }
+          },
+          "EDGE_LINE_COLOR": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Color",
+              "type": "string"
+            }
+          },
+          "EDGE_SOURCE_ARROW_COLOR": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Color",
+              "type": "string"
+            }
+          },
+          "EDGE_TARGET_ARROW_COLOR": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Color",
+              "type": "string"
+            }
+          },
+          "EDGE_LINE_STYLE": {
+            "type": "DISCRETE",
+            "definition": {
+              "map": [
+                {
+                  "v": "Dots",
+                  "vp": "dotted"
+                },
+                {
+                  "v": "Double",
+                  "vp": "solid"
+                },
+                {
+                  "v": "Solid",
+                  "vp": "solid"
+                },
+                {
+                  "v": "Dashed",
+                  "vp": "dashed"
+                }
+              ],
+              "attribute": "LineStyle",
+              "type": "string"
+            }
+          }
+        },
+        "nodeMapping": {
+          "NODE_BORDER_WIDTH": {
+            "type": "DISCRETE",
+            "definition": {
+              "map": [
+                {
+                  "v": "Label",
+                  "vp": 0
+                },
+                {
+                  "v": "Group",
+                  "vp": 0
+                },
+                {
+                  "v": "Anchor",
+                  "vp": 0
+                }
+              ],
+              "attribute": "Type",
+              "type": "string"
+            }
+          },
+          "NODE_LABEL": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "name",
+              "type": "string"
+            }
+          },
+          "NODE_LABEL_COLOR": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Color",
+              "type": "string"
+            }
+          },
+          "NODE_BORDER_COLOR": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Color",
+              "type": "string"
+            }
+          },
+          "NODE_HEIGHT": {
+            "type": "DISCRETE",
+            "definition": {
+              "map": [
+                {
+                  "v": "Label",
+                  "vp": 25
+                },
+                {
+                  "v": "Group",
+                  "vp": 25
+                },
+                {
+                  "v": "Anchor",
+                  "vp": 1
+                }
+              ],
+              "attribute": "Type",
+              "type": "string"
+            }
+          },
+          "NODE_LABEL_FONT_SIZE": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Label Font Size",
+              "type": "double"
+            }
+          },
+          "NODE_WIDTH": {
+            "type": "DISCRETE",
+            "definition": {
+              "map": [
+                {
+                  "v": "Label",
+                  "vp": 25
+                },
+                {
+                  "v": "Group",
+                  "vp": 25
+                },
+                {
+                  "v": "Anchor",
+                  "vp": 1
+                }
+              ],
+              "attribute": "Type",
+              "type": "string"
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "status": [
+      {
+        "success": true
+      }
+    ]
+  }
+]
