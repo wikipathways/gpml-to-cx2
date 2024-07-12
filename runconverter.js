@@ -38,10 +38,10 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     // Convert to CX2 format
     const cx2Data = {
       
-      cxDescriptor: {
+       
       "CXVersion": "2.0",
-      "hasFragments": false
-    },
+      "hasFragments": false,
+    
     
     metaData: [
     { name: "attributeDeclarations", elementCount: 1 },
@@ -55,7 +55,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     { name: "tableVisualProperties" }
   ],
 
-  attributeDeclarations: {
+  attributeDeclarations: [{
   "nodes": {
     "FillColor": { "d": "string" },
     "Shape": { "d": "string" },
@@ -65,12 +65,14 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     "Color": { "d": "string" },
     "ChEBI": { "d": "string" },
     "LabelSize": { "d": "double" },
-    "IsGPMLShape": { "d": "boolean" },
+    "Node Size": { "d": "double" },
+    "Border Width": { "d": "double"},
     "XrefDatasource": { "d": "string" },
     "LabelFont": { "d": "string" },
     "Type": { "d": "string" },
     "Transparent": { "d": "string" },
     "XrefId": { "d": "string" },
+    "GraphId": { "d": "string" },
     "name": { "d": "string" },
     "Height": { "d": "double" },
     "Ensembl": { "d": "string" },
@@ -92,12 +94,20 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     "LineThickness": { "d": "double" },
     "LineStyle": { "d": "string" },
     "Color": { "d": "string" },
+    "Source Arrow Shape": { "d": "string" },
     "name": { "d": "string" },
     "interaction": { "d": "string" },
-    "Interaction": { "d": "string" },
-    "selected": { "d": "boolean" }
+    "Target Arrow Shape": { "d": "string" },
+    "Width": { "d": "double" },
+    "selected": { "d": "boolean" },
+    "WP.type": { "d": "string" }
   }
-},
+}],
+"networkAttributes": [
+    {
+      "name": pathway.$.Name,
+    }
+  ],
   
     elements: {
         nodes: [],
