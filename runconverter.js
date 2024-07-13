@@ -108,12 +108,16 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
       "name": pathway.$.Name,
     }
   ],
+  // "nodes" : {
+    
+  // }
   
     elements: {
         nodes: [],
         edges: [],
         labels: []
       },
+  
        status: [ 
         {
           "success": true
@@ -132,7 +136,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           y: parseFloat(dataNode.Graphics[0].$.CenterY), 
           z: parseInt(dataNode.Graphics[0].$.ZOrder) || 0, 
           v: {
-            FillColor: dataNode.Graphics[0].$.FillColor || "#ffffff",
+            FillColor: dataNode.Graphics[0].$.FillColor || "Transparent",
             Shape: dataNode.Graphics[0].$.Shape || "None",
             BorderThickness: parseFloat(dataNode.Graphics[0].$.BorderThickness) || 0,
             Color: dataNode.Graphics[0].$.Color || "#000000",
@@ -208,7 +212,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         LineStyle: "Solid",
         "Source Arrow Shape": shape,
         Color: "#000000",
-        interaction: arrowHead,
+        interaction: arrowHead || "Straight",
         "Target Arrow Shape": arrowHead,
         Width: 1.0060088996034258,
         "WP.type": arrowHead
