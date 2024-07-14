@@ -35,6 +35,8 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
       process.exit(1);
     }
 
+      const commentText = result.Pathway.Comment[0]._;
+
     // Convert to CX2 format
     const cx2Data = {
       
@@ -106,6 +108,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
 "networkAttributes": [
     {
       "name": pathway.$.Name,
+      "description": commentText
     }
   ],
   // "nodes" : {
@@ -115,6 +118,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     elements: {
         nodes: [],
         edges: [],
+        visualProperties: [],
         labels: []
       },
   
