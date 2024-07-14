@@ -39,11 +39,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
 
     // Convert to CX2 format
     const cx2Data = {
-      
-       
-      "CXVersion": "2.0",
-      "hasFragments": false,
-    
+      cxDescriptor,
     
     metaData: [
     { name: "attributeDeclarations", elementCount: 1 },
@@ -118,7 +114,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     elements: {
         nodes: [],
         edges: [],
-        visualProperties: [],
+        visualConfig: [],
         labels: []
       },
   
@@ -225,6 +221,67 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         cx2Data.elements.edges.push(cx2Edge);
       });
     }
+
+  const visualConfig = {
+  visualEditorProperties: [
+    {
+      properties: {
+        nodeSizeLocked: true,
+        arrowColorMatchesEdge: true,
+        nodeCustomGraphicsSizeSync: true,
+        NETWORK_CENTER_Y_LOCATION: 0,
+        NETWORK_CENTER_X_LOCATION: 0,
+        NETWORK_SCALE_FACTOR: 1
+      }
+    }
+  ],
+  visualProperties: [
+    {
+      default: {
+        edge: {
+          EDGE_SOURCE_ARROW_SIZE: 6,
+          EDGE_SOURCE_ARROW_SELECTED_PAINT: "#FFFF00",
+          EDGE_LABEL_OPACITY: 1,
+          EDGE_TARGET_ARROW_SELECTED_PAINT: "#FFFF00",
+          EDGE_TARGET_ARROW_SHAPE: "none",
+          EDGE_LABEL_BACKGROUND_OPACITY: 1,
+          EDGE_LABEL_POSITION: {
+            JUSTIFICATION: "center",
+            MARGIN_X: 0,
+            MARGIN_Y: 0,
+            EDGE_ANCHOR: "C",
+            LABEL_ANCHOR: "C"
+          },
+          EDGE_Z_ORDER: 0,
+          EDGE_LABEL_MAX_WIDTH: 200,
+          EDGE_LABEL_BACKGROUND_COLOR: "#B6B6B6",
+          EDGE_LABEL_ROTATION: 0,
+          EDGE_VISIBILITY: "element",
+          EDGE_LABEL_FONT_SIZE: 10,
+          EDGE_LABEL_COLOR: "#000000",
+          EDGE_SELECTED_PAINT: "#FF0000",
+          EDGE_SELECTED: "false"
+        }
+      }
+    }
+
+  ]
+};
+   if (!cx2Data.elements.visualConfig) {
+          cx2Data.elements.visualConfig = [];
+        }
+        cx2Data.elements.visualConfig.push(visualConfig);
+    
+    
+
+
+
+
+
+
+
+
+
        
     if (pathway.Label) {
       pathway.Label.forEach(label => {
