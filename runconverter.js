@@ -1,5 +1,7 @@
 const fs = require('fs');
 const parseString = require('xml2js').parseString;
+const path = require('path');
+
 
 const gpmlFilePath = process.argv[2];
 
@@ -315,7 +317,8 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     const cx2JsonString = JSON.stringify(cx2DataArray, null, 2);
 
     // Write CX2 data to file
-    const outputPath = `${gpmlFilePath}.cx2`;
+    // const outputPath = `${gpmlFilePath}.cx2`;
+    const outputPath = path.join(path.dirname(gpmlFilePath), path.basename(gpmlFilePath, '.gpml') + '.cx2');
     fs.writeFile(outputPath, cx2JsonString, 'utf-8', (err) => {
       if (err) {
         console.error(`Error writing CX2 file: ${err.message}`);
