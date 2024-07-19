@@ -42,26 +42,27 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
       const edgesCount = result.Pathway.Interaction.length;
 
     // Convert to CX2 format
-    const cx2Data = {
-      // cxDescriptor,
-      
+    const cx2Data = [
+      {  
       "CXVersion": "2.0",
-      "hasFragments": false,
+      "hasFragments": false
+    },  
     
-    
-    metaData: [
-    { name: "attributeDeclarations", elementCount: 1 },
-    { name: "networkAttributes", elementCount: 1 },
-    { name: "edges", elementCount: edgesCount },
-    { name: "nodes", elementCount: dataNodeCount-1 },
-    { name: "visualProperties", elementCount: 1 },
-    { name: "visualEditorProperties", elementCount: 1 },
-    { name: "edgeBypasses" },
-    { name: "nodeBypasses" },
-    { name: "tableVisualProperties" }
-  ],
-
-  attributeDeclarations: [{
+    {
+    "metaData": [
+    { "name": "attributeDeclarations", elementCount: 1 },
+    { "name": "networkAttributes", elementCount: 1 },
+    { "name": "edges", elementCount: edgesCount },
+    { "name": "nodes", elementCount: dataNodeCount-1 },
+    { "name": "visualProperties", elementCount: 1 },
+    { "name": "visualEditorProperties", elementCount: 1 },
+    { "name": "edgeBypasses" },
+    { "name": "nodeBypasses" },
+    { "name": "tableVisualProperties" }
+  ]
+},
+{
+  "attributeDeclarations": [{
   "nodes": {
     "FillColor": { "d": "string" },
     "Shape": { "d": "string" },
@@ -108,31 +109,33 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     "selected": { "d": "boolean" },
     "WP.type": { "d": "string" }
   }
-}],
+}]
+},
+{
 "networkAttributes": [
     {
       "name": pathway.$.Name,
       "description": commentText
     }
-  ],
-  // "nodes" : {
-    
-  // }
-  
-    // elements: {
-        nodes: [],
-        edges: [],
-        visualConfig: [],
-        labels: [],
-        edgeMapping: [],
+  ]
+},
+{ 
+        "nodes": [],
+        "edges": [],
+        "visualConfig": [],
+        "labels": [],
+        "edgeMapping": []
+},        
       // },
-  
+{  
        status: [ 
         {
           "success": true
         }
       ]
-    };
+}
+
+];
 
         if (pathway.DataNode) {
       pathway.DataNode.forEach(dataNode => {
@@ -165,7 +168,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           
           }
         };
-        cx2Data.nodes.push(cx2Node);
+        cx2Data[4].nodes.push(cx2Node);
       });
     }
 
@@ -196,7 +199,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         "WP.type": arrowHead
       }
     };
-        cx2Data.edges.push(cx2Edge);
+        cx2Data[4].edges.push(cx2Edge);
       });
     }
 
@@ -248,7 +251,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
    if (!cx2Data.visualConfig) {
           cx2Data.visualConfig = [];
         }
-        cx2Data.visualConfig.push(visualConfig);
+        cx2Data[4].visualConfig.push(visualConfig);
     
 
 
@@ -274,7 +277,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         if (!cx2Data.labels) {
           cx2Data.labels = [];
         }
-        cx2Data.labels.push(cx2Label);
+        cx2Data[4].labels.push(cx2Label);
       });
     }
 
@@ -310,14 +313,14 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
  if (!cx2Data.edgeMapping) {
           cx2Data.edgeMapping = [];
         }
-        cx2Data.edgeMapping.push(edgeMapping);
+        cx2Data[4].edgeMapping.push(edgeMapping);
 
 
 
 
 
 
-  const cx2DataArray = [cx2Data];
+  const cx2DataArray = cx2Data;
 
 
     // Convert CX2 data to JSON string
