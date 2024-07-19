@@ -10,10 +10,10 @@ if (!gpmlFilePath) {
   process.exit(1);
 }
 
-const cxDescriptor = {
-  "CXVersion": "2.0",
-  "hasFragments": false
-};
+// const cxDescriptor = {
+//   "CXVersion": "2.0",
+//   "hasFragments": false
+// };
 
 
 // Read GPML file content
@@ -38,16 +38,22 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     }
 
       const commentText = result.Pathway.Comment[0]._;
+      const dataNodeCount = result.Pathway.DataNode.length;
+      const edgesCount = result.Pathway.Interaction.length;
 
     // Convert to CX2 format
     const cx2Data = {
-      cxDescriptor,
+      // cxDescriptor,
+      
+      "CXVersion": "2.0",
+      "hasFragments": false,
+    
     
     metaData: [
     { name: "attributeDeclarations", elementCount: 1 },
     { name: "networkAttributes", elementCount: 1 },
-    { name: "edges", elementCount: 32 },
-    { name: "nodes", elementCount: 50 },
+    { name: "edges", elementCount: edgesCount },
+    { name: "nodes", elementCount: dataNodeCount-1 },
     { name: "visualProperties", elementCount: 1 },
     { name: "visualEditorProperties", elementCount: 1 },
     { name: "edgeBypasses" },
@@ -113,12 +119,13 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     
   // }
   
-    elements: {
+    // elements: {
         nodes: [],
         edges: [],
         visualConfig: [],
-        labels: []
-      },
+        labels: [],
+        edgeMapping: [],
+      // },
   
        status: [ 
         {
@@ -158,41 +165,10 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           
           }
         };
-        cx2Data.elements.nodes.push(cx2Node);
+        cx2Data.nodes.push(cx2Node);
       });
     }
 
-
-    //  if (pathway.Interaction) {
-    //   pathway.Interaction.forEach(interaction => {
-    //     const points = interaction.Graphics[0].Point;
-    //     const start = points[0];
-    //     const end = points[1];
-    //     const xref = interaction.Xref ? { database: interaction.Xref[0].$.Database, id: interaction.Xref[0].$.ID } : { database: '', id: '' };
-    //     const cx2Edge = {
-    //       id: interaction.$.GraphId,
-    //       source: start.$.GraphRef,
-    //       target: end.$.GraphRef,
-    //       z: parseInt(interaction.Graphics[0].$.ZOrder),
-    //       v: {
-    //         lineThickness: parseFloat(interaction.Graphics[0].$.LineThickness),
-    //         arrowHead: end.$.ArrowHead ? end.$.ArrowHead : 'None',
-    //         startPoint: {
-    //           x: parseFloat(start.$.X),
-    //           y: parseFloat(start.$.Y),
-    //           relX: parseFloat(start.$.RelX),
-    //           relY: parseFloat(start.$.RelY)
-    //         },
-    //         endPoint: {
-    //           x: parseFloat(end.$.X),
-    //           y: parseFloat(end.$.Y),
-    //           relX: parseFloat(end.$.RelX),
-    //           relY: parseFloat(end.$.RelY),
-    //           arrowHead: end.$.ArrowHead ? end.$.ArrowHead : 'None'
-    //         },
-    //         xref: xref
-    //       }
-    //     };
     if (pathway.Interaction) {
   pathway.Interaction.forEach(interaction => {
     const points = interaction.Graphics[0].Point;
@@ -220,7 +196,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         "WP.type": arrowHead
       }
     };
-        cx2Data.elements.edges.push(cx2Edge);
+        cx2Data.edges.push(cx2Edge);
       });
     }
 
@@ -269,19 +245,11 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
 
   ]
 };
-   if (!cx2Data.elements.visualConfig) {
-          cx2Data.elements.visualConfig = [];
+   if (!cx2Data.visualConfig) {
+          cx2Data.visualConfig = [];
         }
-        cx2Data.elements.visualConfig.push(visualConfig);
+        cx2Data.visualConfig.push(visualConfig);
     
-    
-
-
-
-
-
-
-
 
 
        
@@ -303,12 +271,51 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             valign: graphics.Valign
           }
         };
-        if (!cx2Data.elements.labels) {
-          cx2Data.elements.labels = [];
+        if (!cx2Data.labels) {
+          cx2Data.labels = [];
         }
-        cx2Data.elements.labels.push(cx2Label);
+        cx2Data.labels.push(cx2Label);
       });
     }
+
+
+  const edgeMapping = {
+  "EDGE_TARGET_ARROW_SHAPE": {
+    "type": "DISCRETE",
+    "definition": {
+      "map": [
+        { "v": "Arrow", "vp": "triangle" },
+        { "v": "mim-branching-right", "vp": "triangle-cross" },
+        { "v": "mim-covalent-bond", "vp": "triangle-cross" },
+        { "v": "mim-branching-left", "vp": "triangle-cross" },
+        { "v": "mim-transcription-translation", "vp": "triangle" },
+        { "v": "mim-binding", "vp": "triangle" },
+        { "v": "Line", "vp": "none" },
+        { "v": "mim-cleavage", "vp": "diamond" },
+        { "v": "mim-gap", "vp": "triangle" },
+        { "v": "mim-stimulation", "vp": "triangle" },
+        { "v": "mim-catalysis", "vp": "circle" },
+        { "v": "mim-inhibition", "vp": "tee" },
+        { "v": "TBar", "vp": "tee" },
+        { "v": "mim-modification", "vp": "triangle" },
+        { "v": "mim-necessary-stimulation", "vp": "triangle-cross" },
+        { "v": "mim-conversion", "vp": "triangle" }
+      ],
+      "attribute": "Target Arrow Shape",
+      "type": "string"
+    }
+  }
+};
+
+ if (!cx2Data.edgeMapping) {
+          cx2Data.edgeMapping = [];
+        }
+        cx2Data.edgeMapping.push(edgeMapping);
+
+
+
+
+
 
   const cx2DataArray = [cx2Data];
 
