@@ -192,7 +192,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         Color: "#000000",
         interaction: arrowHead || "Straight",
         "Target Arrow Shape": arrowHead,
-        Width: 1.0060088996034258,
+        Width: 0,
         "WP.type": arrowHead
       }
     };
