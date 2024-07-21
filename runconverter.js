@@ -88,6 +88,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
   },
   "networkAttributes": {
     "shared name": { "d": "string" },
+    "description": { "d": "string" }, 
     "__Annotations": { "d": "list_of_string" },
     "name": { "d": "string" },
     "selected": { "d": "boolean" }
@@ -155,6 +156,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             ChEBI: xrefId,
             GraphId: dataNode.$.GraphId,
             "Border Width" : parseFloat(dataNode.Graphics[0].$.BorderThickness) || 0,
+            Width: parseFloat(dataNode.Graphics[0].$.Width) ||0,
             LabelSize: parseInt(dataNode.Graphics[0].$.LabelSize),
             XrefDatasource: xrefDatasource,
             LabelFont: dataNode.Graphics[0].$.LabelFont  || "Dialog.plain",
