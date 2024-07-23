@@ -121,12 +121,21 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
   ]
 },
 { 
-        "nodes": [],
-        "edges": [],
-        "visualConfig": [],
-        "labels": [],
+        "nodes": []
+},
+{
+        "edges": []
+},
+{
+        "visualConfig": []
+},
+{
+        "labels": []
+},
+{
         "edgeMapping": []
-},        
+}
+,        
       // },
 {  
        status: [ 
@@ -153,7 +162,7 @@ let nodeId = 1;
 
         const cx2Node = {
           // id: dataNode.$.GraphId, 
-          id: nodeId++,
+          id: nodeId,
           x: parseFloat(dataNode.Graphics[0].$.CenterX), 
           y: parseFloat(dataNode.Graphics[0].$.CenterY), 
           z: parseInt(dataNode.Graphics[0].$.ZOrder) || 0, 
@@ -180,8 +189,12 @@ let nodeId = 1;
           }
         };
         cx2Data[4].nodes.push(cx2Node);
+        nodeId +=1;
       });
     }
+
+
+    let edgeId = 1;
 
     if (pathway.Interaction) {
   pathway.Interaction.forEach(interaction => {
@@ -198,7 +211,7 @@ let nodeId = 1;
     // New cx2Edge structure
     const cx2Edge = {
       // id: interaction.$.GraphId,
-      id: nodeId++,
+      id: edgeId,
       s: start.$.GraphRef,
       t: end.$.GraphRef,
       v: {
@@ -211,7 +224,8 @@ let nodeId = 1;
         "WP.type": arrowHead
       }
     };
-        cx2Data[4].edges.push(cx2Edge);
+        cx2Data[5].edges.push(cx2Edge);
+        edgeId +=1;
       });
     }
 
@@ -263,7 +277,7 @@ let nodeId = 1;
    if (!cx2Data.visualConfig) {
           cx2Data.visualConfig = [];
         }
-        cx2Data[4].visualConfig.push(visualConfig);
+        cx2Data[6].visualConfig.push(visualConfig);
     
 
 
@@ -289,7 +303,7 @@ let nodeId = 1;
         if (!cx2Data.labels) {
           cx2Data.labels = [];
         }
-        cx2Data[4].labels.push(cx2Label);
+        cx2Data[7].labels.push(cx2Label);
       });
     }
 
@@ -325,7 +339,7 @@ let nodeId = 1;
  if (!cx2Data.edgeMapping) {
           cx2Data.edgeMapping = [];
         }
-        cx2Data[4].edgeMapping.push(edgeMapping);
+        cx2Data[8].edgeMapping.push(edgeMapping);
 
 
 
