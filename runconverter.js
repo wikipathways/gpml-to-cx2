@@ -138,13 +138,22 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
 
 ];
 
+
+let nodeId = 1;
+
+
+
+
         if (pathway.DataNode) {
       pathway.DataNode.forEach(dataNode => {
          const xref = dataNode.Xref && dataNode.Xref[0] ? dataNode.Xref[0].$ : null;
          const xrefId = xref ? xref.ID : null;
          const xrefDatasource = xref ? xref.Database : null;
+         const ensemblId = xrefDatasource === "Ensembl" ? xrefId : "";
+
         const cx2Node = {
-          id: dataNode.$.GraphId, 
+          // id: dataNode.$.GraphId, 
+          id: nodeId++,
           x: parseFloat(dataNode.Graphics[0].$.CenterX), 
           y: parseFloat(dataNode.Graphics[0].$.CenterY), 
           z: parseInt(dataNode.Graphics[0].$.ZOrder) || 0, 
@@ -165,7 +174,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             XrefId: xrefId,
             name: dataNode.$.TextLabel,
             Height: parseFloat(dataNode.Graphics[0].$.Height),
-            Ensembl: dataNode.$.Ensembl || "",
+            Ensembl: ensemblId|| "",
             "Node Size": parseFloat(dataNode.Graphics[0].$.Width),
           
           }
@@ -188,7 +197,8 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     }
     // New cx2Edge structure
     const cx2Edge = {
-      id: interaction.$.GraphId,
+      // id: interaction.$.GraphId,
+      id: nodeId++,
       s: start.$.GraphRef,
       t: end.$.GraphRef,
       v: {
