@@ -148,10 +148,8 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
 ];
 
 
-let nodeId = 1;
-
-
-
+        const graphIdMapping = {};
+        let nodeId = 1;
 
         if (pathway.DataNode) {
       pathway.DataNode.forEach(dataNode => {
@@ -189,6 +187,7 @@ let nodeId = 1;
           }
         };
         cx2Data[4].nodes.push(cx2Node);
+        graphIdMapping[dataNode.$.GraphId] = nodeId;
         nodeId +=1;
       });
     }
@@ -212,8 +211,8 @@ let nodeId = 1;
     const cx2Edge = {
       // id: interaction.$.GraphId,
       id: edgeId,
-      s: start.$.GraphRef,
-      t: end.$.GraphRef,
+      s: graphIdMapping[start.$.GraphRef],
+      t: graphIdMapping[end.$.GraphRef],
       v: {
         LineStyle: "Solid",
         "Source Arrow Shape": shape,
