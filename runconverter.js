@@ -127,7 +127,10 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         "edges": []
 },
 {
-        "visualConfig": []
+        "visualEditorProperties": []
+},
+{
+        "visualProperties" :[]
 },
 {
         "labels": []
@@ -136,7 +139,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         "edgeMapping": []
 }
 ,        
-      // },
+      
 {  
        status: [ 
         {
@@ -149,7 +152,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
 
 
         const graphIdMapping = {};
-        let nodeId = 1;
+        let Id = 1;
 
         if (pathway.DataNode) {
       pathway.DataNode.forEach(dataNode => {
@@ -160,7 +163,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
 
         const cx2Node = {
           // id: dataNode.$.GraphId, 
-          id: nodeId,
+          id: Id,
           x: parseFloat(dataNode.Graphics[0].$.CenterX), 
           y: parseFloat(dataNode.Graphics[0].$.CenterY), 
           z: parseInt(dataNode.Graphics[0].$.ZOrder) || 0, 
@@ -187,13 +190,13 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           }
         };
         cx2Data[4].nodes.push(cx2Node);
-        graphIdMapping[dataNode.$.GraphId] = nodeId;
-        nodeId +=1;
+        graphIdMapping[dataNode.$.GraphId] = Id;
+        Id +=1;
       });
     }
 
 
-    let edgeId = 1;
+   
 
     if (pathway.Interaction) {
   pathway.Interaction.forEach(interaction => {
@@ -210,7 +213,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     // New cx2Edge structure
     const cx2Edge = {
       // id: interaction.$.GraphId,
-      id: edgeId,
+      id: Id,
       s: graphIdMapping[start.$.GraphRef],
       t: graphIdMapping[end.$.GraphRef],
       v: {
@@ -224,12 +227,12 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
       }
     };
         cx2Data[5].edges.push(cx2Edge);
-        edgeId +=1;
+        Id +=1;
       });
     }
 
-  const visualConfig = {
-  visualEditorProperties: [
+   
+  const visualEditorProperties  =
     {
       properties: {
         nodeSizeLocked: true,
@@ -240,8 +243,14 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         NETWORK_SCALE_FACTOR: 1
       }
     }
-  ],
-  visualProperties: [
+
+     if (!cx2Data.visualEditorProperties) {
+          cx2Data.visualEditorProperties = [];
+        }
+
+    cx2Data[6].visualEditorProperties.push(visualEditorProperties);
+  
+   const visualProperties =
     {
       default: {
         edge: {
@@ -266,18 +275,159 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           EDGE_LABEL_FONT_SIZE: 10,
           EDGE_LABEL_COLOR: "#000000",
           EDGE_SELECTED_PAINT: "#FF0000",
-          EDGE_SELECTED: "false"
-        }
+          EDGE_SELECTED: "false",
+          EDGE_STACKING_DENSITY: 0.5,
+          EDGE_SOURCE_ARROW_COLOR:"#CCCCCC",
+          EDGE_TARGET_ARROW_COLOR:"#CCCCCC",
+          EDGE_STROKE_SELECTED_PAINT:"#FF0000",
+          EDGE_WIDTH:2,
+          EDGE_SOURCE_ARROW_SHAPE: "none",
+          EDGE_LINE_COLOR: "#CCCCCC",
+          EDGE_OPACITY:1,
+          EDGE_LABEL_BACKGROUND_SHAPE: "NONE",
+           EDGE_LABEL_FONT_FACE: {
+              FONT_FAMILY: "sans-serif",
+              FONT_STYLE: "normal",
+              FONT_WEIGHT: "normal",
+              FONT_NAME: "Dialog.plain"
+            },
+            EDGE_STACKING: "AUTO BEND",
+            EDGE_LABEL_AUTOROTATE: false,
+            EDGE_LINE_STYLE: "solid",
+            EDGE_CURVED: true,
+            EDGE_TARGET_ARROW_SIZE: 6
+
+        },
+         network: {
+            NETWORK_BACKGROUND_COLOR: "#FFFFFF"
+          },
+           node: {
+            NODE_Y_LOCATION: 0,
+            NODE_BACKGROUND_COLOR: "#FFFFFF",
+            NODE_LABEL_BACKGROUND_COLOR: "#B6B6B6",
+            NODE_WIDTH: 50,
+            NODE_CUSTOMGRAPHICS_SIZE_7: 50,
+            COMPOUND_NODE_SHAPE: "ROUND_RECTANGLE",
+            NODE_CUSTOMGRAPHICS_SIZE_6: 50,
+            NODE_CUSTOMGRAPHICS_SIZE_5: 50,
+            NODE_Z_LOCATION: 0,
+            NODE_LABEL_POSITION: {
+              HORIZONTAL_ALIGN: "center",
+              VERTICAL_ALIGN: "center",
+              HORIZONTAL_ANCHOR: "center",
+              VERTICAL_ANCHOR: "center",
+              MARGIN_X: 0,
+              MARGIN_Y: 0,
+              JUSTIFICATION: "center"
+            },
+            NODE_CUSTOMGRAPHICS_SIZE_4: 50,
+            NODE_CUSTOMGRAPHICS_SIZE_3: 50,
+            NODE_CUSTOMGRAPHICS_SIZE_2: 50,
+            NODE_VISIBILITY: "element",
+            NODE_CUSTOMGRAPHICS_SIZE_1: 50,
+            NODE_BORDER_STYLE: "solid",
+            NODE_BACKGROUND_OPACITY: 1,
+            NODE_LABEL_COLOR: "#000000",
+            NODE_SELECTED: true,
+            NODE_BORDER_COLOR: "#C0C0C0",
+            NODE_CUSTOMGRAPHICS_POSITION_8: {
+              JUSTIFICATION: "center",
+              MARGIN_X: 0,
+              MARGIN_Y: 0,
+              ENTITY_ANCHOR: "C",
+              GRAPHICS_ANCHOR: "C"
+            },
+
+            NODE_CUSTOMGRAPHICS_POSITION_9: {
+              JUSTIFICATION: "center",
+              MARGIN_X: 0,
+              MARGIN_Y: 0,
+              ENTITY_ANCHOR: "C",
+              GRAPHICS_ANCHOR: "C"
+            },
+            NODE_SHAPE: "ellipse",
+            NODE_CUSTOMGRAPHICS_POSITION_4: {
+              JUSTIFICATION: "center",
+              MARGIN_X: 0,
+              MARGIN_Y: 0,
+              ENTITY_ANCHOR: "C",
+              GRAPHICS_ANCHOR: "C"
+            },
+            NODE_CUSTOMGRAPHICS_POSITION_5: {
+              JUSTIFICATION: "center",
+              MARGIN_X: 0,
+              MARGIN_Y: 0,
+              ENTITY_ANCHOR: "C",
+              GRAPHICS_ANCHOR: "C"
+            },
+            NODE_CUSTOMGRAPHICS_POSITION_6: {
+              JUSTIFICATION: "center",
+              MARGIN_X: 0,
+              MARGIN_Y: 0,
+              ENTITY_ANCHOR: "C",
+              GRAPHICS_ANCHOR: "C"
+            },
+            NODE_CUSTOMGRAPHICS_POSITION_7: {
+              JUSTIFICATION: "center",
+              MARGIN_X: 0,
+              MARGIN_Y: 0,
+              ENTITY_ANCHOR: "C",
+              GRAPHICS_ANCHOR: "C"
+            },
+            NODE_LABEL_FONT_SIZE: 12,
+            NODE_X_LOCATION: 0,
+            NODE_CUSTOMGRAPHICS_POSITION_1: {
+              JUSTIFICATION: "center",
+              MARGIN_X: 0,
+              MARGIN_Y: 0,
+              ENTITY_ANCHOR: "C",
+              GRAPHICS_ANCHOR: "C"
+            },
+            NODE_BORDER_OPACITY: 1,
+            NODE_CUSTOMGRAPHICS_POSITION_2: {
+              JUSTIFICATION: "center",
+              MARGIN_X: 0,
+              MARGIN_Y: 0,
+              ENTITY_ANCHOR: "C",
+              GRAPHICS_ANCHOR: "C"
+            },
+            NODE_CUSTOMGRAPHICS_SIZE_9: 50,
+            NODE_LABEL_ROTATION: 0,
+            NODE_CUSTOMGRAPHICS_POSITION_3: {
+              JUSTIFICATION: "center",
+              MARGIN_X: 0,
+              MARGIN_Y: 0,
+              ENTITY_ANCHOR: "C",
+              GRAPHICS_ANCHO: "C"
+            },
+            NODE_CUSTOMGRAPHICS_SIZE_8: 50,
+            NODE_BORDER_WIDTH: 2,
+            NODE_LABEL_OPACITY: 1,
+            NODE_HEIGHT: 50,
+            NODE_LABEL_BACKGROUND_SHAPE: "NONE",
+            COMPOUND_NODE_PADDING: "10.0",
+            NODE_LABEL_BACKGROUND_OPACITY: 1,
+            NODE_LABEL_FONT_FACE: {
+              FONT_FAMILY: "sans-serif",
+              FONT_STYLE: "normal",
+              FONT_WEIGHT: "normal",
+              FONT_NAME: "SansSerif.plain"
+            },
+            NODE_SELECTED_PAINT: "#FFFF00",
+            NODE_LABEL_MAX_WIDTH: 200
+
+
+
+          }
       }
     }
 
-  ]
-};
-   if (!cx2Data.visualConfig) {
-          cx2Data.visualConfig = [];
+
+    if (!cx2Data.visualProperties) {
+          cx2Data.visualProperties = [];
         }
-        cx2Data[6].visualConfig.push(visualConfig);
-    
+
+    cx2Data[7].visualProperties.push(visualProperties);
 
 
        
@@ -302,7 +452,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         if (!cx2Data.labels) {
           cx2Data.labels = [];
         }
-        cx2Data[7].labels.push(cx2Label);
+        cx2Data[8].labels.push(cx2Label);
       });
     }
 
@@ -338,7 +488,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
  if (!cx2Data.edgeMapping) {
           cx2Data.edgeMapping = [];
         }
-        cx2Data[8].edgeMapping.push(edgeMapping);
+        cx2Data[9].edgeMapping.push(edgeMapping);
 
 
 
