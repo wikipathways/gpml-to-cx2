@@ -410,8 +410,259 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
 
 
         }
-      }
+      },
+
+
+    edgeMapping : {
+      "EDGE_TARGET_ARROW_SHAPE": {
+        "type": "DISCRETE",
+        "definition": {
+          "map": [
+            { "v": "Arrow", "vp": "triangle" },
+            { "v": "mim-branching-right", "vp": "triangle-cross" },
+            { "v": "mim-covalent-bond", "vp": "triangle-cross" },
+            { "v": "mim-branching-left", "vp": "triangle-cross" },
+            { "v": "mim-transcription-translation", "vp": "triangle" },
+            { "v": "mim-binding", "vp": "triangle" },
+            { "v": "Line", "vp": "none" },
+            { "v": "mim-cleavage", "vp": "diamond" },
+            { "v": "mim-gap", "vp": "triangle" },
+            { "v": "mim-stimulation", "vp": "triangle" },
+            { "v": "mim-catalysis", "vp": "circle" },
+            { "v": "mim-inhibition", "vp": "tee" },
+            { "v": "TBar", "vp": "tee" },
+            { "v": "mim-modification", "vp": "triangle" },
+            { "v": "mim-necessary-stimulation", "vp": "triangle-cross" },
+            { "v": "mim-conversion", "vp": "triangle" }
+          ],
+          "attribute": "Target Arrow Shape",
+          "type": "string"
+        }
+      },
+
+    "EDGE_WIDTH": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Width",
+              "type": "double"
+            }
+          },
+          "EDGE_SOURCE_ARROW_SHAPE": {
+            "type": "DISCRETE",
+            "definition": {
+              "map": [
+                {
+                  "v": "Arrow",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-branching-right",
+                  "vp": "triangle-cross"
+                },
+                {
+                  "v": "mim-covalent-bond",
+                  "vp": "triangle-cross"
+                },
+                {
+                  "v": "mim-branching-left",
+                  "vp": "triangle-cross"
+                },
+                {
+                  "v": "mim-transcription-translation",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-binding",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "Line",
+                  "vp": "none"
+                },
+                {
+                  "v": "mim-cleavage",
+                  "vp": "diamond"
+                },
+                {
+                  "v": "mim-gap",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-stimulation",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-catalysis",
+                  "vp": "circle"
+                },
+                {
+                  "v": "mim-inhibition",
+                  "vp": "tee"
+                },
+                {
+                  "v": "TBar",
+                  "vp": "tee"
+                },
+                {
+                  "v": "mim-modification",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "mim-necessary-stimulation",
+                  "vp": "triangle-cross"
+                },
+                {
+                  "v": "mim-conversion",
+                  "vp": "triangle"
+                }
+              ],
+              "attribute": "Source Arrow Shape",
+              "type": "string"
+            }
+          },
+          "EDGE_LINE_COLOR": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Color",
+              "type": "string"
+            }
+          },
+          "EDGE_SOURCE_ARROW_COLOR": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Color",
+              "type": "string"
+            }
+          },
+          "EDGE_LINE_STYLE": {
+            "type": "DISCRETE",
+            "definition": {
+              "map": [
+                {
+                  "v": "Dots",
+                  "vp": "dotted"
+                },
+                {
+                  "v": "Double",
+                  "vp": "solid"
+                },
+                {
+                  "v": "Solid",
+                  "vp": "solid"
+                },
+                {
+                  "v": "Dashed",
+                  "vp": "dashed"
+                }
+              ],
+              "attribute": "LineStyle",
+              "type": "string"
+            }
+          },
+           "EDGE_TARGET_ARROW_COLOR": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Color",
+              "type": "string"
+            }
+          }
+        },
+        "nodeMapping": {
+          "NODE_BORDER_WIDTH": {
+            "type": "DISCRETE",
+            "definition": {
+              "map": [
+                {
+                  "v": "Label",
+                  "vp": 0
+                },
+                {
+                  "v": "Group",
+                  "vp": 0
+                },
+                {
+                  "v": "Anchor",
+                  "vp": 0
+                }
+              ],
+              "attribute": "Type",
+              "type": "string"
+            }
+          },
+          "NODE_LABEL": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "name",
+              "type": "string"
+            }
+          },
+          "NODE_LABEL_COLOR": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Color",
+              "type": "string"
+            }
+          },
+          "NODE_BORDER_COLOR": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Color",
+              "type": "string"
+            }
+          },
+           "NODE_HEIGHT": {
+            "type": "DISCRETE",
+            "definition": {
+              "map": [
+                {
+                  "v": "Label",
+                  "vp": 25
+                },
+                {
+                  "v": "Group",
+                  "vp": 25
+                },
+                {
+                  "v": "Anchor",
+                  "vp": 1
+                }
+              ],
+              "attribute": "Type",
+              "type": "string"
+            }
+          },
+          "NODE_LABEL_FONT_SIZE": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Label Font Size",
+              "type": "double"
+            }
+          },
+          "NODE_WIDTH": {
+            "type": "DISCRETE",
+            "definition": {
+              "map": [
+                {
+                  "v": "Label",
+                  "vp": 25
+                },
+                {
+                  "v": "Group",
+                  "vp": 25
+                },
+                {
+                  "v": "Anchor",
+                  "vp": 1
+                }
+              ],
+              "attribute": "Type",
+              "type": "string"
+            }
+          }
+        }
+      
     }
+  
 
 
     if (!cx2Data.visualProperties) {
@@ -448,38 +699,38 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     }
 
 
-    const edgeMapping = {
-      "EDGE_TARGET_ARROW_SHAPE": {
-        "type": "DISCRETE",
-        "definition": {
-          "map": [
-            { "v": "Arrow", "vp": "triangle" },
-            { "v": "mim-branching-right", "vp": "triangle-cross" },
-            { "v": "mim-covalent-bond", "vp": "triangle-cross" },
-            { "v": "mim-branching-left", "vp": "triangle-cross" },
-            { "v": "mim-transcription-translation", "vp": "triangle" },
-            { "v": "mim-binding", "vp": "triangle" },
-            { "v": "Line", "vp": "none" },
-            { "v": "mim-cleavage", "vp": "diamond" },
-            { "v": "mim-gap", "vp": "triangle" },
-            { "v": "mim-stimulation", "vp": "triangle" },
-            { "v": "mim-catalysis", "vp": "circle" },
-            { "v": "mim-inhibition", "vp": "tee" },
-            { "v": "TBar", "vp": "tee" },
-            { "v": "mim-modification", "vp": "triangle" },
-            { "v": "mim-necessary-stimulation", "vp": "triangle-cross" },
-            { "v": "mim-conversion", "vp": "triangle" }
-          ],
-          "attribute": "Target Arrow Shape",
-          "type": "string"
-        }
-      }
-    };
+    // const edgeMapping = {
+    //   "EDGE_TARGET_ARROW_SHAPE": {
+    //     "type": "DISCRETE",
+    //     "definition": {
+    //       "map": [
+    //         { "v": "Arrow", "vp": "triangle" },
+    //         { "v": "mim-branching-right", "vp": "triangle-cross" },
+    //         { "v": "mim-covalent-bond", "vp": "triangle-cross" },
+    //         { "v": "mim-branching-left", "vp": "triangle-cross" },
+    //         { "v": "mim-transcription-translation", "vp": "triangle" },
+    //         { "v": "mim-binding", "vp": "triangle" },
+    //         { "v": "Line", "vp": "none" },
+    //         { "v": "mim-cleavage", "vp": "diamond" },
+    //         { "v": "mim-gap", "vp": "triangle" },
+    //         { "v": "mim-stimulation", "vp": "triangle" },
+    //         { "v": "mim-catalysis", "vp": "circle" },
+    //         { "v": "mim-inhibition", "vp": "tee" },
+    //         { "v": "TBar", "vp": "tee" },
+    //         { "v": "mim-modification", "vp": "triangle" },
+    //         { "v": "mim-necessary-stimulation", "vp": "triangle-cross" },
+    //         { "v": "mim-conversion", "vp": "triangle" }
+    //       ],
+    //       "attribute": "Target Arrow Shape",
+    //       "type": "string"
+    //     }
+    //   }
+    // };
 
-    if (!cx2Data.edgeMapping) {
-      cx2Data.edgeMapping = [];
-    }
-    cx2Data[9].edgeMapping.push(edgeMapping);
+    // if (!cx2Data.edgeMapping) {
+    //   cx2Data.edgeMapping = [];
+    // }
+    // cx2Data[9].edgeMapping.push(edgeMapping);
 
     const cx2DataArray = cx2Data;
 
