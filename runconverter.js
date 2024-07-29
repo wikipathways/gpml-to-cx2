@@ -10,10 +10,6 @@ if (!gpmlFilePath) {
   process.exit(1);
 }
 
-// const cxDescriptor = {
-//   "CXVersion": "2.0",
-//   "hasFragments": false
-// };
 
 
 // Read GPML file content
@@ -40,6 +36,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
       const commentText = result.Pathway.Comment[0]._;
       const dataNodeCount = result.Pathway.DataNode.length;
       const edgesCount = result.Pathway.Interaction.length;
+      console.log(edgesCount);
 
     // Convert to CX2 format
     const cx2Data = [
@@ -168,13 +165,13 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           y: parseFloat(dataNode.Graphics[0].$.CenterY), 
           z: parseInt(dataNode.Graphics[0].$.ZOrder) || 0, 
           v: {
-            FillColor: dataNode.Graphics[0].$.FillColor || "Transparent",
-            Shape: dataNode.Graphics[0].$.Shape || "None",
+            FillColor: dataNode.Graphics[0].$.FillColor || "White",
+            Shape: dataNode.Graphics[0].$.ShapeType || "Rectangle",
             BorderThickness: parseFloat(dataNode.Graphics[0].$.BorderThickness) || 0,
-            Color: dataNode.Graphics[0].$.Color || "#000000",
+            Color: dataNode.Graphics[0].$.Color ? "#" + dataNode.Graphics[0].$.Color : "#000000",
             ChEBI: xrefId,
             GraphId: dataNode.$.GraphId,
-            "Border Width" : parseFloat(dataNode.Graphics[0].$.BorderThickness) || 0,
+            "Border Width" : parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1,
             Width: parseFloat(dataNode.Graphics[0].$.Width) ||0,
             LabelSize: parseInt(dataNode.Graphics[0].$.LabelSize),
             XrefDatasource: xrefDatasource,
@@ -205,14 +202,14 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     const end = points[1];
     const xref = interaction.Xref ? { database: interaction.Xref[0].$.Database, id: interaction.Xref[0].$.ID } : { database: '', id: '' };
     const arrowHead = end.$.ArrowHead ? end.$.ArrowHead : "None"; 
-    let shape = "None";
+    let shape = "Line";
     if (interaction.Graphics && interaction.Graphics[0].Anchor && interaction.Graphics[0].Anchor.length > 0) {
     const anchor = interaction.Graphics[0].Anchor[0];
     const shape = anchor.$.Shape
     }
-    // New cx2Edge structure
+    
     const cx2Edge = {
-      // id: interaction.$.GraphId,
+     
       id: Id,
       s: graphIdMapping[start.$.GraphRef],
       t: graphIdMapping[end.$.GraphRef],
@@ -230,6 +227,10 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         Id +=1;
       });
     }
+
+
+
+
 
    
   const visualEditorProperties  =
