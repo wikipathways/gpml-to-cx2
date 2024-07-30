@@ -128,10 +128,6 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
       {
         "labels": []
       },
-      {
-        "edgeMapping": []
-      }
-      ,
 
       {
         status: [
@@ -162,10 +158,10 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           v: {
             FillColor: dataNode.Graphics[0].$.FillColor || "White",
             Shape: dataNode.Graphics[0].$.ShapeType || "Rectangle",
-            BorderThickness: parseFloat(dataNode.Graphics[0].$.BorderThickness) || 0,
+            BorderThickness: parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1,
             Color: dataNode.Graphics[0].$.Color ? "#" + dataNode.Graphics[0].$.Color : "#000000",
             ChEBI: xrefId,
-            GraphId: dataNode.$.GraphId,
+            GraphID: dataNode.$.GraphId,
             "Border Width": parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1,
             Width: parseFloat(dataNode.Graphics[0].$.Width) || 0,
             LabelSize: parseInt(dataNode.Graphics[0].$.LabelSize),
@@ -268,12 +264,12 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           EDGE_SELECTED_PAINT: "#FF0000",
           EDGE_SELECTED: "false",
           EDGE_STACKING_DENSITY: 0.5,
-          EDGE_SOURCE_ARROW_COLOR: "#CCCCCC",
-          EDGE_TARGET_ARROW_COLOR: "#CCCCCC",
+          EDGE_SOURCE_ARROW_COLOR: "#404040",
+          EDGE_TARGET_ARROW_COLOR: "#404040",
           EDGE_STROKE_SELECTED_PAINT: "#FF0000",
           EDGE_WIDTH: 2,
           EDGE_SOURCE_ARROW_SHAPE: "none",
-          EDGE_LINE_COLOR: "#CCCCCC",
+          EDGE_LINE_COLOR: "#404040",
           EDGE_OPACITY: 1,
           EDGE_LABEL_BACKGROUND_SHAPE: "NONE",
           EDGE_LABEL_FONT_FACE: {
@@ -296,11 +292,10 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           NODE_Y_LOCATION: 0,
           NODE_BACKGROUND_COLOR: "#FFFFFF",
           NODE_LABEL_BACKGROUND_COLOR: "#B6B6B6",
-          NODE_WIDTH: 50,
+          NODE_WIDTH: 75,
           NODE_CUSTOMGRAPHICS_SIZE_7: 50,
-          COMPOUND_NODE_SHAPE: "ROUND_RECTANGLE",
           NODE_CUSTOMGRAPHICS_SIZE_6: 50,
-          NODE_CUSTOMGRAPHICS_SIZE_5: 50,
+          COMPOUND_NODE_SHAPE: "ROUND_RECTANGLE",
           NODE_Z_LOCATION: 0,
           NODE_LABEL_POSITION: {
             HORIZONTAL_ALIGN: "center",
@@ -311,6 +306,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             MARGIN_Y: 0,
             JUSTIFICATION: "center"
           },
+          NODE_CUSTOMGRAPHICS_SIZE_5: 50,
           NODE_CUSTOMGRAPHICS_SIZE_4: 50,
           NODE_CUSTOMGRAPHICS_SIZE_3: 50,
           NODE_CUSTOMGRAPHICS_SIZE_2: 50,
@@ -319,8 +315,8 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           NODE_BORDER_STYLE: "solid",
           NODE_BACKGROUND_OPACITY: 1,
           NODE_LABEL_COLOR: "#000000",
-          NODE_SELECTED: true,
-          NODE_BORDER_COLOR: "#C0C0C0",
+          NODE_SELECTED: false,
+          NODE_BORDER_COLOR: "#CCCCCC",
           NODE_CUSTOMGRAPHICS_POSITION_8: {
             JUSTIFICATION: "center",
             MARGIN_X: 0,
@@ -336,7 +332,6 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             ENTITY_ANCHOR: "C",
             GRAPHICS_ANCHOR: "C"
           },
-          NODE_SHAPE: "ellipse",
           NODE_CUSTOMGRAPHICS_POSITION_4: {
             JUSTIFICATION: "center",
             MARGIN_X: 0,
@@ -344,6 +339,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             ENTITY_ANCHOR: "C",
             GRAPHICS_ANCHOR: "C"
           },
+          NODE_SHAPE: "ellipse",
           NODE_CUSTOMGRAPHICS_POSITION_5: {
             JUSTIFICATION: "center",
             MARGIN_X: 0,
@@ -383,7 +379,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             GRAPHICS_ANCHOR: "C"
           },
           NODE_CUSTOMGRAPHICS_SIZE_9: 50,
-          NODE_LABEL_ROTATION: 0,
+         
           NODE_CUSTOMGRAPHICS_POSITION_3: {
             JUSTIFICATION: "center",
             MARGIN_X: 0,
@@ -391,10 +387,11 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             ENTITY_ANCHOR: "C",
             GRAPHICS_ANCHO: "C"
           },
+          NODE_LABEL_ROTATION: 0,
           NODE_CUSTOMGRAPHICS_SIZE_8: 50,
-          NODE_BORDER_WIDTH: 2,
+          NODE_BORDER_WIDTH: 1,
           NODE_LABEL_OPACITY: 1,
-          NODE_HEIGHT: 50,
+          NODE_HEIGHT: 35,
           NODE_LABEL_BACKGROUND_SHAPE: "NONE",
           COMPOUND_NODE_PADDING: "10.0",
           NODE_LABEL_BACKGROUND_OPACITY: 1,
@@ -435,7 +432,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             { "v": "mim-necessary-stimulation", "vp": "triangle-cross" },
             { "v": "mim-conversion", "vp": "triangle" }
           ],
-          "attribute": "Target Arrow Shape",
+          "attribute": "EndArrow",
           "type": "string"
         }
       },
@@ -443,7 +440,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     "EDGE_WIDTH": {
             "type": "PASSTHROUGH",
             "definition": {
-              "attribute": "Width",
+              "attribute": "LineThickness",
               "type": "double"
             }
           },
@@ -516,7 +513,28 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
                   "vp": "triangle"
                 }
               ],
-              "attribute": "Source Arrow Shape",
+              "attribute": "StartArrow",
+              "type": "string"
+            }
+          },
+          "EDGE_TOOLTIP": {
+            "type": "DISCRETE",
+            "definition": {
+              "map": [
+                {
+                  "v": "Elbow",
+                  "vp": "Elbow"
+                },
+                {
+                  "v": "Curved",
+                  "vp": "Curved"
+                },
+                {
+                  "v": "Straight",
+                  "vp": "Straight"
+                }
+              ],
+              "attribute": "ConnectorType",
               "type": "string"
             }
           },
@@ -528,6 +546,13 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             }
           },
           "EDGE_SOURCE_ARROW_COLOR": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Color",
+              "type": "string"
+            }
+          },
+          "EDGE_TARGET_ARROW_COLOR": {
             "type": "PASSTHROUGH",
             "definition": {
               "attribute": "Color",
@@ -558,35 +583,14 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
               "attribute": "LineStyle",
               "type": "string"
             }
-          },
-           "EDGE_TARGET_ARROW_COLOR": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "Color",
-              "type": "string"
-            }
           }
         },
         "nodeMapping": {
           "NODE_BORDER_WIDTH": {
-            "type": "DISCRETE",
+            "type": "PASSTHROUGH",
             "definition": {
-              "map": [
-                {
-                  "v": "Label",
-                  "vp": 0
-                },
-                {
-                  "v": "Group",
-                  "vp": 0
-                },
-                {
-                  "v": "Anchor",
-                  "vp": 0
-                }
-              ],
-              "attribute": "Type",
-              "type": "string"
+              "attribute": "BorderThickness",
+              "type": "double"
             }
           },
           "NODE_LABEL": {
@@ -610,53 +614,138 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
               "type": "string"
             }
           },
-           "NODE_HEIGHT": {
+          "NODE_HEIGHT": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Height",
+              "type": "double"
+            }
+          },
+          "NODE_BACKGROUND_COLOR": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "FillColor",
+              "type": "string"
+            }
+          },
+          "NODE_SHAPE": {
             "type": "DISCRETE",
             "definition": {
               "map": [
                 {
-                  "v": "Label",
-                  "vp": 25
+                  "v": "Nucleus",
+                  "vp": "Nucleus"
                 },
                 {
-                  "v": "Group",
-                  "vp": 25
+                  "v": "Hexagon",
+                  "vp": "hexagon"
                 },
                 {
-                  "v": "Anchor",
-                  "vp": 1
+                  "v": "Ellipse",
+                  "vp": "ellipse"
+                },
+                {
+                  "v": "Brace",
+                  "vp": "Brace"
+                },
+                {
+                  "v": "RoundRectangle",
+                  "vp": "round-rectangle"
+                },
+                {
+                  "v": "Rectangle",
+                  "vp": "rectangle"
+                },
+                {
+                  "v": "Triangle",
+                  "vp": "triangle"
+                },
+                {
+                  "v": "Octagon",
+                  "vp": "octagon"
+                },
+                {
+                  "v": "Sarcoplasmic Reticulum",
+                  "vp": "Sarcoplasmic Reticulum"
+                },
+                {
+                  "v": "Endoplasmic Reticulum",
+                  "vp": "Endoplasmic Reticulum"
+                },
+                {
+                  "v": "Golgi Apparatus",
+                  "vp": "Golgi Apparatus"
+                },
+                {
+                  "v": "Mitochondria",
+                  "vp": "Mitochondria"
+                },
+                {
+                  "v": "Arc",
+                  "vp": "Arc"
+                },
+                {
+                  "v": "Oval",
+                  "vp": "ellipse"
+                },
+                {
+                  "v": "Pentagon",
+                  "vp": "hexagon"
+                },
+                {
+                  "v": "Organelle",
+                  "vp": "round-rectangle"
+                },
+                {
+                  "v": "Cell",
+                  "vp": "Cell"
+                },
+                {
+                  "v": "RoundedRectangle",
+                  "vp": "round-rectangle"
                 }
               ],
-              "attribute": "Type",
+              "attribute": "Shape",
+              "type": "string"
+            }
+          },
+          "NODE_LABEL_FONT_FACE": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "LabelFont",
               "type": "string"
             }
           },
           "NODE_LABEL_FONT_SIZE": {
             "type": "PASSTHROUGH",
             "definition": {
-              "attribute": "Label Font Size",
+              "attribute": "LabelSize",
               "type": "double"
             }
           },
-          "NODE_WIDTH": {
+          "NODE_BACKGROUND_OPACITY": {
             "type": "DISCRETE",
             "definition": {
               "map": [
                 {
-                  "v": "Label",
-                  "vp": 25
+                  "v": "true",
+                  "vp": 0
                 },
                 {
-                  "v": "Group",
-                  "vp": 25
-                },
-                {
-                  "v": "Anchor",
+                  "v": "false",
                   "vp": 1
                 }
               ],
-              "attribute": "Type",
+              "attribute": "Transparent",
               "type": "string"
+            }
+          },
+          "NODE_WIDTH": {
+            "type": "PASSTHROUGH",
+            "definition": {
+              "attribute": "Width",
+              "type": "double"
+
             }
           }
         }
@@ -699,38 +788,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     }
 
 
-    // const edgeMapping = {
-    //   "EDGE_TARGET_ARROW_SHAPE": {
-    //     "type": "DISCRETE",
-    //     "definition": {
-    //       "map": [
-    //         { "v": "Arrow", "vp": "triangle" },
-    //         { "v": "mim-branching-right", "vp": "triangle-cross" },
-    //         { "v": "mim-covalent-bond", "vp": "triangle-cross" },
-    //         { "v": "mim-branching-left", "vp": "triangle-cross" },
-    //         { "v": "mim-transcription-translation", "vp": "triangle" },
-    //         { "v": "mim-binding", "vp": "triangle" },
-    //         { "v": "Line", "vp": "none" },
-    //         { "v": "mim-cleavage", "vp": "diamond" },
-    //         { "v": "mim-gap", "vp": "triangle" },
-    //         { "v": "mim-stimulation", "vp": "triangle" },
-    //         { "v": "mim-catalysis", "vp": "circle" },
-    //         { "v": "mim-inhibition", "vp": "tee" },
-    //         { "v": "TBar", "vp": "tee" },
-    //         { "v": "mim-modification", "vp": "triangle" },
-    //         { "v": "mim-necessary-stimulation", "vp": "triangle-cross" },
-    //         { "v": "mim-conversion", "vp": "triangle" }
-    //       ],
-    //       "attribute": "Target Arrow Shape",
-    //       "type": "string"
-    //     }
-    //   }
-    // };
-
-    // if (!cx2Data.edgeMapping) {
-    //   cx2Data.edgeMapping = [];
-    // }
-    // cx2Data[9].edgeMapping.push(edgeMapping);
+  
 
     const cx2DataArray = cx2Data;
 
