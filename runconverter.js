@@ -173,7 +173,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           y: parseFloat(dataNode.Graphics[0].$.CenterY),
           z: parseInt(dataNode.Graphics[0].$.ZOrder) || 0,
           v: {
-            FillColor: "#ffffff",
+            FillColor: fillColor,
             Shape: dataNode.Graphics[0].$.ShapeType || "Rectangle",
             BorderThickness: parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1,
             Color: dataNode.Graphics[0].$.Color ? "#" + dataNode.Graphics[0].$.Color : "#000000",
@@ -183,7 +183,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             XrefDatasource: xrefDatasource,
             LabelFont: dataNode.Graphics[0].$.FontWeight ? "Dialog."+dataNode.Graphics[0].$.FontWeight.toLowerCase() : "Dialog.plain",
             Type: dataNode.$.Type,
-            Transparent: dataNode.Graphics[0].$.Transparent || "false",
+            Transparent: transparent,
             XrefId: xrefId,
             name: dataNode.$.TextLabel,
             Height: parseFloat(dataNode.Graphics[0].$.Height),
