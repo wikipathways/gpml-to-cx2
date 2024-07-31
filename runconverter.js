@@ -156,24 +156,24 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           y: parseFloat(dataNode.Graphics[0].$.CenterY),
           z: parseInt(dataNode.Graphics[0].$.ZOrder) || 0,
           v: {
-            FillColor: dataNode.Graphics[0].$.FillColor || "White",
+            FillColor: "#ffffff",
             Shape: dataNode.Graphics[0].$.ShapeType || "Rectangle",
             BorderThickness: parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1,
             Color: dataNode.Graphics[0].$.Color ? "#" + dataNode.Graphics[0].$.Color : "#000000",
             ChEBI: xrefId,
             GraphID: dataNode.$.GraphId,
-            "Border Width": parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1,
-            Width: parseFloat(dataNode.Graphics[0].$.Width) || 0,
-            LabelSize: parseInt(dataNode.Graphics[0].$.LabelSize),
+            LabelSize: parseInt(dataNode.Graphics[0].$.FontSize),
             XrefDatasource: xrefDatasource,
-            LabelFont: dataNode.Graphics[0].$.LabelFont || "Dialog.plain",
+            LabelFont: dataNode.Graphics[0].$.FontWeight ? "Dialog."+dataNode.Graphics[0].$.FontWeight.toLowerCase() : "Dialog.plain",
             Type: dataNode.$.Type,
             Transparent: dataNode.Graphics[0].$.Transparent || "false",
             XrefId: xrefId,
             name: dataNode.$.TextLabel,
             Height: parseFloat(dataNode.Graphics[0].$.Height),
-            Ensembl: ensemblId || "",
-            "Node Size": parseFloat(dataNode.Graphics[0].$.Width),
+            Width: parseFloat(dataNode.Graphics[0].$.Width) || 0,
+            
+            
+      
 
           }
         };
@@ -222,7 +222,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     const visualEditorProperties =
     {
       properties: {
-        nodeSizeLocked: true,
+        nodeSizeLocked: false,
         arrowColorMatchesEdge: true,
         nodeCustomGraphicsSizeSync: true,
         NETWORK_CENTER_Y_LOCATION: 0,
@@ -620,7 +620,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
               "attribute": "Height",
               "type": "double"
             }
-          },
+          }, 
           "NODE_BACKGROUND_COLOR": {
             "type": "PASSTHROUGH",
             "definition": {
@@ -630,7 +630,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           },
           "NODE_SHAPE": {
             "type": "DISCRETE",
-            "definition": {
+            "definition": { 
               "map": [
                 {
                   "v": "Nucleus",
