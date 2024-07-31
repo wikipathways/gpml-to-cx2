@@ -149,6 +149,23 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         const xrefDatasource = xref ? xref.Database : null;
         const ensemblId = xrefDatasource === "Ensembl" ? xrefId : "";
 
+    let fillColor = "#FFFFFF";
+    let transparent = "false";
+    if (dataNode.Graphics[0].$.FillColor) {
+      if (dataNode.Graphics[0].$.FillColor.toLowerCase() === "transparent") {
+        fillColor = "#FFFFFF";
+        transparent = "true";
+      } else {
+        fillColor = "#" + dataNode.Graphics[0].$.FillColor;
+        transparent = "false";
+      }
+    }
+
+
+
+
+
+
         const cx2Node = {
           // id: dataNode.$.GraphId, 
           id: idCount,
