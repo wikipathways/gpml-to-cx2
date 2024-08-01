@@ -162,6 +162,13 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     }
 
 
+    function getBorderThickness(name) {
+     return ["Fatty acid", "Phospholipid", "Triglycerides"].includes(name) ? 0 : (parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1);
+    }
+
+    const name = dataNode.$.TextLabel;
+    const borderThickness = getBorderThickness(name);
+
 
 
 
@@ -175,7 +182,8 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           v: {
             FillColor: fillColor,
             Shape: dataNode.Graphics[0].$.ShapeType || "Rectangle",
-            BorderThickness: parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1,
+            // BorderThickness: parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1,
+            BorderThickness: borderThickness,
             Color: dataNode.Graphics[0].$.Color ? "#" + dataNode.Graphics[0].$.Color : "#000000",
             ChEBI: xrefId,
             GraphID: dataNode.$.GraphId,
@@ -235,6 +243,12 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
         idCount += 1;
       });
     }
+
+  
+
+
+
+
 
     const visualEditorProperties =
     {
@@ -313,6 +327,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           NODE_CUSTOMGRAPHICS_SIZE_7: 50,
           NODE_CUSTOMGRAPHICS_SIZE_6: 50,
           COMPOUND_NODE_SHAPE: "ROUND_RECTANGLE",
+          
           NODE_Z_LOCATION: 0,
           NODE_LABEL_POSITION: {
             HORIZONTAL_ALIGN: "center",
@@ -356,6 +371,7 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             ENTITY_ANCHOR: "C",
             GRAPHICS_ANCHOR: "C"
           },
+    
           NODE_SHAPE: "ellipse",
           NODE_CUSTOMGRAPHICS_POSITION_5: {
             JUSTIFICATION: "center",
@@ -419,7 +435,8 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
             FONT_NAME: "SansSerif.plain"
           },
           NODE_SELECTED_PAINT: "#FFFF00",
-          NODE_LABEL_MAX_WIDTH: 200
+          NODE_LABEL_MAX_WIDTH: 200,
+          
 
 
 
