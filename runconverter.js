@@ -162,12 +162,15 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
     }
 
 
-    function getBorderThickness(name) {
-     return ["Fatty acid", "Phospholipid", "Triglycerides"].includes(name) ? 0 : (parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1);
-    }
+  function getBorderThickness(shape) {
+  if (shape === "None") {
+    return 0;
+  }
+  return  (parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1);
+  }
 
-    const name = dataNode.$.TextLabel;
-    const borderThickness = getBorderThickness(name);
+    const shape =  dataNode.Graphics[0].$.ShapeType || "Rectangle";
+    const borderThickness = getBorderThickness(shape);
 
 
 
@@ -182,7 +185,6 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           v: {
             FillColor: fillColor,
             Shape: dataNode.Graphics[0].$.ShapeType || "Rectangle",
-            // BorderThickness: parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1,
             BorderThickness: borderThickness,
             Color: dataNode.Graphics[0].$.Color ? "#" + dataNode.Graphics[0].$.Color : "#000000",
             ChEBI: xrefId,
