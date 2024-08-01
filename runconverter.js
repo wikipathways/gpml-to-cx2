@@ -169,53 +169,52 @@ let idCount = 1;
 let processDataNodes = function() {
   if (pathway.DataNode) {
     pathway.DataNode.forEach(dataNode => {
+      const graphics = dataNode.Graphics[0].$;
       const xref = dataNode.Xref && dataNode.Xref[0] ? dataNode.Xref[0].$ : null;
       const xrefId = xref ? xref.ID : null;
       const xrefDatasource = xref ? xref.Database : null;
-      const ensemblId = xrefDatasource === "Ensembl" ? xrefId : "";
 
       let fillColor = "#FFFFFF";
       let transparent = "false";
-      if (dataNode.Graphics[0].$.FillColor) {
-        if (dataNode.Graphics[0].$.FillColor.toLowerCase() === "transparent") {
+      if (graphics.FillColor) {
+        if (graphics.FillColor.toLowerCase() === "transparent") {
           fillColor = "#FFFFFF";
           transparent = "true";
         } else {
-          fillColor = "#" + dataNode.Graphics[0].$.FillColor;
+          fillColor = "#" + graphics.FillColor;
           transparent = "false";
         }
       }
 
-      const shape = dataNode.Graphics[0].$.ShapeType || "Rectangle";
-      const lineThickness = parseFloat(dataNode.Graphics[0].$.LineThickness) || 1;
+      const shape = graphics.ShapeType || "Rectangle";
+      const lineThickness = parseFloat(graphics.LineThickness) || 1;
       const borderThickness = getBorderThickness(shape, lineThickness);
-      const fontName = dataNode.Graphics[0].$.FontName || "Arial";
-      const fontWeight = dataNode.Graphics[0].$.FontWeight;
-      const fontStyle = dataNode.Graphics[0].$.FontStyle;
+      const fontName = graphics.FontName || "Arial";
+      const fontWeight = graphics.FontWeight;
+      const fontStyle = graphics.FontStyle;
       const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
 
       const cx2Node = {
         // id: dataNode.$.GraphId, 
         id: idCount,
-        x: parseFloat(dataNode.Graphics[0].$.CenterX),
-        y: parseFloat(dataNode.Graphics[0].$.CenterY),
-        z: parseInt(dataNode.Graphics[0].$.ZOrder) || 0,
+        x: parseFloat(graphics.CenterX),
+        y: parseFloat(graphics.CenterY),
+        z: parseInt(graphics.ZOrder) || 0,
         v: {
           FillColor: fillColor,
           Shape: shape,
           BorderThickness: borderThickness,
-          Color: dataNode.Graphics[0].$.Color ? "#" + dataNode.Graphics[0].$.Color : "#000000",
-          ChEBI: xrefId,
+          Color: graphics.Color ? "#" + graphics.Color : "#000000",
           GraphID: dataNode.$.GraphId,
-          LabelSize: parseInt(dataNode.Graphics[0].$.FontSize),
+          LabelSize: parseInt(graphics.FontSize),
           XrefDatasource: xrefDatasource,
           LabelFont: labelFont,
           Type: dataNode.$.Type,
           Transparent: transparent,
           XrefId: xrefId,
           name: dataNode.$.TextLabel,
-          Height: parseFloat(dataNode.Graphics[0].$.Height),
-          Width: parseFloat(dataNode.Graphics[0].$.Width),
+          Height: parseFloat(graphics.Height),
+          Width: parseFloat(graphics.Width),
         }
       };
       cx2Data[4].nodes.push(cx2Node);
@@ -232,28 +231,28 @@ let processLabels = function() {
 
       let fillColor = "#FFFFFF";
       let transparent = "true";
-      if (label.Graphics[0].$.FillColor) {
-        if (label.Graphics[0].$.FillColor.toLowerCase() === "transparent") {
+      if (graphics.FillColor) {
+        if (graphics.FillColor.toLowerCase() === "transparent") {
           fillColor = "#FFFFFF";
           transparent = "true";
         } else {
-          fillColor = "#" + label.Graphics[0].$.FillColor;
+          fillColor = "#" + graphics.FillColor;
           transparent = "false";
         }
       }
-      const shape = label.Graphics[0].$.ShapeType || "None";
-      const lineThickness = parseFloat(label.Graphics[0].$.LineThickness) || 1;
+      const shape = graphics.ShapeType || "None";
+      const lineThickness = parseFloat(graphics.LineThickness) || 1;
       const borderThickness = getBorderThickness(shape, lineThickness);
-      const fontName = label.Graphics[0].$.FontName || "Arial";
-      const fontWeight = label.Graphics[0].$.FontWeight;
-      const fontStyle = label.Graphics[0].$.FontStyle;
+      const fontName = graphics.FontName || "Arial";
+      const fontWeight = graphics.FontWeight;
+      const fontStyle = graphics.FontStyle;
       const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
 
       const cx2Label = {
         id: idCount,
-        x: parseFloat(label.Graphics[0].$.CenterX),
-        y: parseFloat(label.Graphics[0].$.CenterY),
-        z: parseInt(label.Graphics[0].$.ZOrder) || 0,
+        x: parseFloat(graphics.CenterX),
+        y: parseFloat(graphics.CenterY),
+        z: parseInt(graphics.ZOrder) || 0,
         v: {
           GraphID: label.$.GraphId,
           name: label.$.TextLabel,
@@ -261,10 +260,10 @@ let processLabels = function() {
           Transparent: transparent,
           Shape: shape,
           BorderThickness: borderThickness,
-          Height: parseFloat(label.Graphics[0].$.Height),
-          Width: parseFloat(label.Graphics[0].$.Width),
-          Color: label.Graphics[0].$.Color ? "#" + label.Graphics[0].$.Color : "#000000",
-          LabelSize: parseInt(label.Graphics[0].$.FontSize),
+          Height: parseFloat(graphics.Height),
+          Width: parseFloat(graphics.Width),
+          Color: graphics.Color ? "#" + graphics.Color : "#000000",
+          LabelSize: parseInt(graphics.FontSize),
           LabelFont: labelFont,
         }
       };
