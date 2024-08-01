@@ -9,444 +9,645 @@ if (!gpmlFilePath) {
   process.exit(1);
 }
 
+let gpmlContent = "";
+let result = "";
+
 // Read GPML file content
-fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
+try {
+  gpmlContent = fs.readFileSync(gpmlFilePath, 'utf-8');
+} catch (err) {
+  console.error(`Error reading GPML file: ${err.message}`);
+  process.exit(1);
+}
+
+// Parse GPML XML
+parseString(gpmlContent, (err, resultXML) => {
   if (err) {
-    console.error(`Error reading GPML file: ${err.message}`);
+    console.error(`Error parsing GPML XML: ${err.message}`);
     process.exit(1);
   }
+  result = resultXML;
+});
 
-  // Parse GPML XML
-  parseString(gpmlContent, (err, result) => {
-    if (err) {
-      console.error(`Error parsing GPML XML: ${err.message}`);
-      process.exit(1);
-    }
+// Extract Pathway information
+const pathway = result.Pathway;
+if (!pathway) {
+  console.error('Pathway element not found in GPML XML.');
+  process.exit(1);
+}
 
-    // Extract Pathway information
-    const pathway = result.Pathway;
-    if (!pathway) {
-      console.error('Pathway element not found in GPML XML.');
-      process.exit(1);
-    }
+const commentText = result.Pathway.Comment ? result.Pathway.Comment[0]._ : "";
+const dataNodeCount = result.Pathway.DataNode ? result.Pathway.DataNode.length : 0;
+const edgesCount = result.Pathway.Interaction ? result.Pathway.Interaction.length : 0;
 
-    const commentText = result.Pathway.Comment ? result.Pathway.Comment[0]._ : "";
-    const dataNodeCount = result.Pathway.DataNode ? result.Pathway.DataNode.length : 0;
-    const edgesCount = result.Pathway.Interaction ? result.Pathway.Interaction.length : 0;
-
-    // Convert to CX2 format
-    const cx2Data = [
-      {
-        "CXVersion": "2.0",
-        "hasFragments": false
+// Construct CX2 JSON data
+const cx2Data = [
+  {
+    "CXVersion": "2.0",
+    "hasFragments": false
+  },
+  {
+    "metaData": [
+      { "name": "attributeDeclarations", elementCount: 1 },
+      { "name": "networkAttributes", elementCount: 1 },
+      { "name": "edges", elementCount: edgesCount },
+      { "name": "nodes", elementCount: dataNodeCount - 1 },
+      { "name": "visualProperties", elementCount: 1 },
+      { "name": "visualEditorProperties", elementCount: 1 },
+      { "name": "edgeBypasses" },
+      { "name": "nodeBypasses" },
+      { "name": "tableVisualProperties" }
+    ]
+  },
+  {
+    "attributeDeclarations": [{
+      "nodes": {
+        "FillColor": { "d": "string" },
+        "Shape": { "d": "string" },
+        "BorderThickness": { "d": "double" },
+        "BorderStyle": { "d": "string" },
+        "GraphID": { "d": "string" },
+        "Color": { "d": "string" },
+        "ChEBI": { "d": "string" },
+        "LabelSize": { "d": "double" },
+        "Node Size": { "d": "double" },
+        "Border Width": { "d": "double" },
+        "XrefDatasource": { "d": "string" },
+        "LabelFont": { "d": "string" },
+        "Type": { "d": "string" },
+        "Transparent": { "d": "string" },
+        "XrefId": { "d": "string" },
+        "GraphId": { "d": "string" },
+        "name": { "d": "string" },
+        "Height": { "d": "double" },
+        "Ensembl": { "d": "string" },
+        "Width": { "d": "double" },
+        "selected": { "d": "boolean" }
       },
-
-      {
-        "metaData": [
-          { "name": "attributeDeclarations", elementCount: 1 },
-          { "name": "networkAttributes", elementCount: 1 },
-          { "name": "edges", elementCount: edgesCount },
-          { "name": "nodes", elementCount: dataNodeCount - 1 },
-          { "name": "visualProperties", elementCount: 1 },
-          { "name": "visualEditorProperties", elementCount: 1 },
-          { "name": "edgeBypasses" },
-          { "name": "nodeBypasses" },
-          { "name": "tableVisualProperties" }
-        ]
+      "networkAttributes": {
+        "shared name": { "d": "string" },
+        "description": { "d": "string" },
+        "__Annotations": { "d": "list_of_string" },
+        "name": { "d": "string" },
+        "selected": { "d": "boolean" }
       },
-      {
-        "attributeDeclarations": [{
-          "nodes": {
-            "FillColor": { "d": "string" },
-            "Shape": { "d": "string" },
-            "BorderThickness": { "d": "double" },
-            "BorderStyle": { "d": "string" },
-            "GraphID": { "d": "string" },
-            "Color": { "d": "string" },
-            "ChEBI": { "d": "string" },
-            "LabelSize": { "d": "double" },
-            "Node Size": { "d": "double" },
-            "Border Width": { "d": "double" },
-            "XrefDatasource": { "d": "string" },
-            "LabelFont": { "d": "string" },
-            "Type": { "d": "string" },
-            "Transparent": { "d": "string" },
-            "XrefId": { "d": "string" },
-            "GraphId": { "d": "string" },
-            "name": { "d": "string" },
-            "Height": { "d": "double" },
-            "Ensembl": { "d": "string" },
-            "Width": { "d": "double" },
-            "selected": { "d": "boolean" }
-          },
-          "networkAttributes": {
-            "shared name": { "d": "string" },
-            "description": { "d": "string" },
-            "__Annotations": { "d": "list_of_string" },
-            "name": { "d": "string" },
-            "selected": { "d": "boolean" }
-          },
-          "edges": {
-            "shared name": { "d": "string" },
-            "StartArrow": { "d": "string" },
-            "EndArrow": { "d": "string" },
-            "ConnectorType": { "d": "string" },
-            "shared interaction": { "d": "string" },
-            "LineThickness": { "d": "double" },
-            "LineStyle": { "d": "string" },
-            "Color": { "d": "string" },
-            "Source Arrow Shape": { "d": "string" },
-            "name": { "d": "string" },
-            "interaction": { "d": "string" },
-            "Target Arrow Shape": { "d": "string" },
-            "Width": { "d": "double" },
-            "selected": { "d": "boolean" },
-            "WP.type": { "d": "string" }
-          }
-        }]
-      },
-      {
-        "networkAttributes": [
-          {
-            "name": pathway.$.Name,
-            "description": commentText
-          }
-        ]
-      },
-      {
-        "nodes": []
-      },
-      {
-        "edges": []
-      },
-      {
-        "visualEditorProperties": []
-      },
-      {
-        "visualProperties": []
-      },
-      {
-        "labels": []
-      },
-
-      {
-        status: [
-          {
-            "success": true
-          }
-        ]
+      "edges": {
+        "shared name": { "d": "string" },
+        "StartArrow": { "d": "string" },
+        "EndArrow": { "d": "string" },
+        "ConnectorType": { "d": "string" },
+        "shared interaction": { "d": "string" },
+        "LineThickness": { "d": "double" },
+        "LineStyle": { "d": "string" },
+        "Color": { "d": "string" },
+        "Source Arrow Shape": { "d": "string" },
+        "name": { "d": "string" },
+        "interaction": { "d": "string" },
+        "Target Arrow Shape": { "d": "string" },
+        "Width": { "d": "double" },
+        "selected": { "d": "boolean" },
+        "WP.type": { "d": "string" }
       }
-
-    ];
-
-    const graphIdMapping = {};
-    let idCount = 1;
-
-    if (pathway.DataNode) {
-      pathway.DataNode.forEach(dataNode => {
-        const xref = dataNode.Xref && dataNode.Xref[0] ? dataNode.Xref[0].$ : null;
-        const xrefId = xref ? xref.ID : null;
-        const xrefDatasource = xref ? xref.Database : null;
-        const ensemblId = xrefDatasource === "Ensembl" ? xrefId : "";
-
-    let fillColor = "#FFFFFF";
-    let transparent = "false";
-    if (dataNode.Graphics[0].$.FillColor) {
-      if (dataNode.Graphics[0].$.FillColor.toLowerCase() === "transparent") {
-        fillColor = "#FFFFFF";
-        transparent = "true";
-      } else {
-        fillColor = "#" + dataNode.Graphics[0].$.FillColor;
-        transparent = "false";
+    }]
+  },
+  {
+    "networkAttributes": [
+      {
+        "name": pathway.$.Name,
+        "description": commentText
       }
-    }
+    ]
+  },
+  {
+    "nodes": []
+  },
+  {
+    "edges": []
+  },
+  {
+    "visualEditorProperties": []
+  },
+  {
+    "visualProperties": []
+  },
+  {
+    "labels": []
+  },
 
+  {
+    status: [
+      {
+        "success": true
+      }
+    ]
+  }
+];
 
-  function getBorderThickness(shape) {
+function getBorderThickness(shape, lineThickness) {
   if (shape === "None") {
     return 0;
   }
-  return  (parseFloat(dataNode.Graphics[0].$.BorderThickness) || 1);
+  return lineThickness;
+}
+
+function constructLabelFont(fontName, fontWeight, fontStyle) {
+  let labelFont = fontName;
+  if(fontWeight || fontStyle) {
+    labelFont += "-";
+    if(fontWeight)
+      labelFont += fontWeight;
+    if(fontStyle)
+      labelFont += fontStyle;
   }
+  labelFont += "MT";
+  return labelFont;
+};
 
-    const shape =  dataNode.Graphics[0].$.ShapeType || "Rectangle";
-    const borderThickness = getBorderThickness(shape);
+const graphIdMapping = {};
+let idCount = 1;
 
+let processDataNodes = function() {
+  if (pathway.DataNode) {
+    pathway.DataNode.forEach(dataNode => {
+      const xref = dataNode.Xref && dataNode.Xref[0] ? dataNode.Xref[0].$ : null;
+      const xrefId = xref ? xref.ID : null;
+      const xrefDatasource = xref ? xref.Database : null;
+      const ensemblId = xrefDatasource === "Ensembl" ? xrefId : "";
 
-
-
-
-        const cx2Node = {
-          // id: dataNode.$.GraphId, 
-          id: idCount,
-          x: parseFloat(dataNode.Graphics[0].$.CenterX),
-          y: parseFloat(dataNode.Graphics[0].$.CenterY),
-          z: parseInt(dataNode.Graphics[0].$.ZOrder) || 0,
-          v: {
-            FillColor: fillColor,
-            Shape: dataNode.Graphics[0].$.ShapeType || "Rectangle",
-            BorderThickness: borderThickness,
-            Color: dataNode.Graphics[0].$.Color ? "#" + dataNode.Graphics[0].$.Color : "#000000",
-            ChEBI: xrefId,
-            GraphID: dataNode.$.GraphId,
-            LabelSize: parseInt(dataNode.Graphics[0].$.FontSize),
-            XrefDatasource: xrefDatasource,
-            LabelFont: dataNode.Graphics[0].$.FontWeight ? "Dialog."+dataNode.Graphics[0].$.FontWeight.toLowerCase() : "Dialog.plain",
-            Type: dataNode.$.Type,
-            Transparent: transparent,
-            XrefId: xrefId,
-            name: dataNode.$.TextLabel,
-            Height: parseFloat(dataNode.Graphics[0].$.Height),
-            Width: parseFloat(dataNode.Graphics[0].$.Width) || 0,
-            
-            
-      
-
-          }
-        };
-        cx2Data[4].nodes.push(cx2Node);
-        graphIdMapping[dataNode.$.GraphId] = idCount;
-        idCount += 1;
-      });
-    }
-
-
-
-
-    if (pathway.Interaction) {
-      pathway.Interaction.forEach(interaction => {
-        const points = interaction.Graphics[0].Point;
-        const start = points[0];
-        const end = points[1];
-        const xref = interaction.Xref ? { database: interaction.Xref[0].$.Database, id: interaction.Xref[0].$.ID } : { database: '', id: '' };
-        const arrowHead = end.$.ArrowHead ? end.$.ArrowHead : "None";
-        let shape = "Line";
-        if (interaction.Graphics && interaction.Graphics[0].Anchor && interaction.Graphics[0].Anchor.length > 0) {
-          const anchor = interaction.Graphics[0].Anchor[0];
-          const shape = anchor.$.Shape
+      let fillColor = "#FFFFFF";
+      let transparent = "false";
+      if (dataNode.Graphics[0].$.FillColor) {
+        if (dataNode.Graphics[0].$.FillColor.toLowerCase() === "transparent") {
+          fillColor = "#FFFFFF";
+          transparent = "true";
+        } else {
+          fillColor = "#" + dataNode.Graphics[0].$.FillColor;
+          transparent = "false";
         }
-
-        const cx2Edge = {
-
-          id: idCount,
-          s: graphIdMapping[start.$.GraphRef],
-          t: graphIdMapping[end.$.GraphRef],
-          v: {
-            LineStyle: "Solid",
-            "Source Arrow Shape": shape,
-            Color: "#000000",
-            interaction: arrowHead || "Straight",
-            "Target Arrow Shape": arrowHead,
-            Width: 0,
-            "WP.type": arrowHead
-          }
-        };
-        cx2Data[5].edges.push(cx2Edge);
-        idCount += 1;
-      });
-    }
-
-  
-
-
-
-
-
-    const visualEditorProperties =
-    {
-      properties: {
-        nodeSizeLocked: false,
-        arrowColorMatchesEdge: true,
-        nodeCustomGraphicsSizeSync: true,
-        NETWORK_CENTER_Y_LOCATION: 0,
-        NETWORK_CENTER_X_LOCATION: 0,
-        NETWORK_SCALE_FACTOR: 1
       }
-    }
 
-    if (!cx2Data.visualEditorProperties) {
-      cx2Data.visualEditorProperties = [];
-    }
+      const shape = dataNode.Graphics[0].$.ShapeType || "Rectangle";
+      const lineThickness = parseFloat(dataNode.Graphics[0].$.LineThickness) || 1;
+      const borderThickness = getBorderThickness(shape, lineThickness);
+      const fontName = dataNode.Graphics[0].$.FontName || "Arial";
+      const fontWeight = dataNode.Graphics[0].$.FontWeight;
+      const fontStyle = dataNode.Graphics[0].$.FontStyle;
+      const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
 
-    cx2Data[6].visualEditorProperties.push(visualEditorProperties);
+      const cx2Node = {
+        // id: dataNode.$.GraphId, 
+        id: idCount,
+        x: parseFloat(dataNode.Graphics[0].$.CenterX),
+        y: parseFloat(dataNode.Graphics[0].$.CenterY),
+        z: parseInt(dataNode.Graphics[0].$.ZOrder) || 0,
+        v: {
+          FillColor: fillColor,
+          Shape: shape,
+          BorderThickness: borderThickness,
+          Color: dataNode.Graphics[0].$.Color ? "#" + dataNode.Graphics[0].$.Color : "#000000",
+          ChEBI: xrefId,
+          GraphID: dataNode.$.GraphId,
+          LabelSize: parseInt(dataNode.Graphics[0].$.FontSize),
+          XrefDatasource: xrefDatasource,
+          LabelFont: labelFont,
+          Type: dataNode.$.Type,
+          Transparent: transparent,
+          XrefId: xrefId,
+          name: dataNode.$.TextLabel,
+          Height: parseFloat(dataNode.Graphics[0].$.Height),
+          Width: parseFloat(dataNode.Graphics[0].$.Width),
+        }
+      };
+      cx2Data[4].nodes.push(cx2Node);
+      graphIdMapping[dataNode.$.GraphId] = idCount;
+      idCount += 1;
+    });
+  }
+};
 
-    const visualProperties =
-    {
-      default: {
-        edge: {
-          EDGE_SOURCE_ARROW_SIZE: 6,
-          EDGE_SOURCE_ARROW_SELECTED_PAINT: "#FFFF00",
-          EDGE_LABEL_OPACITY: 1,
-          EDGE_TARGET_ARROW_SELECTED_PAINT: "#FFFF00",
-          EDGE_TARGET_ARROW_SHAPE: "none",
-          EDGE_LABEL_BACKGROUND_OPACITY: 1,
-          EDGE_LABEL_POSITION: {
-            JUSTIFICATION: "center",
-            MARGIN_X: 0,
-            MARGIN_Y: 0,
-            EDGE_ANCHOR: "C",
-            LABEL_ANCHOR: "C"
-          },
-          EDGE_Z_ORDER: 0,
-          EDGE_LABEL_MAX_WIDTH: 200,
-          EDGE_LABEL_BACKGROUND_COLOR: "#B6B6B6",
-          EDGE_LABEL_ROTATION: 0,
-          EDGE_VISIBILITY: "element",
-          EDGE_LABEL_FONT_SIZE: 10,
-          EDGE_LABEL_COLOR: "#000000",
-          EDGE_SELECTED_PAINT: "#FF0000",
-          EDGE_SELECTED: "false",
-          EDGE_STACKING_DENSITY: 0.5,
-          EDGE_SOURCE_ARROW_COLOR: "#404040",
-          EDGE_TARGET_ARROW_COLOR: "#404040",
-          EDGE_STROKE_SELECTED_PAINT: "#FF0000",
-          EDGE_WIDTH: 2,
-          EDGE_SOURCE_ARROW_SHAPE: "none",
-          EDGE_LINE_COLOR: "#404040",
-          EDGE_OPACITY: 1,
-          EDGE_LABEL_BACKGROUND_SHAPE: "NONE",
-          EDGE_LABEL_FONT_FACE: {
-            FONT_FAMILY: "sans-serif",
-            FONT_STYLE: "normal",
-            FONT_WEIGHT: "normal",
-            FONT_NAME: "Dialog.plain"
-          },
-          EDGE_STACKING: "AUTO BEND",
-          EDGE_LABEL_AUTOROTATE: false,
-          EDGE_LINE_STYLE: "solid",
-          EDGE_CURVED: true,
-          EDGE_TARGET_ARROW_SIZE: 6
+let processLabels = function() {
+  if (pathway.Label) {
+    pathway.Label.forEach(label => {
+      const graphics = label.Graphics[0].$;
 
+      let fillColor = "#FFFFFF";
+      let transparent = "true";
+      if (label.Graphics[0].$.FillColor) {
+        if (label.Graphics[0].$.FillColor.toLowerCase() === "transparent") {
+          fillColor = "#FFFFFF";
+          transparent = "true";
+        } else {
+          fillColor = "#" + label.Graphics[0].$.FillColor;
+          transparent = "false";
+        }
+      }
+      const shape = label.Graphics[0].$.ShapeType || "None";
+      const lineThickness = parseFloat(label.Graphics[0].$.LineThickness) || 1;
+      const borderThickness = getBorderThickness(shape, lineThickness);
+      const fontName = label.Graphics[0].$.FontName || "Arial";
+      const fontWeight = label.Graphics[0].$.FontWeight;
+      const fontStyle = label.Graphics[0].$.FontStyle;
+      const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
+
+      const cx2Label = {
+        id: idCount,
+        x: parseFloat(label.Graphics[0].$.CenterX),
+        y: parseFloat(label.Graphics[0].$.CenterY),
+        z: parseInt(label.Graphics[0].$.ZOrder) || 0,
+        v: {
+          GraphID: label.$.GraphId,
+          name: label.$.TextLabel,
+          FillColor: fillColor,
+          Transparent: transparent,
+          Shape: shape,
+          BorderThickness: borderThickness,
+          Height: parseFloat(label.Graphics[0].$.Height),
+          Width: parseFloat(label.Graphics[0].$.Width),
+          Color: label.Graphics[0].$.Color ? "#" + label.Graphics[0].$.Color : "#000000",
+          LabelSize: parseInt(label.Graphics[0].$.FontSize),
+          LabelFont: labelFont,
+        }
+      };
+      if (!cx2Data.nodes) {
+        cx2Data.nodes = [];
+      }
+      cx2Data[4].nodes.push(cx2Label);
+      graphIdMapping[label.$.GraphId] = idCount;
+      idCount += 1;
+    });
+  }
+};
+
+let processInteractions = function() {
+  if (pathway.Interaction) {
+    pathway.Interaction.forEach(interaction => {
+      const points = interaction.Graphics[0].Point;
+      const start = points[0];
+      const end = points[1];
+      const xref = interaction.Xref ? { database: interaction.Xref[0].$.Database, id: interaction.Xref[0].$.ID } : { database: '', id: '' };
+      const arrowHead = end.$.ArrowHead ? end.$.ArrowHead : "None";
+      let shape = "Line";
+      if (interaction.Graphics && interaction.Graphics[0].Anchor && interaction.Graphics[0].Anchor.length > 0) {
+        const anchor = interaction.Graphics[0].Anchor[0];
+        const shape = anchor.$.Shape
+      }
+
+      const cx2Edge = {
+
+        id: idCount,
+        s: graphIdMapping[start.$.GraphRef],
+        t: graphIdMapping[end.$.GraphRef],
+        v: {
+          LineStyle: "Solid",
+          "Source Arrow Shape": shape,
+          Color: "#000000",
+          interaction: arrowHead || "Straight",
+          "Target Arrow Shape": arrowHead,
+          Width: 0,
+          "WP.type": arrowHead
+        }
+      };
+      cx2Data[5].edges.push(cx2Edge);
+      idCount += 1;
+    });
+  }
+};
+
+let generateVisualProperties = function() {
+  const visualProperties =
+  {
+    "default": {
+      "edge": {
+        "EDGE_SOURCE_ARROW_SIZE": 6,
+        "EDGE_SOURCE_ARROW_SELECTED_PAINT": "#FFFF00",
+        "EDGE_LABEL_OPACITY": 1,
+        "EDGE_TARGET_ARROW_SELECTED_PAINT": "#FFFF00",
+        "EDGE_TARGET_ARROW_SHAPE": "none",
+        "EDGE_LABEL_BACKGROUND_OPACITY": 1,
+        "EDGE_LABEL_POSITION": {
+          "JUSTIFICATION": "center",
+          "MARGIN_X": 0,
+          "MARGIN_Y": 0,
+          "EDGE_ANCHOR": "C",
+          "LABEL_ANCHOR": "C"
         },
-        network: {
-          NETWORK_BACKGROUND_COLOR: "#FFFFFF"
+        "EDGE_Z_ORDER": 0,
+        "EDGE_LABEL_MAX_WIDTH": 200,
+        "EDGE_LABEL_BACKGROUND_COLOR": "#B6B6B6",
+        "EDGE_LABEL_ROTATION": 0,
+        "EDGE_VISIBILITY": "element",
+        "EDGE_LABEL_FONT_SIZE": 10,
+        "EDGE_LABEL_COLOR": "#000000",
+        "EDGE_SELECTED_PAINT": "#FF0000",
+        "EDGE_SELECTED": "false",
+        "EDGE_STACKING_DENSITY": 0.5,
+        "EDGE_SOURCE_ARROW_COLOR": "#404040",
+        "EDGE_TARGET_ARROW_COLOR": "#404040",
+        "EDGE_STROKE_SELECTED_PAINT": "#FF0000",
+        "EDGE_WIDTH": 2,
+        "EDGE_SOURCE_ARROW_SHAPE": "none",
+        "EDGE_LINE_COLOR": "#404040",
+        "EDGE_OPACITY": 1,
+        "EDGE_LABEL_BACKGROUND_SHAPE": "NONE",
+        "EDGE_LABEL_FONT_FACE": {
+          "FONT_FAMILY": "sans-serif",
+          "FONT_STYLE": "normal",
+          "FONT_WEIGHT": "normal",
+          "FONT_NAME": "Dialog.plain"
         },
-        node: {
-          NODE_Y_LOCATION: 0,
-          NODE_BACKGROUND_COLOR: "#FFFFFF",
-          NODE_LABEL_BACKGROUND_COLOR: "#B6B6B6",
-          NODE_WIDTH: 75,
-          NODE_CUSTOMGRAPHICS_SIZE_7: 50,
-          NODE_CUSTOMGRAPHICS_SIZE_6: 50,
-          COMPOUND_NODE_SHAPE: "ROUND_RECTANGLE",
-          
-          NODE_Z_LOCATION: 0,
-          NODE_LABEL_POSITION: {
-            HORIZONTAL_ALIGN: "center",
-            VERTICAL_ALIGN: "center",
-            HORIZONTAL_ANCHOR: "center",
-            VERTICAL_ANCHOR: "center",
-            MARGIN_X: 0,
-            MARGIN_Y: 0,
-            JUSTIFICATION: "center"
-          },
-          NODE_CUSTOMGRAPHICS_SIZE_5: 50,
-          NODE_CUSTOMGRAPHICS_SIZE_4: 50,
-          NODE_CUSTOMGRAPHICS_SIZE_3: 50,
-          NODE_CUSTOMGRAPHICS_SIZE_2: 50,
-          NODE_VISIBILITY: "element",
-          NODE_CUSTOMGRAPHICS_SIZE_1: 50,
-          NODE_BORDER_STYLE: "solid",
-          NODE_BACKGROUND_OPACITY: 1,
-          NODE_LABEL_COLOR: "#000000",
-          NODE_SELECTED: false,
-          NODE_BORDER_COLOR: "#CCCCCC",
-          NODE_CUSTOMGRAPHICS_POSITION_8: {
-            JUSTIFICATION: "center",
-            MARGIN_X: 0,
-            MARGIN_Y: 0,
-            ENTITY_ANCHOR: "C",
-            GRAPHICS_ANCHOR: "C"
-          },
+        "EDGE_STACKING": "AUTO BEND",
+        "EDGE_LABEL_AUTOROTATE": false,
+        "EDGE_LINE_STYLE": "solid",
+        "EDGE_CURVED": true,
+        "EDGE_TARGET_ARROW_SIZE": 6
+      },
+      "network": {
+        "NETWORK_BACKGROUND_COLOR": "#FFFFFF"
+      },
+      "node": {
+        "NODE_Y_LOCATION": 0,
+        "NODE_BACKGROUND_COLOR": "#FFFFFF",
+        "NODE_LABEL_BACKGROUND_COLOR": "#B6B6B6",
+        "NODE_WIDTH": 75,
+        "NODE_CUSTOMGRAPHICS_SIZE_7": 50,
+        "NODE_CUSTOMGRAPHICS_SIZE_6": 50,
+        "COMPOUND_NODE_SHAPE": "ROUND_RECTANGLE",
 
-          NODE_CUSTOMGRAPHICS_POSITION_9: {
-            JUSTIFICATION: "center",
-            MARGIN_X: 0,
-            MARGIN_Y: 0,
-            ENTITY_ANCHOR: "C",
-            GRAPHICS_ANCHOR: "C"
-          },
-          NODE_CUSTOMGRAPHICS_POSITION_4: {
-            JUSTIFICATION: "center",
-            MARGIN_X: 0,
-            MARGIN_Y: 0,
-            ENTITY_ANCHOR: "C",
-            GRAPHICS_ANCHOR: "C"
-          },
-    
-          NODE_SHAPE: "ellipse",
-          NODE_CUSTOMGRAPHICS_POSITION_5: {
-            JUSTIFICATION: "center",
-            MARGIN_X: 0,
-            MARGIN_Y: 0,
-            ENTITY_ANCHOR: "C",
-            GRAPHICS_ANCHOR: "C"
-          },
-          NODE_CUSTOMGRAPHICS_POSITION_6: {
-            JUSTIFICATION: "center",
-            MARGIN_X: 0,
-            MARGIN_Y: 0,
-            ENTITY_ANCHOR: "C",
-            GRAPHICS_ANCHOR: "C"
-          },
-          NODE_CUSTOMGRAPHICS_POSITION_7: {
-            JUSTIFICATION: "center",
-            MARGIN_X: 0,
-            MARGIN_Y: 0,
-            ENTITY_ANCHOR: "C",
-            GRAPHICS_ANCHOR: "C"
-          },
-          NODE_LABEL_FONT_SIZE: 12,
-          NODE_X_LOCATION: 0,
-          NODE_CUSTOMGRAPHICS_POSITION_1: {
-            JUSTIFICATION: "center",
-            MARGIN_X: 0,
-            MARGIN_Y: 0,
-            ENTITY_ANCHOR: "C",
-            GRAPHICS_ANCHOR: "C"
-          },
-          NODE_BORDER_OPACITY: 1,
-          NODE_CUSTOMGRAPHICS_POSITION_2: {
-            JUSTIFICATION: "center",
-            MARGIN_X: 0,
-            MARGIN_Y: 0,
-            ENTITY_ANCHOR: "C",
-            GRAPHICS_ANCHOR: "C"
-          },
-          NODE_CUSTOMGRAPHICS_SIZE_9: 50,
-         
-          NODE_CUSTOMGRAPHICS_POSITION_3: {
-            JUSTIFICATION: "center",
-            MARGIN_X: 0,
-            MARGIN_Y: 0,
-            ENTITY_ANCHOR: "C",
-            GRAPHICS_ANCHO: "C"
-          },
-          NODE_LABEL_ROTATION: 0,
-          NODE_CUSTOMGRAPHICS_SIZE_8: 50,
-          NODE_BORDER_WIDTH: 1,
-          NODE_LABEL_OPACITY: 1,
-          NODE_HEIGHT: 35,
-          NODE_LABEL_BACKGROUND_SHAPE: "NONE",
-          COMPOUND_NODE_PADDING: "10.0",
-          NODE_LABEL_BACKGROUND_OPACITY: 1,
-          NODE_LABEL_FONT_FACE: {
-            FONT_FAMILY: "sans-serif",
-            FONT_STYLE: "normal",
-            FONT_WEIGHT: "normal",
-            FONT_NAME: "SansSerif.plain"
-          },
-          NODE_SELECTED_PAINT: "#FFFF00",
-          NODE_LABEL_MAX_WIDTH: 200,
-          
+        "NODE_Z_LOCATION": 0,
+        "NODE_LABEL_POSITION": {
+          "HORIZONTAL_ALIGN": "center",
+          "VERTICAL_ALIGN": "center",
+          "HORIZONTAL_ANCHOR": "center",
+          "VERTICAL_ANCHOR": "center",
+          "MARGIN_X": 0,
+          "MARGIN_Y": 0,
+          "JUSTIFICATION": "center"
+        },
+        "NODE_CUSTOMGRAPHICS_SIZE_5": 50,
+        "NODE_CUSTOMGRAPHICS_SIZE_4": 50,
+        "NODE_CUSTOMGRAPHICS_SIZE_3": 50,
+        "NODE_CUSTOMGRAPHICS_SIZE_2": 50,
+        "NODE_VISIBILITY": "element",
+        "NODE_CUSTOMGRAPHICS_SIZE_1": 50,
+        "NODE_BORDER_STYLE": "solid",
+        "NODE_BACKGROUND_OPACITY": 1,
+        "NODE_LABEL_COLOR": "#000000",
+        "NODE_SELECTED": false,
+        "NODE_BORDER_COLOR": "#CCCCCC",
+        "NODE_CUSTOMGRAPHICS_POSITION_8": {
+          "JUSTIFICATION": "center",
+          "MARGIN_X": 0,
+          "MARGIN_Y": 0,
+          "ENTITY_ANCHOR": "C",
+          "GRAPHICS_ANCHOR": "C"
+        },
 
+        "NODE_CUSTOMGRAPHICS_POSITION_9": {
+          "JUSTIFICATION": "center",
+          "MARGIN_X": 0,
+          "MARGIN_Y": 0,
+          "ENTITY_ANCHOR": "C",
+          "GRAPHICS_ANCHOR": "C"
+        },
+        "NODE_CUSTOMGRAPHICS_POSITION_4": {
+          "JUSTIFICATION": "center",
+          "MARGIN_X": 0,
+          "MARGIN_Y": 0,
+          "ENTITY_ANCHOR": "C",
+          "GRAPHICS_ANCHOR": "C"
+        },
 
+        "NODE_SHAPE": "ellipse",
+        "NODE_CUSTOMGRAPHICS_POSITION_5": {
+          "JUSTIFICATION": "center",
+          "MARGIN_X": 0,
+          "MARGIN_Y": 0,
+          "ENTITY_ANCHOR": "C",
+          "GRAPHICS_ANCHOR": "C"
+        },
+        "NODE_CUSTOMGRAPHICS_POSITION_6": {
+          "JUSTIFICATION": "center",
+          "MARGIN_X": 0,
+          "MARGIN_Y": 0,
+          "ENTITY_ANCHOR": "C",
+          "GRAPHICS_ANCHOR": "C"
+        },
+        "NODE_CUSTOMGRAPHICS_POSITION_7": {
+          "JUSTIFICATION": "center",
+          "MARGIN_X": 0,
+          "MARGIN_Y": 0,
+          "ENTITY_ANCHOR": "C",
+          "GRAPHICS_ANCHOR": "C"
+        },
+        "NODE_LABEL_FONT_SIZE": 12,
+        "NODE_X_LOCATION": 0,
+        "NODE_CUSTOMGRAPHICS_POSITION_1": {
+          "JUSTIFICATION": "center",
+          "MARGIN_X": 0,
+          "MARGIN_Y": 0,
+          "ENTITY_ANCHOR": "C",
+          "GRAPHICS_ANCHOR": "C"
+        },
+        "NODE_BORDER_OPACITY": 1,
+        "NODE_CUSTOMGRAPHICS_POSITION_2": {
+          "JUSTIFICATION": "center",
+          "MARGIN_X": 0,
+          "MARGIN_Y": 0,
+          "ENTITY_ANCHOR": "C",
+          "GRAPHICS_ANCHOR": "C"
+        },
+        "NODE_CUSTOMGRAPHICS_SIZE_9": 50,
 
+        "NODE_CUSTOMGRAPHICS_POSITION_3": {
+          "JUSTIFICATION": "center",
+          "MARGIN_X": 0,
+          "MARGIN_Y": 0,
+          "ENTITY_ANCHOR": "C",
+          "GRAPHICS_ANCHOR": "C"
+        },
+        "NODE_LABEL_ROTATION": 0,
+        "NODE_CUSTOMGRAPHICS_SIZE_8": 50,
+        "NODE_BORDER_WIDTH": 1,
+        "NODE_LABEL_OPACITY": 1,
+        "NODE_HEIGHT": 35,
+        "NODE_LABEL_BACKGROUND_SHAPE": "NONE",
+        "COMPOUND_NODE_PADDING": "10.0",
+        "NODE_LABEL_BACKGROUND_OPACITY": 1,
+        "NODE_LABEL_FONT_FACE": {
+          "FONT_FAMILY": "sans-serif",
+          "FONT_STYLE": "normal",
+          "FONT_WEIGHT": "normal",
+          "FONT_NAME": "SansSerif.plain"
+        },
+        "NODE_SELECTED_PAINT": "#FFFF00",
+        "NODE_LABEL_MAX_WIDTH": 200,
+      }
+    },
+    "nodeMapping": {
+      "NODE_BORDER_WIDTH": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "BorderThickness",
+          "type": "double"
         }
       },
+      "NODE_LABEL": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "name",
+          "type": "string"
+        }
+      },
+      "NODE_LABEL_COLOR": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "Color",
+          "type": "string"
+        }
+      },
+      "NODE_BORDER_COLOR": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "Color",
+          "type": "string"
+        }
+      },
+      "NODE_HEIGHT": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "Height",
+          "type": "double"
+        }
+      },
+      "NODE_BACKGROUND_COLOR": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "FillColor",
+          "type": "string"
+        }
+      },
+      "NODE_SHAPE": {
+        "type": "DISCRETE",
+        "definition": {
+          "map": [
+            {
+              "v": "Nucleus",
+              "vp": "Nucleus"
+            },
+            {
+              "v": "Hexagon",
+              "vp": "hexagon"
+            },
+            {
+              "v": "Ellipse",
+              "vp": "ellipse"
+            },
+            {
+              "v": "Brace",
+              "vp": "Brace"
+            },
+            {
+              "v": "RoundRectangle",
+              "vp": "round-rectangle"
+            },
+            {
+              "v": "Rectangle",
+              "vp": "rectangle"
+            },
+            {
+              "v": "Triangle",
+              "vp": "triangle"
+            },
+            {
+              "v": "Octagon",
+              "vp": "octagon"
+            },
+            {
+              "v": "Sarcoplasmic Reticulum",
+              "vp": "Sarcoplasmic Reticulum"
+            },
+            {
+              "v": "Endoplasmic Reticulum",
+              "vp": "Endoplasmic Reticulum"
+            },
+            {
+              "v": "Golgi Apparatus",
+              "vp": "Golgi Apparatus"
+            },
+            {
+              "v": "Mitochondria",
+              "vp": "Mitochondria"
+            },
+            {
+              "v": "Arc",
+              "vp": "Arc"
+            },
+            {
+              "v": "Oval",
+              "vp": "ellipse"
+            },
+            {
+              "v": "Pentagon",
+              "vp": "hexagon"
+            },
+            {
+              "v": "Organelle",
+              "vp": "round-rectangle"
+            },
+            {
+              "v": "Cell",
+              "vp": "Cell"
+            },
+            {
+              "v": "RoundedRectangle",
+              "vp": "round-rectangle"
+            }
+          ],
+          "attribute": "Shape",
+          "type": "string"
+        }
+      },
+      "NODE_LABEL_FONT_FACE": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "LabelFont",
+          "type": "string"
+        }
+      },
+      "NODE_LABEL_FONT_SIZE": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "LabelSize",
+          "type": "double"
+        }
+      },
+      "NODE_BACKGROUND_OPACITY": {
+        "type": "DISCRETE",
+        "definition": {
+          "map": [
+            {
+              "v": "true",
+              "vp": 0
+            },
+            {
+              "v": "false",
+              "vp": 1
+            }
+          ],
+          "attribute": "Transparent",
+          "type": "string"
+        }
+      },
+      "NODE_WIDTH": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "Width",
+          "type": "double"
 
-
-    edgeMapping : {
+        }
+      }
+    },
+    "edgeMapping": {
       "EDGE_TARGET_ARROW_SHAPE": {
         "type": "DISCRETE",
         "definition": {
@@ -472,374 +673,201 @@ fs.readFile(gpmlFilePath, 'utf-8', (err, gpmlContent) => {
           "type": "string"
         }
       },
-
-    "EDGE_WIDTH": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "LineThickness",
-              "type": "double"
-            }
-          },
-          "EDGE_SOURCE_ARROW_SHAPE": {
-            "type": "DISCRETE",
-            "definition": {
-              "map": [
-                {
-                  "v": "Arrow",
-                  "vp": "triangle"
-                },
-                {
-                  "v": "mim-branching-right",
-                  "vp": "triangle-cross"
-                },
-                {
-                  "v": "mim-covalent-bond",
-                  "vp": "triangle-cross"
-                },
-                {
-                  "v": "mim-branching-left",
-                  "vp": "triangle-cross"
-                },
-                {
-                  "v": "mim-transcription-translation",
-                  "vp": "triangle"
-                },
-                {
-                  "v": "mim-binding",
-                  "vp": "triangle"
-                },
-                {
-                  "v": "Line",
-                  "vp": "none"
-                },
-                {
-                  "v": "mim-cleavage",
-                  "vp": "diamond"
-                },
-                {
-                  "v": "mim-gap",
-                  "vp": "triangle"
-                },
-                {
-                  "v": "mim-stimulation",
-                  "vp": "triangle"
-                },
-                {
-                  "v": "mim-catalysis",
-                  "vp": "circle"
-                },
-                {
-                  "v": "mim-inhibition",
-                  "vp": "tee"
-                },
-                {
-                  "v": "TBar",
-                  "vp": "tee"
-                },
-                {
-                  "v": "mim-modification",
-                  "vp": "triangle"
-                },
-                {
-                  "v": "mim-necessary-stimulation",
-                  "vp": "triangle-cross"
-                },
-                {
-                  "v": "mim-conversion",
-                  "vp": "triangle"
-                }
-              ],
-              "attribute": "StartArrow",
-              "type": "string"
-            }
-          },
-          "EDGE_TOOLTIP": {
-            "type": "DISCRETE",
-            "definition": {
-              "map": [
-                {
-                  "v": "Elbow",
-                  "vp": "Elbow"
-                },
-                {
-                  "v": "Curved",
-                  "vp": "Curved"
-                },
-                {
-                  "v": "Straight",
-                  "vp": "Straight"
-                }
-              ],
-              "attribute": "ConnectorType",
-              "type": "string"
-            }
-          },
-          "EDGE_LINE_COLOR": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "Color",
-              "type": "string"
-            }
-          },
-          "EDGE_SOURCE_ARROW_COLOR": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "Color",
-              "type": "string"
-            }
-          },
-          "EDGE_TARGET_ARROW_COLOR": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "Color",
-              "type": "string"
-            }
-          },
-          "EDGE_LINE_STYLE": {
-            "type": "DISCRETE",
-            "definition": {
-              "map": [
-                {
-                  "v": "Dots",
-                  "vp": "dotted"
-                },
-                {
-                  "v": "Double",
-                  "vp": "solid"
-                },
-                {
-                  "v": "Solid",
-                  "vp": "solid"
-                },
-                {
-                  "v": "Dashed",
-                  "vp": "dashed"
-                }
-              ],
-              "attribute": "LineStyle",
-              "type": "string"
-            }
-          }
-        },
-        "nodeMapping": {
-          "NODE_BORDER_WIDTH": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "BorderThickness",
-              "type": "double"
-            }
-          },
-          "NODE_LABEL": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "name",
-              "type": "string"
-            }
-          },
-          "NODE_LABEL_COLOR": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "Color",
-              "type": "string"
-            }
-          },
-          "NODE_BORDER_COLOR": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "Color",
-              "type": "string"
-            }
-          },
-          "NODE_HEIGHT": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "Height",
-              "type": "double"
-            }
-          }, 
-          "NODE_BACKGROUND_COLOR": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "FillColor",
-              "type": "string"
-            }
-          },
-          "NODE_SHAPE": {
-            "type": "DISCRETE",
-            "definition": { 
-              "map": [
-                {
-                  "v": "Nucleus",
-                  "vp": "Nucleus"
-                },
-                {
-                  "v": "Hexagon",
-                  "vp": "hexagon"
-                },
-                {
-                  "v": "Ellipse",
-                  "vp": "ellipse"
-                },
-                {
-                  "v": "Brace",
-                  "vp": "Brace"
-                },
-                {
-                  "v": "RoundRectangle",
-                  "vp": "round-rectangle"
-                },
-                {
-                  "v": "Rectangle",
-                  "vp": "rectangle"
-                },
-                {
-                  "v": "Triangle",
-                  "vp": "triangle"
-                },
-                {
-                  "v": "Octagon",
-                  "vp": "octagon"
-                },
-                {
-                  "v": "Sarcoplasmic Reticulum",
-                  "vp": "Sarcoplasmic Reticulum"
-                },
-                {
-                  "v": "Endoplasmic Reticulum",
-                  "vp": "Endoplasmic Reticulum"
-                },
-                {
-                  "v": "Golgi Apparatus",
-                  "vp": "Golgi Apparatus"
-                },
-                {
-                  "v": "Mitochondria",
-                  "vp": "Mitochondria"
-                },
-                {
-                  "v": "Arc",
-                  "vp": "Arc"
-                },
-                {
-                  "v": "Oval",
-                  "vp": "ellipse"
-                },
-                {
-                  "v": "Pentagon",
-                  "vp": "hexagon"
-                },
-                {
-                  "v": "Organelle",
-                  "vp": "round-rectangle"
-                },
-                {
-                  "v": "Cell",
-                  "vp": "Cell"
-                },
-                {
-                  "v": "RoundedRectangle",
-                  "vp": "round-rectangle"
-                }
-              ],
-              "attribute": "Shape",
-              "type": "string"
-            }
-          },
-          "NODE_LABEL_FONT_FACE": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "LabelFont",
-              "type": "string"
-            }
-          },
-          "NODE_LABEL_FONT_SIZE": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "LabelSize",
-              "type": "double"
-            }
-          },
-          "NODE_BACKGROUND_OPACITY": {
-            "type": "DISCRETE",
-            "definition": {
-              "map": [
-                {
-                  "v": "true",
-                  "vp": 0
-                },
-                {
-                  "v": "false",
-                  "vp": 1
-                }
-              ],
-              "attribute": "Transparent",
-              "type": "string"
-            }
-          },
-          "NODE_WIDTH": {
-            "type": "PASSTHROUGH",
-            "definition": {
-              "attribute": "Width",
-              "type": "double"
-
-            }
-          }
+      "EDGE_WIDTH": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "LineThickness",
+          "type": "double"
         }
-      
-    }
-  
-
-
-    if (!cx2Data.visualProperties) {
-      cx2Data.visualProperties = [];
-    }
-
-    cx2Data[7].visualProperties.push(visualProperties);
-
-
-
-    if (pathway.Label) {
-      pathway.Label.forEach(label => {
-        const graphics = label.Graphics[0].$;
-        const cx2Label = {
-          id: label.$.GraphId,
-          text: label.$.TextLabel,
-          graphics: {
-            centerX: parseFloat(graphics.CenterX),
-            centerY: parseFloat(graphics.CenterY),
-            width: parseFloat(graphics.Width),
-            height: parseFloat(graphics.Height),
-            zOrder: parseInt(graphics.ZOrder, 10),
-            fillColor: `#${graphics.FillColor}`,
-            fontWeight: graphics.FontWeight,
-            fontSize: parseInt(graphics.FontSize, 10),
-            valign: graphics.Valign
-          }
-        };
-        if (!cx2Data.labels) {
-          cx2Data.labels = [];
+      },
+      "EDGE_SOURCE_ARROW_SHAPE": {
+        "type": "DISCRETE",
+        "definition": {
+          "map": [
+            {
+              "v": "Arrow",
+              "vp": "triangle"
+            },
+            {
+              "v": "mim-branching-right",
+              "vp": "triangle-cross"
+            },
+            {
+              "v": "mim-covalent-bond",
+              "vp": "triangle-cross"
+            },
+            {
+              "v": "mim-branching-left",
+              "vp": "triangle-cross"
+            },
+            {
+              "v": "mim-transcription-translation",
+              "vp": "triangle"
+            },
+            {
+              "v": "mim-binding",
+              "vp": "triangle"
+            },
+            {
+              "v": "Line",
+              "vp": "none"
+            },
+            {
+              "v": "mim-cleavage",
+              "vp": "diamond"
+            },
+            {
+              "v": "mim-gap",
+              "vp": "triangle"
+            },
+            {
+              "v": "mim-stimulation",
+              "vp": "triangle"
+            },
+            {
+              "v": "mim-catalysis",
+              "vp": "circle"
+            },
+            {
+              "v": "mim-inhibition",
+              "vp": "tee"
+            },
+            {
+              "v": "TBar",
+              "vp": "tee"
+            },
+            {
+              "v": "mim-modification",
+              "vp": "triangle"
+            },
+            {
+              "v": "mim-necessary-stimulation",
+              "vp": "triangle-cross"
+            },
+            {
+              "v": "mim-conversion",
+              "vp": "triangle"
+            }
+          ],
+          "attribute": "StartArrow",
+          "type": "string"
         }
-        cx2Data[8].labels.push(cx2Label);
-      });
-    }
-
-
-  
-
-    const cx2DataArray = cx2Data;
-
-    // Convert CX2 data to JSON string
-    const cx2JsonString = JSON.stringify(cx2DataArray, null, 2);
-
-    // Write CX2 data to file
-    // const outputPath = `${gpmlFilePath}.cx2`;
-    const outputPath = path.join(path.dirname(gpmlFilePath), path.basename(gpmlFilePath, '.gpml') + '.cx2');
-    fs.writeFile(outputPath, cx2JsonString, 'utf-8', (err) => {
-      if (err) {
-        console.error(`Error writing CX2 file: ${err.message}`);
-        process.exit(1);
+      },
+      "EDGE_TOOLTIP": {
+        "type": "DISCRETE",
+        "definition": {
+          "map": [
+            {
+              "v": "Elbow",
+              "vp": "Elbow"
+            },
+            {
+              "v": "Curved",
+              "vp": "Curved"
+            },
+            {
+              "v": "Straight",
+              "vp": "Straight"
+            }
+          ],
+          "attribute": "ConnectorType",
+          "type": "string"
+        }
+      },
+      "EDGE_LINE_COLOR": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "Color",
+          "type": "string"
+        }
+      },
+      "EDGE_SOURCE_ARROW_COLOR": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "Color",
+          "type": "string"
+        }
+      },
+      "EDGE_TARGET_ARROW_COLOR": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "Color",
+          "type": "string"
+        }
+      },
+      "EDGE_LINE_STYLE": {
+        "type": "DISCRETE",
+        "definition": {
+          "map": [
+            {
+              "v": "Dots",
+              "vp": "dotted"
+            },
+            {
+              "v": "Double",
+              "vp": "solid"
+            },
+            {
+              "v": "Solid",
+              "vp": "solid"
+            },
+            {
+              "v": "Dashed",
+              "vp": "dashed"
+            }
+          ],
+          "attribute": "LineStyle",
+          "type": "string"
+        }
       }
-      console.log(`CX2 data successfully written to: ${outputPath}`);
-    });
-  });
+    },
+  }
+
+  if (!cx2Data.visualProperties) {
+    cx2Data.visualProperties = [];
+  }
+
+  cx2Data[7].visualProperties.push(visualProperties);
+};
+
+let generateVisualEditorProperties = function() {
+  const visualEditorProperties =
+  {
+    properties: {
+      nodeSizeLocked: false,
+      arrowColorMatchesEdge: true,
+      nodeCustomGraphicsSizeSync: true,
+      NETWORK_CENTER_Y_LOCATION: 0,
+      NETWORK_CENTER_X_LOCATION: 0,
+      NETWORK_SCALE_FACTOR: 1
+    }
+  };
+
+  if (!cx2Data.visualEditorProperties) {
+    cx2Data.visualEditorProperties = [];
+  }
+
+  cx2Data[6].visualEditorProperties.push(visualEditorProperties);
+};
+
+processDataNodes();
+processLabels();
+processInteractions();
+generateVisualProperties();
+generateVisualEditorProperties();
+
+const cx2DataArray = cx2Data;
+
+// Convert CX2 data to JSON string
+const cx2JsonString = JSON.stringify(cx2DataArray, null, 2);
+
+// Write CX2 data to file
+// const outputPath = `${gpmlFilePath}.cx2`;
+const outputPath = path.join(path.dirname(gpmlFilePath), path.basename(gpmlFilePath, '.gpml') + '.cx2');
+fs.writeFile(outputPath, cx2JsonString, 'utf-8', (err) => {
+  if (err) {
+    console.error(`Error writing CX2 file: ${err.message}`);
+    process.exit(1);
+  }
+  console.log(`CX2 data successfully written to: ${outputPath}`);
 });
