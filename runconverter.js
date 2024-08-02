@@ -291,24 +291,29 @@ let processInteractions = function() {
         const shape = anchor.$.Shape
       }
 
+
+      if (graphIdMapping[start.$.GraphRef] && graphIdMapping[end.$.GraphRef]) {
+
       const cx2Edge = {
 
         id: idCount,
         s: graphIdMapping[start.$.GraphRef],
         t: graphIdMapping[end.$.GraphRef],
         v: {
+          StartArrow: "Solid",
+          EndArrow: arrowHead,
+          ConnectorType: "Straight",
+          LineThickness: parseFloat(interaction.Graphics[0].$.LineThickness) ,
           LineStyle: "Solid",
-          "Source Arrow Shape": shape,
           Color: "#000000",
-          interaction: arrowHead || "Straight",
-          "Target Arrow Shape": arrowHead,
-          Width: 0,
-          "WP.type": arrowHead
+          interaction: arrowHead
         }
       };
       cx2Data[5].edges.push(cx2Edge);
       idCount += 1;
+    }
     });
+    
   }
 };
 
