@@ -143,6 +143,9 @@ const cx2Data = [
   }
 ];
 
+
+
+
 function getBorderThickness(shape, lineThickness) {
   if (shape === "None") {
     return 0;
@@ -277,10 +280,49 @@ let processLabels = function() {
   }
 };
 
+ const anchors = [];
+ const interactions = result.Pathway.Interaction || [];
+    interactions.forEach(interaction => {
+      const graphics = interaction.Graphics || [];
+      graphics.forEach(graphic => {
+        const anchorElements = graphic.Anchor || [];
+        anchorElements.forEach(anchor => {
+          anchors.push(anchor.$.GraphId);
+        });
+      });
+    });
+
+
+    interactions.forEach(interaction => {
+  const graphics = interaction.Graphics || [];
+  graphics.forEach(graphic => {
+    const points = graphic.Point || [];
+    points.forEach(point => {
+      if (anchors.includes(point.$.GraphRef)) {
+        const node = {
+          id: idCount,
+          x: parseFloat(point.$.X),
+          y: parseFloat(point.$.Y),
+          z: parseInt(interaction.Graphics[0].$.ZOrder) || 0
+        };
+        cx2Data[4].nodes.push(node);
+        graphIdMapping[point.$.GraphRef] = idCount;
+        idCount += 1;
+      }
+    });
+  });
+});
+
+
+
 let processInteractions = function() {
   if (pathway.Interaction) {
     pathway.Interaction.forEach(interaction => {
       const points = interaction.Graphics[0].Point;
+
+  
+
+      
       const start = points[0];
       const end = points[1];
       const xref = interaction.Xref ? { database: interaction.Xref[0].$.Database, id: interaction.Xref[0].$.ID } : { database: '', id: '' };
@@ -300,7 +342,7 @@ let processInteractions = function() {
         s: graphIdMapping[start.$.GraphRef],
         t: graphIdMapping[end.$.GraphRef],
         v: {
-          StartArrow: "Solid",
+          StartArrow: "Line",
           EndArrow: arrowHead,
           ConnectorType: "Straight",
           LineThickness: parseFloat(interaction.Graphics[0].$.LineThickness) ,
