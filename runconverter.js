@@ -37,8 +37,9 @@ if (!pathway) {
 }
 
 const commentText = result.Pathway.Comment ? result.Pathway.Comment[0]._ : "";
-const dataNodeCount = result.Pathway.DataNode ? result.Pathway.DataNode.length : 0;
+let dataNodeCount = result.Pathway.DataNode ? result.Pathway.DataNode.length : 0;
 const edgesCount = result.Pathway.Interaction ? result.Pathway.Interaction.length : 0;
+
 
 // Construct CX2 JSON data
 const cx2Data = [
@@ -51,7 +52,7 @@ const cx2Data = [
       { "name": "attributeDeclarations", elementCount: 1 },
       { "name": "networkAttributes", elementCount: 1 },
       { "name": "edges", elementCount: edgesCount },
-      { "name": "nodes", elementCount: dataNodeCount - 1 },
+      { "name": "nodes", elementCount: dataNodeCount  },
       { "name": "visualProperties", elementCount: 1 },
       { "name": "visualEditorProperties", elementCount: 1 },
       { "name": "edgeBypasses" },
@@ -280,6 +281,7 @@ let processLabels = function() {
   }
 };
 
+
  const anchors = [];
  const interactions = result.Pathway.Interaction || [];
     interactions.forEach(interaction => {
@@ -313,12 +315,15 @@ interactions.forEach(interaction => {
           uniqueNodes.add(nodeKey);
           cx2Data[4].nodes.push(node);
           graphIdMapping[point.$.GraphRef] = idCount;
+          dataNodeCount++;
           idCount += 1;
         }
       }
     });
   });
 });
+
+cx2Data[1].metaData.find(meta => meta.name === "nodes").elementCount = dataNodeCount;
 
 
 
