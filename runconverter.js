@@ -293,7 +293,10 @@ let processLabels = function() {
     });
 
 
-    interactions.forEach(interaction => {
+  
+    const uniqueNodes = new Set();
+
+interactions.forEach(interaction => {
   const graphics = interaction.Graphics || [];
   graphics.forEach(graphic => {
     const points = graphic.Point || [];
@@ -305,13 +308,21 @@ let processLabels = function() {
           y: parseFloat(point.$.Y),
           z: parseInt(interaction.Graphics[0].$.ZOrder) || 0
         };
-        cx2Data[4].nodes.push(node);
-        graphIdMapping[point.$.GraphRef] = idCount;
-        idCount += 1;
+        const nodeKey = `${node.x},${node.y},${node.z}`;
+        if (!uniqueNodes.has(nodeKey)) {
+          uniqueNodes.add(nodeKey);
+          cx2Data[4].nodes.push(node);
+          graphIdMapping[point.$.GraphRef] = idCount;
+          idCount += 1;
+        }
       }
     });
   });
 });
+
+
+
+
 
 
 
@@ -343,12 +354,13 @@ let processInteractions = function() {
         t: graphIdMapping[end.$.GraphRef],
         v: {
           StartArrow: "Line",
-          EndArrow: arrowHead,
+          EndArrow: arrowHead === 'None' ? 'Line' : arrowHead,
           ConnectorType: "Straight",
           LineThickness: parseFloat(interaction.Graphics[0].$.LineThickness) ,
           LineStyle: "Solid",
           Color: "#000000",
-          interaction: arrowHead
+          // interaction: arrowHead || Line
+          interaction: arrowHead === 'None' ? 'Line' : arrowHead
         }
       };
       cx2Data[5].edges.push(cx2Edge);
