@@ -134,6 +134,12 @@ const cx2Data = [
   {
     "labels": []
   },
+  {
+    "nodeBypasses": []
+  },
+  {
+    "edgeBypasses": []
+  },
 
   {
     status: [
@@ -323,6 +329,8 @@ interactions.forEach(interaction => {
   });
 });
 
+
+
 cx2Data[1].metaData.find(meta => meta.name === "nodes").elementCount = dataNodeCount;
 
 
@@ -364,7 +372,7 @@ let processInteractions = function() {
           LineThickness: parseFloat(interaction.Graphics[0].$.LineThickness) ,
           LineStyle: "Solid",
           Color: "#000000",
-          // interaction: arrowHead || Line
+        
           interaction: arrowHead === 'None' ? 'Line' : arrowHead
         }
       };
@@ -546,171 +554,7 @@ let generateVisualProperties = function() {
         "NODE_LABEL_MAX_WIDTH": 200,
       }
     },
-    "nodeMapping": {
-      "NODE_BORDER_WIDTH": {
-        "type": "PASSTHROUGH",
-        "definition": {
-          "attribute": "BorderThickness",
-          "type": "double"
-        }
-      },
-      "NODE_LABEL": {
-        "type": "PASSTHROUGH",
-        "definition": {
-          "attribute": "name",
-          "type": "string"
-        }
-      },
-      "NODE_LABEL_COLOR": {
-        "type": "PASSTHROUGH",
-        "definition": {
-          "attribute": "Color",
-          "type": "string"
-        }
-      },
-      "NODE_BORDER_COLOR": {
-        "type": "PASSTHROUGH",
-        "definition": {
-          "attribute": "Color",
-          "type": "string"
-        }
-      },
-      "NODE_HEIGHT": {
-        "type": "PASSTHROUGH",
-        "definition": {
-          "attribute": "Height",
-          "type": "double"
-        }
-      },
-      "NODE_BACKGROUND_COLOR": {
-        "type": "PASSTHROUGH",
-        "definition": {
-          "attribute": "FillColor",
-          "type": "string"
-        }
-      },
-      "NODE_SHAPE": {
-        "type": "DISCRETE",
-        "definition": {
-          "map": [
-            {
-              "v": "Nucleus",
-              "vp": "Nucleus"
-            },
-            {
-              "v": "Hexagon",
-              "vp": "hexagon"
-            },
-            {
-              "v": "Ellipse",
-              "vp": "ellipse"
-            },
-            {
-              "v": "Brace",
-              "vp": "Brace"
-            },
-            {
-              "v": "RoundRectangle",
-              "vp": "round-rectangle"
-            },
-            {
-              "v": "Rectangle",
-              "vp": "rectangle"
-            },
-            {
-              "v": "Triangle",
-              "vp": "triangle"
-            },
-            {
-              "v": "Octagon",
-              "vp": "octagon"
-            },
-            {
-              "v": "Sarcoplasmic Reticulum",
-              "vp": "Sarcoplasmic Reticulum"
-            },
-            {
-              "v": "Endoplasmic Reticulum",
-              "vp": "Endoplasmic Reticulum"
-            },
-            {
-              "v": "Golgi Apparatus",
-              "vp": "Golgi Apparatus"
-            },
-            {
-              "v": "Mitochondria",
-              "vp": "Mitochondria"
-            },
-            {
-              "v": "Arc",
-              "vp": "Arc"
-            },
-            {
-              "v": "Oval",
-              "vp": "ellipse"
-            },
-            {
-              "v": "Pentagon",
-              "vp": "hexagon"
-            },
-            {
-              "v": "Organelle",
-              "vp": "round-rectangle"
-            },
-            {
-              "v": "Cell",
-              "vp": "Cell"
-            },
-            {
-              "v": "RoundedRectangle",
-              "vp": "round-rectangle"
-            }
-          ],
-          "attribute": "Shape",
-          "type": "string"
-        }
-      },
-      "NODE_LABEL_FONT_FACE": {
-        "type": "PASSTHROUGH",
-        "definition": {
-          "attribute": "LabelFont",
-          "type": "string"
-        }
-      },
-      "NODE_LABEL_FONT_SIZE": {
-        "type": "PASSTHROUGH",
-        "definition": {
-          "attribute": "LabelSize",
-          "type": "double"
-        }
-      },
-      "NODE_BACKGROUND_OPACITY": {
-        "type": "DISCRETE",
-        "definition": {
-          "map": [
-            {
-              "v": "true",
-              "vp": 0
-            },
-            {
-              "v": "false",
-              "vp": 1
-            }
-          ],
-          "attribute": "Transparent",
-          "type": "string"
-        }
-      },
-      "NODE_WIDTH": {
-        "type": "PASSTHROUGH",
-        "definition": {
-          "attribute": "Width",
-          "type": "double"
-
-        }
-      }
-    },
-    "edgeMapping": {
+     "edgeMapping": {
       "EDGE_TARGET_ARROW_SHAPE": {
         "type": "DISCRETE",
         "definition": {
@@ -884,6 +728,171 @@ let generateVisualProperties = function() {
         }
       }
     },
+    "nodeMapping": {
+      "NODE_BORDER_WIDTH": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "BorderThickness",
+          "type": "double"
+        }
+      },
+      "NODE_LABEL": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "name",
+          "type": "string"
+        }
+      },
+      "NODE_LABEL_COLOR": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "Color",
+          "type": "string"
+        }
+      },
+      "NODE_BORDER_COLOR": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "Color",
+          "type": "string"
+        }
+      },
+      "NODE_HEIGHT": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "Height",
+          "type": "double"
+        }
+      },
+      "NODE_BACKGROUND_COLOR": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "FillColor",
+          "type": "string"
+        }
+      },
+      "NODE_SHAPE": {
+        "type": "DISCRETE",
+        "definition": {
+          "map": [
+            {
+              "v": "Nucleus",
+              "vp": "Nucleus"
+            },
+            {
+              "v": "Hexagon",
+              "vp": "hexagon"
+            },
+            {
+              "v": "Ellipse",
+              "vp": "ellipse"
+            },
+            {
+              "v": "Brace",
+              "vp": "Brace"
+            },
+            {
+              "v": "RoundRectangle",
+              "vp": "round-rectangle"
+            },
+            {
+              "v": "Rectangle",
+              "vp": "rectangle"
+            },
+            {
+              "v": "Triangle",
+              "vp": "triangle"
+            },
+            {
+              "v": "Octagon",
+              "vp": "octagon"
+            },
+            {
+              "v": "Sarcoplasmic Reticulum",
+              "vp": "Sarcoplasmic Reticulum"
+            },
+            {
+              "v": "Endoplasmic Reticulum",
+              "vp": "Endoplasmic Reticulum"
+            },
+            {
+              "v": "Golgi Apparatus",
+              "vp": "Golgi Apparatus"
+            },
+            {
+              "v": "Mitochondria",
+              "vp": "Mitochondria"
+            },
+            {
+              "v": "Arc",
+              "vp": "Arc"
+            },
+            {
+              "v": "Oval",
+              "vp": "ellipse"
+            },
+            {
+              "v": "Pentagon",
+              "vp": "hexagon"
+            },
+            {
+              "v": "Organelle",
+              "vp": "round-rectangle"
+            },
+            {
+              "v": "Cell",
+              "vp": "Cell"
+            },
+            {
+              "v": "RoundedRectangle",
+              "vp": "round-rectangle"
+            }
+          ],
+          "attribute": "Shape",
+          "type": "string"
+        }
+      },
+      "NODE_LABEL_FONT_FACE": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "LabelFont",
+          "type": "string"
+        }
+      },
+      "NODE_LABEL_FONT_SIZE": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "LabelSize",
+          "type": "double"
+        }
+      },
+      "NODE_BACKGROUND_OPACITY": {
+        "type": "DISCRETE",
+        "definition": {
+          "map": [
+            {
+              "v": "true",
+              "vp": 0
+            },
+            {
+              "v": "false",
+              "vp": 1
+            }
+          ],
+          "attribute": "Transparent",
+          "type": "string"
+        }
+      },
+      "NODE_WIDTH": {
+        "type": "PASSTHROUGH",
+        "definition": {
+          "attribute": "Width",
+          "type": "double"
+
+        }
+      }
+    }
+   
   }
 
   if (!cx2Data.visualProperties) {
@@ -918,6 +927,60 @@ processLabels();
 processInteractions();
 generateVisualProperties();
 generateVisualEditorProperties();
+
+
+
+
+  if (!cx2Data[9].nodeBypasses) {
+    cx2Data[9].nodeBypasses = [];
+  }
+  if (interactions) {
+  
+
+    interactions.forEach(interaction => {
+      const graphics = interaction.Graphics[0];
+      const points = graphics.Point;
+
+      points.forEach(point => {
+        const arrowHead = point.$.ArrowHead;
+        const graphRef = point.$.GraphRef;
+    if (anchors.includes(graphRef)) {
+        let v;
+        if (arrowHead != 'Arrow') {
+          v = {
+            "NODE_CUSTOMGRAPHICS_SIZE_7": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_6": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_5": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_4": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_3": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_2": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_1": 1,
+            "NODE_HEIGHT": 1,
+            "NODE_SHAPE": "rectangle",
+            "NODE_WIDTH": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_9": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_8": 1
+          };
+        } else {
+          v = {
+            NODE_Z_LOCATION: parseInt(graphics.$.ZOrder) || 0
+          };
+        }
+
+        const id = graphIdMapping[graphRef]
+
+        const nodebypass = {
+          id: id, 
+          v: v
+        };
+        cx2Data[9].nodeBypasses.push(nodebypass);
+      }
+      });
+    });
+  }
+
+  
+
 
 const cx2DataArray = cx2Data;
 
