@@ -230,9 +230,12 @@ let processDataNodes = function() {
       cx2Data[4].nodes.push(cx2Node);
       graphIdMapping[dataNode.$.GraphId] = idCount;
       idCount += 1;
+  
     });
   }
 };
+
+
 
 let processLabels = function() {
   if (pathway.Label) {
@@ -559,22 +562,70 @@ let generateVisualProperties = function() {
         "type": "DISCRETE",
         "definition": {
           "map": [
-            { "v": "Arrow", "vp": "triangle" },
-            { "v": "mim-branching-right", "vp": "triangle-cross" },
-            { "v": "mim-covalent-bond", "vp": "triangle-cross" },
-            { "v": "mim-branching-left", "vp": "triangle-cross" },
-            { "v": "mim-transcription-translation", "vp": "triangle" },
-            { "v": "mim-binding", "vp": "triangle" },
-            { "v": "Line", "vp": "none" },
-            { "v": "mim-cleavage", "vp": "diamond" },
-            { "v": "mim-gap", "vp": "triangle" },
-            { "v": "mim-stimulation", "vp": "triangle" },
-            { "v": "mim-catalysis", "vp": "circle" },
-            { "v": "mim-inhibition", "vp": "tee" },
-            { "v": "TBar", "vp": "tee" },
-            { "v": "mim-modification", "vp": "triangle" },
-            { "v": "mim-necessary-stimulation", "vp": "triangle-cross" },
-            { "v": "mim-conversion", "vp": "triangle" }
+            { 
+              "v": "Arrow",
+              "vp": "triangle"
+            },
+            { 
+              "v": "mim-branching-right",
+              "vp": "triangle-cross" 
+            },
+            { 
+              "v": "mim-covalent-bond", 
+              "vp": "triangle-cross" 
+            },
+            { 
+              "v": "mim-branching-left", 
+              "vp": "triangle-cross" 
+            },
+            { 
+              "v": "mim-transcription-translation", 
+              "vp": "triangle" 
+            },
+            { 
+              "v": "mim-binding", 
+              "vp": "triangle" 
+            },
+            { 
+              "v": "Line", 
+              "vp": "none" 
+            },
+            { 
+              "v": "mim-cleavage", 
+              "vp": "diamond"
+            },
+            { 
+              "v": "mim-gap", 
+              "vp": "triangle" 
+            },
+            { 
+              "v": "mim-stimulation", 
+              "vp": "triangle" 
+            },
+            { 
+              "v": "mim-catalysis", 
+              "vp": "circle" 
+            },
+            { 
+              "v": "mim-inhibition", 
+              "vp": "tee" 
+            },
+            { 
+              "v": "TBar", 
+              "vp": "tee" 
+            },
+            { 
+              "v": "mim-modification", 
+              "vp": "triangle" 
+            },
+            { 
+              "v": "mim-necessary-stimulation",
+              "vp": "triangle-cross" 
+            },
+            { 
+              "v": "mim-conversion", 
+              "vp": "triangle" 
+            }
           ],
           "attribute": "EndArrow",
           "type": "string"
@@ -982,6 +1033,7 @@ generateVisualEditorProperties();
       });
     });
   }
+   
 
 const cx2DataArray = cx2Data;
 
