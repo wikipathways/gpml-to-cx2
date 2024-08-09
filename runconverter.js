@@ -934,9 +934,9 @@ generateVisualEditorProperties();
   if (!cx2Data[9].nodeBypasses) {
     cx2Data[9].nodeBypasses = [];
   }
+  const nodeBypassMap = new Map();
   if (interactions) {
   
-
     interactions.forEach(interaction => {
       const graphics = interaction.Graphics[0];
       const points = graphics.Point;
@@ -968,19 +968,20 @@ generateVisualEditorProperties();
         }
 
         const id = graphIdMapping[graphRef]
-
+         if (!nodeBypassMap.has(id)) {
         const nodebypass = {
           id: id, 
           v: v
         };
+        nodeBypassMap.set(id, nodebypass);
         cx2Data[9].nodeBypasses.push(nodebypass);
+
+      }
+        
       }
       });
     });
   }
-
-  
-
 
 const cx2DataArray = cx2Data;
 
