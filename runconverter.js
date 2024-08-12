@@ -175,6 +175,9 @@ function constructLabelFont(fontName, fontWeight, fontStyle) {
 
 const graphIdMapping = {};
 let idCount = 1;
+let cx2NodeIdCounts = [];
+let cx2EdgeIdCounts = [];
+let z=0;
 
 let processDataNodes = function() {
   if (pathway.DataNode) {
@@ -203,6 +206,7 @@ let processDataNodes = function() {
       const fontWeight = graphics.FontWeight;
       const fontStyle = graphics.FontStyle;
       const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
+      z = parseInt(graphics.ZOrder) || 0;
 
       const cx2Node = {
         // id: dataNode.$.GraphId, 
@@ -229,7 +233,9 @@ let processDataNodes = function() {
       };
       cx2Data[4].nodes.push(cx2Node);
       graphIdMapping[dataNode.$.GraphId] = idCount;
+      cx2NodeIdCounts.push(idCount);
       idCount += 1;
+      
   
     });
   }
@@ -337,11 +343,6 @@ interactions.forEach(interaction => {
 cx2Data[1].metaData.find(meta => meta.name === "nodes").elementCount = dataNodeCount;
 
 
-
-
-
-
-
 let processInteractions = function() {
   if (pathway.Interaction) {
     pathway.Interaction.forEach(interaction => {
@@ -380,6 +381,7 @@ let processInteractions = function() {
         }
       };
       cx2Data[5].edges.push(cx2Edge);
+      cx2EdgeIdCounts.push(idCount);
       idCount += 1;
     }
     });
@@ -985,6 +987,7 @@ generateVisualEditorProperties();
   if (!cx2Data[9].nodeBypasses) {
     cx2Data[9].nodeBypasses = [];
   }
+  const usedIds = [];
   const nodeBypassMap = new Map();
   if (interactions) {
   
@@ -1020,11 +1023,15 @@ generateVisualEditorProperties();
 
         const id = graphIdMapping[graphRef]
          if (!nodeBypassMap.has(id)) {
+         
         const nodebypass = {
           id: id, 
           v: v
         };
+        
         nodeBypassMap.set(id, nodebypass);
+         usedIds.push(id);
+         
         cx2Data[9].nodeBypasses.push(nodebypass);
 
       }
@@ -1033,6 +1040,33 @@ generateVisualEditorProperties();
       });
     });
   }
+  
+  cx2NodeIdCounts.forEach(id => {
+  
+  const v = {
+    NODE_Z_LOCATION: z 
+  };
+
+  
+  const nodebypass = {
+    id: id,
+    v: v
+  };
+   cx2Data[9].nodeBypasses.push(nodebypass);
+});
+  
+
+
+cx2EdgeIdCounts.forEach(id => {
+
+const edgebypass = {
+  id:id,
+  v: {
+    EDGE_WIDTH: 1
+  }
+}
+cx2Data[10].edgeBypasses.push(edgebypass);
+});
    
 
 const cx2DataArray = cx2Data;
