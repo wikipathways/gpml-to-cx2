@@ -311,7 +311,8 @@ let processLabels = function() {
 
 
   
-    const uniqueNodes = new Set();
+const uniqueNodes = new Set();
+let count =0;
 
 interactions.forEach(interaction => {
   const graphics = interaction.Graphics || [];
@@ -331,6 +332,7 @@ interactions.forEach(interaction => {
           cx2Data[4].nodes.push(node);
           graphIdMapping[point.$.GraphRef] = idCount;
           dataNodeCount++;
+          count++;
           idCount += 1;
         }
       }
@@ -994,13 +996,14 @@ generateVisualEditorProperties();
     interactions.forEach(interaction => {
       const graphics = interaction.Graphics[0];
       const points = graphics.Point;
+      let style =1;
 
       points.forEach(point => {
         const arrowHead = point.$.ArrowHead;
         const graphRef = point.$.GraphRef;
     if (anchors.includes(graphRef)) {
         let v;
-        if (arrowHead != 'Arrow') {
+        if (style<=count) {
           v = {
             "NODE_CUSTOMGRAPHICS_SIZE_7": 1,
             "NODE_CUSTOMGRAPHICS_SIZE_6": 1,
@@ -1020,6 +1023,7 @@ generateVisualEditorProperties();
             NODE_Z_LOCATION: parseInt(graphics.$.ZOrder) || 0
           };
         }
+        style++;
 
         const id = graphIdMapping[graphRef]
          if (!nodeBypassMap.has(id)) {
