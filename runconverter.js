@@ -375,7 +375,7 @@ let processInteractions = function() {
           ConnectorType: "Straight",
           LineThickness: parseFloat(interaction.Graphics[0].$.LineThickness) ,
           LineStyle: "Solid",
-          Color: "#000000",
+          Color: interaction.Graphics[0].$.Color ? '#' +interaction.Graphics[0].$.Color: "#000000",
         
           interaction: arrowHead === 'None' ? 'Line' : arrowHead
         }
