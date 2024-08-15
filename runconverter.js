@@ -178,6 +178,7 @@ let idCount = 1;
 let cx2NodeIdCounts = [];
 let cx2EdgeIdCounts = [];
 let z=0;
+let cx2LabelIds = [];
 
 let processDataNodes = function() {
   if (pathway.DataNode) {
@@ -291,6 +292,7 @@ let processLabels = function() {
       }
       cx2Data[4].nodes.push(cx2Label);
       graphIdMapping[label.$.GraphId] = idCount;
+      cx2LabelIds.push(idCount);
       idCount += 1;
     });
   }
@@ -1059,6 +1061,53 @@ generateVisualEditorProperties();
    cx2Data[9].nodeBypasses.push(nodebypass);
 });
   
+
+
+const processedLabelIds = new Set();
+cx2LabelIds.forEach(labelId => {
+
+ if (pathway.Label) {
+ 
+    pathway.Label.forEach(label => {
+       
+      const graphics = label.Graphics[0].$;
+
+            const v = {
+                NODE_BORDER_WIDTH: 0,
+                NODE_Z_LOCATION: parseInt(graphics.ZOrder, 10),
+                NODE_LABEL_COLOR: "#000000",
+                NODE_BORDER_COLOR: "#000000",
+                NODE_HEIGHT: parseFloat(graphics.Height),
+                NODE_LABEL_FONT_FACE: {
+                    FONT_FAMILY: "sans-serif",
+                    FONT_STYLE: "normal",
+                    FONT_WEIGHT: "normal",
+                    FONT_NAME: "Dialog.bold"
+                },
+                NODE_SELECTED_PAINT: "#FFFFCC",
+                NODE_LABEL_FONT_SIZE: parseInt(graphics.FontSize, 10),
+                NODE_BACKGROUND_OPACITY: 0,
+                NODE_WIDTH: parseFloat(graphics.Width)
+            };
+
+            const nodebypass = {
+                id: labelId, 
+                v: v
+            };
+            processedLabelIds.add(labelId);
+
+          
+            if (!cx2Data[9].nodeBypasses) {
+                cx2Data[9].nodeBypasses = [];
+            }
+
+            cx2Data[9].nodeBypasses.push(nodebypass);
+           
+        }
+)} 
+});
+
+
 
 
 cx2EdgeIdCounts.forEach(id => {
