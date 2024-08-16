@@ -52,7 +52,7 @@ const cx2Data = [
       { "name": "attributeDeclarations", elementCount: 1 },
       { "name": "networkAttributes", elementCount: 1 },
       { "name": "edges", elementCount: edgesCount },
-      { "name": "nodes", elementCount: dataNodeCount  },
+      { "name": "nodes", elementCount: dataNodeCount },
       { "name": "visualProperties", elementCount: 1 },
       { "name": "visualEditorProperties", elementCount: 1 },
       { "name": "edgeBypasses" },
@@ -150,9 +150,6 @@ const cx2Data = [
   }
 ];
 
-
-
-
 function getBorderThickness(shape, lineThickness) {
   if (shape === "None") {
     return 0;
@@ -162,11 +159,11 @@ function getBorderThickness(shape, lineThickness) {
 
 function constructLabelFont(fontName, fontWeight, fontStyle) {
   let labelFont = fontName;
-  if(fontWeight || fontStyle) {
+  if (fontWeight || fontStyle) {
     labelFont += "-";
-    if(fontWeight)
+    if (fontWeight)
       labelFont += fontWeight;
-    if(fontStyle)
+    if (fontStyle)
       labelFont += fontStyle;
   }
   labelFont += "MT";
@@ -177,10 +174,13 @@ const graphIdMapping = {};
 let idCount = 1;
 let cx2NodeIdCounts = [];
 let cx2EdgeIdCounts = [];
-let z=0;
+let z = 0;
 let cx2LabelIds = [];
 
-let processDataNodes = function() {
+const usedIds = [];
+const nodeBypassMap = new Map();
+
+let processDataNodes = function () {
   if (pathway.DataNode) {
     pathway.DataNode.forEach(dataNode => {
       const graphics = dataNode.Graphics[0].$;
@@ -236,37 +236,17 @@ let processDataNodes = function() {
       graphIdMapping[dataNode.$.GraphId] = idCount;
       cx2NodeIdCounts.push(idCount);
       idCount += 1;
-      
-  
+
+
     });
   }
 };
 
-
-
-let processLabels = function() {
+const processedLabelIds = new Set();
+let processLabels = function () {
   if (pathway.Label) {
     pathway.Label.forEach(label => {
       const graphics = label.Graphics[0].$;
-
-      let fillColor = "#FFFFFF";
-      let transparent = "true";
-      if (graphics.FillColor) {
-        if (graphics.FillColor.toLowerCase() === "transparent") {
-          fillColor = "#FFFFFF";
-          transparent = "true";
-        } else {
-          fillColor = "#" + graphics.FillColor;
-          transparent = "false";
-        }
-      }
-      const shape = graphics.ShapeType || "None";
-      const lineThickness = parseFloat(graphics.LineThickness) || 1;
-      const borderThickness = getBorderThickness(shape, lineThickness);
-      const fontName = graphics.FontName || "Arial";
-      const fontWeight = graphics.FontWeight;
-      const fontStyle = graphics.FontStyle;
-      const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
 
       const cx2Label = {
         id: idCount,
@@ -276,15 +256,6 @@ let processLabels = function() {
         v: {
           GraphID: label.$.GraphId,
           name: label.$.TextLabel,
-          FillColor: fillColor,
-          Transparent: transparent,
-          Shape: shape,
-          BorderThickness: borderThickness,
-          Height: parseFloat(graphics.Height),
-          Width: parseFloat(graphics.Width),
-          Color: graphics.Color ? "#" + graphics.Color : "#000000",
-          LabelSize: parseInt(graphics.FontSize),
-          LabelFont: labelFont,
         }
       };
       if (!cx2Data.nodes) {
@@ -293,28 +264,58 @@ let processLabels = function() {
       cx2Data[4].nodes.push(cx2Label);
       graphIdMapping[label.$.GraphId] = idCount;
       cx2LabelIds.push(idCount);
+
+      // rest of the style goes to nodeBypasses
+      const v = {
+        NODE_BORDER_WIDTH: 0,
+        NODE_Z_LOCATION: parseInt(graphics.ZOrder, 10),
+        NODE_LABEL_COLOR: "#000000",
+        NODE_BORDER_COLOR: "#000000",
+        NODE_HEIGHT: parseFloat(graphics.Height),
+        NODE_LABEL_FONT_FACE: {
+          FONT_FAMILY: "sans-serif",
+          FONT_STYLE: "normal",
+          FONT_WEIGHT: "normal",
+          FONT_NAME: "Dialog.bold"
+        },
+        NODE_SELECTED_PAINT: "#FFFFCC",
+        NODE_LABEL_FONT_SIZE: parseInt(graphics.FontSize, 10),
+        NODE_BACKGROUND_OPACITY: 0,
+        NODE_WIDTH: parseFloat(graphics.Width)
+      };
+
+      const nodebypass = {
+        id: idCount,
+        v: v
+      };
+      processedLabelIds.add(idCount);
+
+      if (!cx2Data[9].nodeBypasses) {
+        cx2Data[9].nodeBypasses = [];
+      }
+
+      cx2Data[9].nodeBypasses.push(nodebypass);
+
       idCount += 1;
     });
   }
 };
 
 
- const anchors = [];
- const interactions = result.Pathway.Interaction || [];
-    interactions.forEach(interaction => {
-      const graphics = interaction.Graphics || [];
-      graphics.forEach(graphic => {
-        const anchorElements = graphic.Anchor || [];
-        anchorElements.forEach(anchor => {
-          anchors.push(anchor.$.GraphId);
-        });
-      });
+const anchors = [];
+const interactions = result.Pathway.Interaction || [];
+interactions.forEach(interaction => {
+  const graphics = interaction.Graphics || [];
+  graphics.forEach(graphic => {
+    const anchorElements = graphic.Anchor || [];
+    anchorElements.forEach(anchor => {
+      anchors.push(anchor.$.GraphId);
     });
+  });
+});
 
-
-  
 const uniqueNodes = new Set();
-let count =0;
+let count = 0;
 
 interactions.forEach(interaction => {
   const graphics = interaction.Graphics || [];
@@ -347,14 +348,11 @@ interactions.forEach(interaction => {
 cx2Data[1].metaData.find(meta => meta.name === "nodes").elementCount = dataNodeCount;
 
 
-let processInteractions = function() {
+let processInteractions = function () {
   if (pathway.Interaction) {
     pathway.Interaction.forEach(interaction => {
       const points = interaction.Graphics[0].Point;
 
-  
-
-      
       const start = points[0];
       const end = points[1];
       const xref = interaction.Xref ? { database: interaction.Xref[0].$.Database, id: interaction.Xref[0].$.ID } : { database: '', id: '' };
@@ -368,32 +366,32 @@ let processInteractions = function() {
 
       if (graphIdMapping[start.$.GraphRef] && graphIdMapping[end.$.GraphRef]) {
 
-      const cx2Edge = {
+        const cx2Edge = {
 
-        id: idCount,
-        s: graphIdMapping[start.$.GraphRef],
-        t: graphIdMapping[end.$.GraphRef],
-        v: {
-          StartArrow: "Line",
-          EndArrow: arrowHead === 'None' ? 'Line' : arrowHead,
-          ConnectorType: "Straight",
-          LineThickness: parseFloat(interaction.Graphics[0].$.LineThickness) ,
-          LineStyle: "Solid",
-          Color: interaction.Graphics[0].$.Color ? '#' +interaction.Graphics[0].$.Color: "#000000",
-        
-          interaction: arrowHead === 'None' ? 'Line' : arrowHead
-        }
-      };
-      cx2Data[5].edges.push(cx2Edge);
-      cx2EdgeIdCounts.push(idCount);
-      idCount += 1;
-    }
+          id: idCount,
+          s: graphIdMapping[start.$.GraphRef],
+          t: graphIdMapping[end.$.GraphRef],
+          v: {
+            StartArrow: "Line",
+            EndArrow: arrowHead === 'None' ? 'Line' : arrowHead,
+            ConnectorType: "Straight",
+            LineThickness: parseFloat(interaction.Graphics[0].$.LineThickness),
+            LineStyle: "Solid",
+            Color: interaction.Graphics[0].$.Color ? '#' + interaction.Graphics[0].$.Color : "#000000",
+
+            interaction: arrowHead === 'None' ? 'Line' : arrowHead
+          }
+        };
+        cx2Data[5].edges.push(cx2Edge);
+        cx2EdgeIdCounts.push(idCount);
+        idCount += 1;
+      }
     });
-    
+
   }
 };
 
-let generateVisualProperties = function() {
+let generateVisualProperties = function () {
   const visualProperties =
   {
     "default": {
@@ -563,74 +561,74 @@ let generateVisualProperties = function() {
         "NODE_LABEL_MAX_WIDTH": 200,
       }
     },
-     "edgeMapping": {
+    "edgeMapping": {
       "EDGE_TARGET_ARROW_SHAPE": {
         "type": "DISCRETE",
         "definition": {
           "map": [
-            { 
+            {
               "v": "Arrow",
               "vp": "triangle"
             },
-            { 
+            {
               "v": "mim-branching-right",
-              "vp": "triangle-cross" 
+              "vp": "triangle-cross"
             },
-            { 
-              "v": "mim-covalent-bond", 
-              "vp": "triangle-cross" 
+            {
+              "v": "mim-covalent-bond",
+              "vp": "triangle-cross"
             },
-            { 
-              "v": "mim-branching-left", 
-              "vp": "triangle-cross" 
+            {
+              "v": "mim-branching-left",
+              "vp": "triangle-cross"
             },
-            { 
-              "v": "mim-transcription-translation", 
-              "vp": "triangle" 
+            {
+              "v": "mim-transcription-translation",
+              "vp": "triangle"
             },
-            { 
-              "v": "mim-binding", 
-              "vp": "triangle" 
+            {
+              "v": "mim-binding",
+              "vp": "triangle"
             },
-            { 
-              "v": "Line", 
-              "vp": "none" 
+            {
+              "v": "Line",
+              "vp": "none"
             },
-            { 
-              "v": "mim-cleavage", 
+            {
+              "v": "mim-cleavage",
               "vp": "diamond"
             },
-            { 
-              "v": "mim-gap", 
-              "vp": "triangle" 
+            {
+              "v": "mim-gap",
+              "vp": "triangle"
             },
-            { 
-              "v": "mim-stimulation", 
-              "vp": "triangle" 
+            {
+              "v": "mim-stimulation",
+              "vp": "triangle"
             },
-            { 
-              "v": "mim-catalysis", 
-              "vp": "circle" 
+            {
+              "v": "mim-catalysis",
+              "vp": "circle"
             },
-            { 
-              "v": "mim-inhibition", 
-              "vp": "tee" 
+            {
+              "v": "mim-inhibition",
+              "vp": "tee"
             },
-            { 
-              "v": "TBar", 
-              "vp": "tee" 
+            {
+              "v": "TBar",
+              "vp": "tee"
             },
-            { 
-              "v": "mim-modification", 
-              "vp": "triangle" 
+            {
+              "v": "mim-modification",
+              "vp": "triangle"
             },
-            { 
+            {
               "v": "mim-necessary-stimulation",
-              "vp": "triangle-cross" 
+              "vp": "triangle-cross"
             },
-            { 
-              "v": "mim-conversion", 
-              "vp": "triangle" 
+            {
+              "v": "mim-conversion",
+              "vp": "triangle"
             }
           ],
           "attribute": "EndArrow",
@@ -949,7 +947,7 @@ let generateVisualProperties = function() {
         }
       }
     }
-   
+
   }
 
   if (!cx2Data.visualProperties) {
@@ -959,7 +957,7 @@ let generateVisualProperties = function() {
   cx2Data[7].visualProperties.push(visualProperties);
 };
 
-let generateVisualEditorProperties = function() {
+let generateVisualEditorProperties = function () {
   const visualEditorProperties =
   {
     properties: {
@@ -985,27 +983,19 @@ processInteractions();
 generateVisualProperties();
 generateVisualEditorProperties();
 
+if (interactions) {
 
+  interactions.forEach(interaction => {
+    const graphics = interaction.Graphics[0];
+    const points = graphics.Point;
+    let style = 1;
 
-
-  if (!cx2Data[9].nodeBypasses) {
-    cx2Data[9].nodeBypasses = [];
-  }
-  const usedIds = [];
-  const nodeBypassMap = new Map();
-  if (interactions) {
-  
-    interactions.forEach(interaction => {
-      const graphics = interaction.Graphics[0];
-      const points = graphics.Point;
-      let style =1;
-
-      points.forEach(point => {
-        const arrowHead = point.$.ArrowHead;
-        const graphRef = point.$.GraphRef;
-    if (anchors.includes(graphRef)) {
+    points.forEach(point => {
+      const arrowHead = point.$.ArrowHead;
+      const graphRef = point.$.GraphRef;
+      if (anchors.includes(graphRef)) {
         let v;
-        if (style<=count) {
+        if (style <= count) {
           v = {
             "NODE_CUSTOMGRAPHICS_SIZE_7": 1,
             "NODE_CUSTOMGRAPHICS_SIZE_6": 1,
@@ -1028,99 +1018,51 @@ generateVisualEditorProperties();
         style++;
 
         const id = graphIdMapping[graphRef]
-         if (!nodeBypassMap.has(id)) {
-         
-        const nodebypass = {
-          id: id, 
-          v: v
-        };
-        
-        nodeBypassMap.set(id, nodebypass);
-         usedIds.push(id);
-         
-        cx2Data[9].nodeBypasses.push(nodebypass);
+        if (!nodeBypassMap.has(id)) {
+
+          const nodebypass = {
+            id: id,
+            v: v
+          };
+
+          nodeBypassMap.set(id, nodebypass);
+          usedIds.push(id);
+
+          cx2Data[9].nodeBypasses.push(nodebypass);
+
+        }
 
       }
-        
-      }
-      });
     });
-  }
-  
-  cx2NodeIdCounts.forEach(id => {
-  
+  });
+}
+
+cx2NodeIdCounts.forEach(id => {
+
   const v = {
-    NODE_Z_LOCATION: z 
+    NODE_Z_LOCATION: z
   };
 
-  
+
   const nodebypass = {
     id: id,
     v: v
   };
-   cx2Data[9].nodeBypasses.push(nodebypass);
+  cx2Data[9].nodeBypasses.push(nodebypass);
 });
-  
-
-
-const processedLabelIds = new Set();
-cx2LabelIds.forEach(labelId => {
-
- if (pathway.Label) {
- 
-    pathway.Label.forEach(label => {
-       
-      const graphics = label.Graphics[0].$;
-
-            const v = {
-                NODE_BORDER_WIDTH: 0,
-                NODE_Z_LOCATION: parseInt(graphics.ZOrder, 10),
-                NODE_LABEL_COLOR: "#000000",
-                NODE_BORDER_COLOR: "#000000",
-                NODE_HEIGHT: parseFloat(graphics.Height),
-                NODE_LABEL_FONT_FACE: {
-                    FONT_FAMILY: "sans-serif",
-                    FONT_STYLE: "normal",
-                    FONT_WEIGHT: "normal",
-                    FONT_NAME: "Dialog.bold"
-                },
-                NODE_SELECTED_PAINT: "#FFFFCC",
-                NODE_LABEL_FONT_SIZE: parseInt(graphics.FontSize, 10),
-                NODE_BACKGROUND_OPACITY: 0,
-                NODE_WIDTH: parseFloat(graphics.Width)
-            };
-
-            const nodebypass = {
-                id: labelId, 
-                v: v
-            };
-            processedLabelIds.add(labelId);
-
-          
-            if (!cx2Data[9].nodeBypasses) {
-                cx2Data[9].nodeBypasses = [];
-            }
-
-            cx2Data[9].nodeBypasses.push(nodebypass);
-           
-        }
-)} 
-});
-
-
 
 
 cx2EdgeIdCounts.forEach(id => {
 
-const edgebypass = {
-  id:id,
-  v: {
-    EDGE_WIDTH: 1
+  const edgebypass = {
+    id: id,
+    v: {
+      EDGE_WIDTH: 1
+    }
   }
-}
-cx2Data[10].edgeBypasses.push(edgebypass);
+  cx2Data[10].edgeBypasses.push(edgebypass);
 });
-   
+
 
 const cx2DataArray = cx2Data;
 
