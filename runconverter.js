@@ -416,7 +416,7 @@ let generateVisualEditorProperties = function () {
 };
 
 
-function generateVisualPropertiesData() {
+let generateVisualPropertiesData =  function () {
   const visualProperties = generateVisualProperties();
 
   cx2Data[7].visualProperties.push(visualProperties);
