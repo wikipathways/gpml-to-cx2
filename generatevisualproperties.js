@@ -1,5 +1,3 @@
-
-
 let generateVisualProperties = function ()   {
    return {
         "default": {
@@ -552,8 +550,5 @@ let generateVisualProperties = function ()   {
         }
       }
 };
-
-
-
 
 export default generateVisualProperties;

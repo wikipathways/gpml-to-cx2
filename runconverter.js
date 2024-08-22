@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { parseString } from 'xml2js';
 import path from 'path';
-import generateVisualProperties from './generatevisualproperties.js';
+import generateVisualProperties from './generateVisualProperties.js';
 
 const gpmlFilePath = process.argv[2];
 
