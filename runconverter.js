@@ -267,20 +267,28 @@ let processLabels = function () {
       cx2LabelIds.push(idCount);
 
       // rest of the style goes to nodeBypasses
+      const shape = label.Graphics[0].$.ShapeType || "None";
+      const lineThickness = parseFloat(label.Graphics[0].$.LineThickness) || 1;
+      const borderThickness = getBorderThickness(shape, lineThickness);
+      const fontName = label.Graphics[0].$.FontName || "Arial";
+      const fontWeight = label.Graphics[0].$.FontWeight;
+      const fontStyle = label.Graphics[0].$.FontStyle;
+      const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
+
       const v = {
-        NODE_BORDER_WIDTH: 0,
-        NODE_Z_LOCATION: parseInt(graphics.ZOrder, 10),
-        NODE_LABEL_COLOR: "#000000",
-        NODE_BORDER_COLOR: "#000000",
+        NODE_BORDER_WIDTH: borderThickness,
+        NODE_Z_LOCATION: parseInt(graphics.ZOrder) || 0,
+        NODE_LABEL_COLOR: graphics.Color ? "#" + graphics.Color : "#000000",
+        NODE_BORDER_COLOR: graphics.Color ? "#" + graphics.Color : "#000000",
         NODE_HEIGHT: parseFloat(graphics.Height),
         NODE_LABEL_FONT_FACE: {
           FONT_FAMILY: "sans-serif",
-          FONT_STYLE: "normal",
-          FONT_WEIGHT: "normal",
-          FONT_NAME: "Dialog.bold"
+          FONT_STYLE: graphics.FontStyle || "normal",
+          FONT_WEIGHT: graphics.FontWeight || "normal",
+          FONT_NAME: labelFont || "Arial",
         },
         NODE_SELECTED_PAINT: "#FFFFCC",
-        NODE_LABEL_FONT_SIZE: parseInt(graphics.FontSize, 10),
+        NODE_LABEL_FONT_SIZE: parseInt(graphics.FontSize, 10) || 12,
         NODE_BACKGROUND_OPACITY: 0,
         NODE_WIDTH: parseFloat(graphics.Width)
       };
@@ -357,13 +365,13 @@ let processInteractions = function () {
       const start = points[0];
       const end = points[1];
       const xref = interaction.Xref ? { database: interaction.Xref[0].$.Database, id: interaction.Xref[0].$.ID } : { database: '', id: '' };
-      const arrowHead = end.$.ArrowHead ? end.$.ArrowHead : "None";
+      const startArrowHead = start.$.ArrowHead ? start.$.ArrowHead : "None";
+      const endArrowHead = end.$.ArrowHead ? end.$.ArrowHead : "None";
       let shape = "Line";
       if (interaction.Graphics && interaction.Graphics[0].Anchor && interaction.Graphics[0].Anchor.length > 0) {
         const anchor = interaction.Graphics[0].Anchor[0];
         const shape = anchor.$.Shape
       }
-
 
       if (graphIdMapping[start.$.GraphRef] && graphIdMapping[end.$.GraphRef]) {
 
@@ -373,14 +381,14 @@ let processInteractions = function () {
           s: graphIdMapping[start.$.GraphRef],
           t: graphIdMapping[end.$.GraphRef],
           v: {
-            StartArrow: "Line",
-            EndArrow: arrowHead === 'None' ? 'Line' : arrowHead,
+            StartArrow: startArrowHead === 'None' ? 'Line' : startArrowHead,
+            EndArrow: endArrowHead === 'None' ? 'Line' : endArrowHead,
             ConnectorType: "Straight",
             LineThickness: parseFloat(interaction.Graphics[0].$.LineThickness),
             LineStyle: "Solid",
             Color: interaction.Graphics[0].$.Color ? '#' + interaction.Graphics[0].$.Color : "#000000",
 
-            interaction: arrowHead === 'None' ? 'Line' : arrowHead
+            interaction: endArrowHead === 'None' ? 'Line' : endArrowHead
           }
         };
         cx2Data[5].edges.push(cx2Edge);
