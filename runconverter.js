@@ -374,6 +374,8 @@ let processInteractions = function () {
       }
 
       if (graphIdMapping[start.$.GraphRef] && graphIdMapping[end.$.GraphRef]) {
+        const attribute = interaction.Attribute && interaction.Attribute.find(attr => attr.$.Key === "org.pathvisio.DoubleLineProperty");
+        const lineStyle = attribute ? attribute.$.Value : interaction.Graphics[0].$.LineStyle === 'Broken' ? "Dashed" : "Solid";
 
         const cx2Edge = {
 
@@ -385,9 +387,8 @@ let processInteractions = function () {
             EndArrow: endArrowHead === 'None' ? 'Line' : endArrowHead,
             ConnectorType: "Straight",
             LineThickness: parseFloat(interaction.Graphics[0].$.LineThickness),
-            LineStyle: "Solid",
+            LineStyle:  lineStyle,
             Color: interaction.Graphics[0].$.Color ? '#' + interaction.Graphics[0].$.Color : "#000000",
-
             interaction: endArrowHead === 'None' ? 'Line' : endArrowHead
           }
         };
