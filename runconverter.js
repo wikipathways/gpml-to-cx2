@@ -84,7 +84,8 @@ const cx2Data = [
         "Height": { "d": "double" },
         "Ensembl": { "d": "string" },
         "Width": { "d": "double" },
-        "selected": { "d": "boolean" }
+        "selected": { "d": "boolean" },
+        "IsGPMLShape": {"d": "boolean"}
       },
       "networkAttributes": {
         "shared name": { "d": "string" },
@@ -355,6 +356,87 @@ interactions.forEach(interaction => {
 
 
 cx2Data[1].metaData.find(meta => meta.name === "nodes").elementCount = dataNodeCount;
+
+
+let extractGraphicalLineInfo =  function () {
+  const graphicalLineInfo = [];
+
+  if (pathway.GraphicalLine) {
+    pathway.GraphicalLine.forEach(graphicalLine => {
+      const graphics = graphicalLine.Graphics[0];
+      const points = graphics.Point;
+      
+
+      points.forEach(point => {
+        const node = {
+          id: idCount, 
+          x: parseFloat(point.$.X),
+          y: parseFloat(point.$.Y),
+          z: 0 
+        };
+         cx2Data[4].nodes.push(node);
+         graphIdMapping[point.$.GraphId] = idCount; 
+         idCount+=1;
+
+        for (let i = 0; i < points.length - 1; i++) {
+           const startGraphId = points[i].$.GraphId;
+           const endGraphId = points[i + 1].$.GraphId;
+
+        if (graphIdMapping[startGraphId] !== undefined && graphIdMapping[endGraphId] !== undefined) {
+        const cx2Edge = {
+
+          id: idCount,
+          s: graphIdMapping[startGraphId], 
+          t: graphIdMapping[endGraphId], 
+
+          v: {
+            StartArrow: 'Line' ,
+            EndArrow: 'Line' ,
+            ConnectorType: 'Straight',
+            LineThickness: parseFloat(graphics.$.LineThickness),
+            LineStyle:  'Solid',
+            Color: '#000000',
+            interaction:  'Line'
+          }
+        };
+        idCount+=1;
+        cx2Data[5].edges.push(cx2Edge);
+      }
+      };
+     
+    });
+  } 
+)}
+}
+
+extractGraphicalLineInfo()
+
+
+
+let extractShapes =  function () {
+  const shapes = result.Shape;
+    if (pathway.Shape) {
+      const shapes = pathway.Shape;
+      shapes.forEach(shape => {
+        const graphics = shape.Graphics[0].$;
+        const node = {
+          id: idCount,
+          x: parseFloat(graphics.CenterX),
+          y: parseFloat(graphics.CenterY),
+          z: parseInt(graphics.ZOrder, 10),
+          v: {
+            GraphID: shape.$.GraphId,
+            IsGPMLShape: true,
+            name: shape.$.TextLabel
+          }
+        };
+        cx2Data[4].nodes.push(node);
+        idCount += 1;
+      });
+    }
+}
+
+extractShapes();
 
 
 let processInteractions = function () {
