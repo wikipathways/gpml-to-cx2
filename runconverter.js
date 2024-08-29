@@ -368,6 +368,12 @@ let extractGraphicalLineInfo =  function () {
       
 
       points.forEach(point => {
+
+        if (!point.$.GraphId) {
+          point.$.GraphId = `generated-${idCount}`;
+        }
+
+
         const node = {
           id: idCount, 
           x: parseFloat(point.$.X),
