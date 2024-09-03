@@ -40,6 +40,7 @@ if (!pathway) {
 const commentText = result.Pathway.Comment ? result.Pathway.Comment[0]._ : "";
 let dataNodeCount = result.Pathway.DataNode ? result.Pathway.DataNode.length : 0;
 const edgesCount = result.Pathway.Interaction ? result.Pathway.Interaction.length : 0;
+let count = 0;
 
 
 // Construct CX2 JSON data
@@ -325,7 +326,7 @@ interactions.forEach(interaction => {
 });
 
 const uniqueNodes = new Set();
-let count = 0;
+
 
 interactions.forEach(interaction => {
   const graphics = interaction.Graphics || [];
@@ -371,15 +372,38 @@ let extractGraphicalLineInfo =  function () {
 
         if (!point.$.GraphId) {
           point.$.GraphId = `generated-${idCount}`;
+          
         }
+
+          let v;
+           v = {
+            "NODE_CUSTOMGRAPHICS_SIZE_7": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_6": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_5": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_4": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_3": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_2": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_1": 1,
+            "NODE_HEIGHT": 1,
+            "NODE_SHAPE": "rectangle",
+            "NODE_WIDTH": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_9": 1,
+            "NODE_CUSTOMGRAPHICS_SIZE_8": 1
+          };
+            const nodebypass = {
+            id: idCount,
+            v: v
+          };
+          cx2Data[9].nodeBypasses.push(nodebypass);
 
 
         const node = {
           id: idCount, 
           x: parseFloat(point.$.X),
           y: parseFloat(point.$.Y),
-          z: 0 
+          z:  graphics.$.ZOrder
         };
+        dataNodeCount++;
          cx2Data[4].nodes.push(node);
          graphIdMapping[point.$.GraphId] = idCount; 
          idCount+=1;
@@ -400,8 +424,8 @@ let extractGraphicalLineInfo =  function () {
             EndArrow: 'Line' ,
             ConnectorType: 'Straight',
             LineThickness: parseFloat(graphics.$.LineThickness),
-            LineStyle:  'Solid',
-            Color: '#000000',
+            LineStyle:  graphics.$.LineStyle ? graphics.$.LineStyle :'Solid',
+            Color: graphics.$.Color ? graphics.$.Color :'#000000',
             interaction:  'Line'
           }
         };
@@ -442,7 +466,7 @@ let extractShapes =  function () {
     }
 }
 
-extractShapes();
+// extractShapes();
 
 
 let processInteractions = function () {
@@ -518,6 +542,8 @@ let generateVisualPropertiesData =  function () {
 
   cx2Data[7].visualProperties.push(visualProperties);
 };
+
+
 
 
 processDataNodes();
