@@ -22,7 +22,7 @@ npm install
 ### 2.Run the following command, replacing <File_Name> with the name of your GPML file:
 
 ```
-node runconverter.js <File_Name>.gpml
+npm run convert <File_Name>.gpml
 ```
 
 ### The converted file will be generated in the same directory.<File_Name>.cx2

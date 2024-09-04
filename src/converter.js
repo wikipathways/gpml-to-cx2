@@ -92,7 +92,14 @@ const cx2Data = [
         "Ensembl": { "d": "string" },
         "Width": { "d": "double" },
         "selected": { "d": "boolean" },
-        "IsGPMLShape": {"d": "boolean"}
+        "IsGPMLShape": {"d": "boolean"},
+        "parentsymbol": {"d": "string"},
+        "parentid": {"d": "string"},
+        "direction": {"d": "string"},
+        "ptm": {"d": "string"},
+        "position": {"d": "string"},
+        "site": {"d": "string"},
+        "sitegrpid": {"d": "string"}
       },
       "networkAttributes": {
         "shared name": { "d": "string" },
@@ -192,7 +199,8 @@ interactions.forEach(interaction => {
           id: idCount,
           x: parseFloat(point.$.X),
           y: parseFloat(point.$.Y),
-          z: parseInt(interaction.Graphics[0].$.ZOrder) || 0
+          // z: parseInt(interaction.Graphics[0].$.ZOrder) || 0
+          z: 0
         };
         const nodeKey = `${node.x},${node.y},${node.z}`;
         if (!uniqueNodes.has(nodeKey)) {
