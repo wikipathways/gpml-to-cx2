@@ -8,6 +8,7 @@ import { processInteractions } from './processInteractions.js';
 import { processGraphicalLines } from './processGraphicalLines.js';
 import { processGroups } from './processGroups.js';
 import { processShapes } from './processShapes.js';
+import {processState } from './processState.js';
 
 const gpmlFilePath = process.argv[2];
 
@@ -42,6 +43,8 @@ if (!pathway) {
   console.error('Pathway element not found in GPML XML.');
   process.exit(1);
 }
+
+
 
 const commentText = result.Pathway.Comment ? result.Pathway.Comment[0]._ : "";
 let dataNodeCount = result.Pathway.DataNode ? result.Pathway.DataNode.length : 0;
@@ -246,7 +249,9 @@ let generateVisualPropertiesData =  function () {
 };
 
 let params = {idCount: idCount, cx2Data: cx2Data, graphIdMapping: graphIdMapping, cx2NodeIdCounts: cx2NodeIdCounts, cx2EdgeIdCounts: cx2EdgeIdCounts};
+
 processDataNodes(pathway, params);
+processState(pathway, params );
 processLabels(pathway, params);
 processInteractions(pathway, params);
 processGraphicalLines(pathway, params);
