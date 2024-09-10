@@ -17,6 +17,7 @@ export function  processState(pathway, params)
       const graphics = matchingDataNode.Graphics[0].$;
       let x = parseFloat(graphics.CenterX);
       let y = parseFloat(graphics.CenterY);
+      let z = parseFloat(graphics.ZOrder)+1;
       let width = parseFloat(graphics.Width);
       let height = parseFloat(graphics.Height);
 
@@ -46,7 +47,7 @@ export function  processState(pathway, params)
       id: idCount,   
       x: x + (parseFloat(stateGraphics.RelX) * width/2),
       y: y + (parseFloat(stateGraphics.RelY) * height/2),
-      z: 0,
+      z: z,
       v: {
         name: state.$.TextLabel,
         }
@@ -60,7 +61,7 @@ export function  processState(pathway, params)
       id: idCount,   
       x: x + (parseFloat(stateGraphics.RelX) * width/2),
       y: y + (parseFloat(stateGraphics.RelY) * height/2),
-      z: 0,
+      z: z,
       v: {
         parentsymbol: commentParts.parentsymbol,
         parentid: commentParts.parentid,
