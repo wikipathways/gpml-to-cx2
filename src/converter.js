@@ -8,7 +8,7 @@ import { processInteractions } from './processInteractions.js';
 import { processGraphicalLines } from './processGraphicalLines.js';
 import { processGroups } from './processGroups.js';
 import { processShapes } from './processShapes.js';
-import {processState } from './processState.js';
+import { processStates } from './processStates.js';
 
 const gpmlFilePath = process.argv[2];
 
@@ -251,11 +251,11 @@ let generateVisualPropertiesData =  function () {
 let params = {idCount: idCount, cx2Data: cx2Data, graphIdMapping: graphIdMapping, cx2NodeIdCounts: cx2NodeIdCounts, cx2EdgeIdCounts: cx2EdgeIdCounts};
 
 processDataNodes(pathway, params);
-processState(pathway, params );
+processStates(pathway, params );
 processLabels(pathway, params);
-processInteractions(pathway, params);
 processGraphicalLines(pathway, params);
 processGroups(pathway, params);
+processInteractions(pathway, params);
 // processShapes(pathway, params);
 generateVisualPropertiesData();
 generateVisualEditorProperties();
