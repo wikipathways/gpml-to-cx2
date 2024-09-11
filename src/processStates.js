@@ -5,7 +5,6 @@ export function processStates(pathway, params) {
 
   if (pathway.State) {
     pathway.State.forEach((state) => {
-      // const state = pathway.State[1];
       let GraphRef = state.$.GraphRef;
       const stateGraphics = state.Graphics[0].$;
       const graphRef = state.$.GraphRef;
@@ -43,72 +42,25 @@ export function processStates(pathway, params) {
         (prop) => prop in commentParts
       );
 
-      if (!hasAllRequiredProperties) {
-        const s = {
-          id: idCount,
-          x: x + (parseFloat(stateGraphics.RelX) * width) / 2,
-          y: y + (parseFloat(stateGraphics.RelY) * height) / 2,
-          z: z,
-          v: {
-            name: state.$.TextLabel,
-          },
-        };
-        cx2Data[4].nodes.push(s);
-
-        const v = {
-          NODE_BORDER_WIDTH: 1,
-          NODE_LABEL: state.$.TextLabel,
-          NODE_Z_LOCATION: z,
-          NODE_LABEL_COLOR: stateGraphics.Color
-            ? "#" + stateGraphics.Color
-            : "#000000",
-          NODE_BORDER_COLOR: stateGraphics.Color
-            ? "#" + stateGraphics.Color
-            : "#000000",
-          NODE_HEIGHT: parseFloat(stateGraphics.Height),
-          NODE_BACKGROUND_COLOR: "#FFFFFF",
-          NODE_SHAPE: stateGraphics.ShapeType
-            ? stateGraphics.ShapeType
-            : "Rectangle",
-          NODE_LABEL_FONT_FACE: {
-            FONT_FAMILY: stateGraphics.FontFamily || "sans-serif",
-            FONT_STYLE: stateGraphics.FontStyle || "normal",
-            FONT_WEIGHT: stateGraphics.FontWeight || "normal",
-            FONT_NAME: stateGraphics.FontName || "Dialog.plain",
-          },
-          NODE_LABEL_FONT_SIZE: stateGraphics.FontSize
-            ? stateGraphics.FontSize
-            : 10,
-          NODE_BACKGROUND_OPACITY: 1,
-          NODE_WIDTH: parseFloat(stateGraphics.Width),
-        };
-
-        const nodebypass = {
-          id: idCount,
-          v: v,
-        };
-
-        cx2Data[9].nodeBypasses.push(nodebypass);
-
-        idCount++;
-        return;
-      }
-
       const s = {
         id: idCount,
         x: x + (parseFloat(stateGraphics.RelX) * width) / 2,
         y: y + (parseFloat(stateGraphics.RelY) * height) / 2,
         z: z,
-        v: {
-          parentsymbol: commentParts.parentsymbol,
-          parentid: commentParts.parentid,
-          direction: commentParts.direction,
-          ptm: commentParts.ptm,
-          site: commentParts.site,
-          name: state.$.TextLabel,
-          position: commentParts.position,
-          sitegrpid: commentParts.sitegrpid,
-        },
+        v: hasAllRequiredProperties
+          ? {
+              parentsymbol: commentParts.parentsymbol,
+              parentid: commentParts.parentid,
+              direction: commentParts.direction,
+              ptm: commentParts.ptm,
+              site: commentParts.site,
+              name: state.$.TextLabel,
+              position: commentParts.position,
+              sitegrpid: commentParts.sitegrpid,
+            }
+          : {
+              name: state.$.TextLabel,
+            },
       };
       cx2Data[4].nodes.push(s);
 
