@@ -19,12 +19,22 @@ export function processStates(pathway, params) {
       let width = parseFloat(graphics.Width);
       let height = parseFloat(graphics.Height);
 
-      const commentString = state.Comment[0];
-      const commentParts = commentString.split(";").reduce((acc, part) => {
-        const [key, value] = part.split("=").map((str) => str.trim());
-        acc[key] = value;
-        return acc;
-      }, {});
+      // const commentString = state.Comment[0];
+      // const commentParts = commentString.split(";").reduce((acc, part) => {
+      //   const [key, value] = part.split("=").map((str) => str.trim());
+      //   acc[key] = value;
+      //   return acc;
+      // }, {});
+
+      let commentParts = {};
+      if (state.Comment && state.Comment[0]) {
+        const commentString = state.Comment[0];
+        commentParts = commentString.split(";").reduce((acc, part) => {
+          const [key, value] = part.split("=").map((str) => str.trim());
+          acc[key] = value;
+          return acc;
+        }, {});
+      }
 
       // Required properties
       const requiredProperties = [
