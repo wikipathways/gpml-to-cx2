@@ -59,20 +59,28 @@ export function processStates(pathway, params) {
           NODE_BORDER_WIDTH: 1,
           NODE_LABEL: state.$.TextLabel,
           NODE_Z_LOCATION: z,
-          NODE_LABEL_COLOR: "#000000",
-          NODE_BORDER_COLOR: "#000000",
-          NODE_HEIGHT: 15,
+          NODE_LABEL_COLOR: stateGraphics.Color
+            ? "#" + stateGraphics.Color
+            : "#000000",
+          NODE_BORDER_COLOR: stateGraphics.Color
+            ? "#" + stateGraphics.Color
+            : "#000000",
+          NODE_HEIGHT: parseFloat(stateGraphics.Height),
           NODE_BACKGROUND_COLOR: "#FFFFFF",
-          NODE_SHAPE: "ellipse",
+          NODE_SHAPE: stateGraphics.ShapeType
+            ? stateGraphics.ShapeType
+            : "Rectangle",
           NODE_LABEL_FONT_FACE: {
-            FONT_FAMILY: "sans-serif",
-            FONT_STYLE: "normal",
-            FONT_WEIGHT: "normal",
-            FONT_NAME: "Dialog.plain",
+            FONT_FAMILY: stateGraphics.FontFamily || "sans-serif",
+            FONT_STYLE: stateGraphics.FontStyle || "normal",
+            FONT_WEIGHT: stateGraphics.FontWeight || "normal",
+            FONT_NAME: stateGraphics.FontName || "Dialog.plain",
           },
-          NODE_LABEL_FONT_SIZE: 10,
+          NODE_LABEL_FONT_SIZE: stateGraphics.FontSize
+            ? stateGraphics.FontSize
+            : 10,
           NODE_BACKGROUND_OPACITY: 1,
-          NODE_WIDTH: 15,
+          NODE_WIDTH: parseFloat(stateGraphics.Width),
         };
 
         const nodebypass = {
@@ -108,20 +116,28 @@ export function processStates(pathway, params) {
         NODE_BORDER_WIDTH: 1,
         NODE_LABEL: state.$.TextLabel,
         NODE_Z_LOCATION: z,
-        NODE_LABEL_COLOR: "#000000",
-        NODE_BORDER_COLOR: "#000000",
-        NODE_HEIGHT: 15,
+        NODE_LABEL_COLOR: stateGraphics.Color
+          ? "#" + stateGraphics.Color
+          : "#000000",
+        NODE_BORDER_COLOR: stateGraphics.Color
+          ? "#" + stateGraphics.Color
+          : "#000000",
+        NODE_HEIGHT: parseFloat(stateGraphics.Height),
         NODE_BACKGROUND_COLOR: "#FFFFFF",
-        NODE_SHAPE: "ellipse",
+        NODE_SHAPE: stateGraphics.ShapeType
+          ? stateGraphics.ShapeType
+          : "Rectangle",
         NODE_LABEL_FONT_FACE: {
-          FONT_FAMILY: "sans-serif",
-          FONT_STYLE: "normal",
-          FONT_WEIGHT: "normal",
-          FONT_NAME: "Dialog.plain",
+          FONT_FAMILY: stateGraphics.FontFamily || "sans-serif",
+          FONT_STYLE: stateGraphics.FontStyle || "normal",
+          FONT_WEIGHT: stateGraphics.FontWeight || "normal",
+          FONT_NAME: stateGraphics.FontName || "Dialog.plain",
         },
-        NODE_LABEL_FONT_SIZE: 10,
+        NODE_LABEL_FONT_SIZE: stateGraphics.FontSize
+          ? stateGraphics.FontSize
+          : 10,
         NODE_BACKGROUND_OPACITY: 1,
-        NODE_WIDTH: 15,
+        NODE_WIDTH: parseFloat(stateGraphics.Width),
       };
 
       const nodebypass = {
