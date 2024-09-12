@@ -40,6 +40,7 @@ export function processLabels (pathway, params) {
         NODE_LABEL_COLOR: graphics.Color ? "#" + graphics.Color : "#000000",
         NODE_BORDER_COLOR: graphics.Color ? "#" + graphics.Color : "#000000",
         NODE_HEIGHT: parseFloat(graphics.Height),
+        NODE_SHAPE :  graphics.ShapeType ? graphics.ShapeType : "None" ,
         NODE_LABEL_FONT_FACE: {
           FONT_FAMILY: "sans-serif",
           FONT_STYLE: graphics.FontStyle || "normal",
