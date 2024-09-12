@@ -1,3 +1,5 @@
+import { getBorderThickness, constructLabelFont } from "./auxiliary.js";
+
 export function processStates(pathway, params) {
   let idCount = params.idCount;
   let cx2Data = params.cx2Data;
@@ -74,31 +76,44 @@ export function processStates(pathway, params) {
       };
       cx2Data[4].nodes.push(s);
 
+      let shape = stateGraphics.ShapeType || "Rectangle";
+      if(shape == "Oval") // cx2 uses ellipse instead of oval
+        shape = "ellipse";
+      const lineThickness = parseFloat(stateGraphics.LineThickness) || 1;
+      const borderThickness = getBorderThickness(shape, lineThickness);
+      const fontName = stateGraphics.FontName || "Arial";
+      const fontWeight = stateGraphics.FontWeight;
+      const fontStyle = stateGraphics.FontStyle;
+      const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
+
+      let fillColor = "#FFFFFF";
+      let backgroundOpacity = 1;
+      if (stateGraphics.FillColor) {
+        if (stateGraphics.FillColor.toLowerCase() === "transparent") {
+          fillColor = "#FFFFFF";
+          backgroundOpacity = 0;
+        } else {
+          fillColor = "#" + stateGraphics.FillColor;
+          backgroundOpacity = 1;
+        }
+      }
       const v = {
-        NODE_BORDER_WIDTH: 1,
+        NODE_BORDER_WIDTH: borderThickness,
         NODE_LABEL: state.$.TextLabel,
         NODE_Z_LOCATION: z,
-        NODE_LABEL_COLOR: stateGraphics.Color
-          ? "#" + stateGraphics.Color
-          : "#000000",
-        NODE_BORDER_COLOR: stateGraphics.Color
-          ? "#" + stateGraphics.Color
-          : "#000000",
+        NODE_LABEL_COLOR: stateGraphics.Color ? "#" + stateGraphics.Color : "#000000",
+        NODE_BORDER_COLOR: stateGraphics.Color ? "#" + stateGraphics.Color : "#000000",
         NODE_HEIGHT: parseFloat(stateGraphics.Height),
-        NODE_BACKGROUND_COLOR: "#FFFFFF",
-        NODE_SHAPE: stateGraphics.ShapeType
-          ? stateGraphics.ShapeType
-          : "Rectangle",
+        NODE_BACKGROUND_COLOR: fillColor,
+        NODE_SHAPE: shape,
         NODE_LABEL_FONT_FACE: {
           FONT_FAMILY: stateGraphics.FontFamily || "sans-serif",
           FONT_STYLE: stateGraphics.FontStyle || "normal",
           FONT_WEIGHT: stateGraphics.FontWeight || "normal",
-          FONT_NAME: stateGraphics.FontName || "Dialog.plain",
+          FONT_NAME: labelFont || "Arial",
         },
-        NODE_LABEL_FONT_SIZE: stateGraphics.FontSize
-          ? stateGraphics.FontSize
-          : 10,
-        NODE_BACKGROUND_OPACITY: 1,
+        NODE_LABEL_FONT_SIZE: stateGraphics.FontSize || 12,
+        NODE_BACKGROUND_OPACITY: backgroundOpacity,
         NODE_WIDTH: parseFloat(stateGraphics.Width),
       };
 

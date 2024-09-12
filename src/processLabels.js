@@ -42,7 +42,7 @@ export function processLabels (pathway, params) {
         NODE_HEIGHT: parseFloat(graphics.Height),
         NODE_SHAPE :  graphics.ShapeType ? graphics.ShapeType : "None" ,
         NODE_LABEL_FONT_FACE: {
-          FONT_FAMILY: "sans-serif",
+          FONT_FAMILY: graphics.FontFamily || "sans-serif",
           FONT_STYLE: graphics.FontStyle || "normal",
           FONT_WEIGHT: graphics.FontWeight || "normal",
           FONT_NAME: labelFont || "Arial",
