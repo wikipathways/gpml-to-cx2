@@ -259,10 +259,10 @@ let params = {
 };
 
 processDataNodes(pathway, params);
-processStates(pathway, params);
-processLabels(pathway, params);
-processGraphicalLines(pathway, params, dataNodeCount);
 processGroups(pathway, params);
+processLabels(pathway, params);
+processStates(pathway, params);
+processGraphicalLines(pathway, params, dataNodeCount);
 processInteractions(pathway, params);
 // processShapes(pathway, params);
 generateVisualPropertiesData();
