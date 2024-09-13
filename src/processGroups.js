@@ -79,6 +79,20 @@ function getGroupElements (pathway, groupId) {
         groupElements.add(dataNode);
     });
   }
+  if (pathway.Label) {
+    pathway.Label.forEach(label => {
+      let groupRef = label.$.GroupRef;
+      if(groupRef && groupRef == groupId)
+        groupElements.add(label);
+    });
+  }
+  if (pathway.Shape) {
+    pathway.Shape.forEach(shape => {
+      let groupRef = shape.$.GroupRef;
+      if(groupRef && groupRef == groupId)
+        groupElements.add(shape);
+    });
+  }
   return groupElements;
 }
 
