@@ -47,7 +47,10 @@ export function processShapes(pathway, params) {
       }).join(' ') + ' Z';
 
       console.log(customShape);
-
+        let width = graphics.Width;
+        let height = graphics.Height;
+        let x = graphics.CenterX;
+        let y = graphics.CenterY;
         const newAnnotation = {
         edgeThickness: graphics.LineThickness,
         canvas: 'background',
@@ -60,11 +63,11 @@ export function processShapes(pathway, params) {
         edgeColor: -4144960,
         edgeOpacity: 100.0,
         name: 'Ellipse',
-        x: 56.73946847611171,
-        width: graphics.Width,
-        y: 413.1679389312976,
+        x: x - width/2,
+        width: width,
+        y: y -height/2,
         z: 0,
-        height: graphics.Height
+        height: height
     }
    
     const annotationString = Object.entries(newAnnotation)
