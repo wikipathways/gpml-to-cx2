@@ -10,6 +10,7 @@ import { processGroups } from "./processGroups.js";
 import { processShapes } from "./processShapes.js";
 import { processStates } from "./processStates.js";
 
+
 const gpmlFilePath = process.argv[2];
 
 if (!gpmlFilePath) {
@@ -138,6 +139,7 @@ const cx2Data = [
       {
         name: pathway.$.Name,
         description: commentText,
+        __Annotations: [],
       },
     ],
   },
@@ -264,9 +266,10 @@ processLabels(pathway, params);
 processStates(pathway, params);
 processGraphicalLines(pathway, params, dataNodeCount);
 processInteractions(pathway, params);
-// processShapes(pathway, params);
+processShapes(pathway, params);
 generateVisualPropertiesData();
 generateVisualEditorProperties();
+// extractAnnotations(gpmlContent, cx2Data);
 
 if (interactions) {
   interactions.forEach((interaction) => {

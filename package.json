@@ -12,7 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "canvas": "^2.11.2",
     "js2xmlparser": "^5.0.0",
-    "xml2js": "^0.6.2"
+    "uuid": "^10.0.0",
+    "xml2js": "^0.6.2",
+    "xmldom": "^0.6.0"
   }
 }
