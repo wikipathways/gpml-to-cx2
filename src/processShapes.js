@@ -28,10 +28,89 @@ export function processShapes(pathway, params) {
       cx2Data[4].nodes.push(node);
 
 
-      let shape = graphics.ShapeType || "Rectangle";
-      // console.log(shape);
-      console.log(shape);
-      const shapetype=  CellShapes.getShape(shape);
+      const attributes = shapes.Attribute || [];
+      let shapetype;
+      let name;
+      const cellularComponentAttr = attributes.find(attr => attr.$.Key === "org.pathvisio.CellularComponentProperty");
+      const doubleLineAttr = attributes.find(attr => attr.$.Key === "org.pathvisio.DoubleLineProperty" );
+        if (cellularComponentAttr) {
+          let shape = cellularComponentAttr.$.Value;
+          name = shape;
+          console.log(shape);
+           shapetype = CellShapes.getPath(shape);
+          console.log(shapetype);
+        }
+        else if (doubleLineAttr) {
+          // Check if the shape has the DoubleLineProperty attribute
+          name = graphics.ShapeType;
+          
+          console.log(name);
+          shapetype = CellShapes.getShape(name);
+        }
+        else
+        {
+        
+        let shapeType = graphics.ShapeType || "Rectangle";
+           if(shapeType !== "Rectangle")
+            {
+             name = shapeType;
+             console.log(shapeType);
+             shapetype = CellShapes.getShape(shapeType);
+            }
+          else
+          {    
+              name = "Rectangle";
+              const lineThickness = parseFloat(graphics.LineThickness) || 1;
+              const borderThickness = getBorderThickness(shapetype, lineThickness);
+              const fontName = graphics.FontName || "Arial";
+              const fontWeight = graphics.FontWeight;
+              const fontStyle = graphics.FontStyle;
+              const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
+
+            let fillColor = "#FFFFFF";
+             let backgroundOpacity = 1;
+            if (graphics.FillColor) {
+            if (graphics.FillColor.toLowerCase() === "transparent") {
+            fillColor = "#FFFFFF";
+            backgroundOpacity = 0;
+            } else {
+             fillColor = "#" + graphics.FillColor;
+             backgroundOpacity = 1;
+           }
+           }   
+                  const v = {
+             NODE_BORDER_WIDTH: borderThickness,
+             NODE_LABEL_COLOR: graphics.Color ? "#" + graphics.Color : "#000000",
+             NODE_Z_LOCATION: graphics.ZOrder,
+             NODE_BORDER_COLOR:  graphics.Color ? "#" + graphics.Color : "#000000",
+             NODE_HEIGHT: graphics.Height,
+             NODE_SHAPE: name,
+             NODE_LABEL_FONT_FACE: {
+             FONT_FAMILY: graphics.FontFamily || "sans-serif",
+             FONT_STYLE: graphics.FontStyle || "normal",
+             FONT_WEIGHT: graphics.FontWeight || "normal",
+            FONT_NAME: labelFont || "Arial",
+           },
+           NODE_SELECTED_PAINT: "#FFFFCC",
+           NODE_LABEL_FONT_SIZE: graphics.FontSize || 12,
+           NODE_BACKGROUND_OPACITY: backgroundOpacity,
+           NODE_WIDTH: graphics.Width,
+           };
+
+          const nodebypass = {
+           id: idCount,
+           v: v,
+          };
+
+          cx2Data[9].nodeBypasses.push(nodebypass);
+          idCount += 1;
+
+         return;
+
+
+          }
+        }
+      
 
        if (!Array.isArray(shapetype) || !shapetype.every(cmd => typeof cmd === 'string')) {
           console.error('shapetype contains non-string elements:', shapetype);
@@ -62,7 +141,7 @@ export function processShapes(pathway, params) {
         shapeType: 'CUSTOM',
         edgeColor: -4144960,
         edgeOpacity: 100.0,
-        name: 'Ellipse',
+        name: name,
         x: x - width/2,
         width: width,
         y: y -height/2,
@@ -77,55 +156,55 @@ export function processShapes(pathway, params) {
     annotations.push(annotationString);
 
       // console.log(shapetype);
-      if(shape == "Oval") // cx2 uses ellipse instead of oval
-        shape = "ellipse";
-      const lineThickness = parseFloat(graphics.LineThickness) || 1;
-      const borderThickness = getBorderThickness(shape, lineThickness);
-      const fontName = graphics.FontName || "Arial";
-      const fontWeight = graphics.FontWeight;
-      const fontStyle = graphics.FontStyle;
-      const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
+      // if(shapetype == "Oval") // cx2 uses ellipse instead of oval
+      //   shapetype = "ellipse";
+      // const lineThickness = parseFloat(graphics.LineThickness) || 1;
+      // const borderThickness = getBorderThickness(shapetype, lineThickness);
+      // const fontName = graphics.FontName || "Arial";
+      // const fontWeight = graphics.FontWeight;
+      // const fontStyle = graphics.FontStyle;
+      // const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
 
-      let fillColor = "#FFFFFF";
-      let backgroundOpacity = 1;
-      if (graphics.FillColor) {
-        if (graphics.FillColor.toLowerCase() === "transparent") {
-          fillColor = "#FFFFFF";
-          backgroundOpacity = 0;
-        } else {
-          fillColor = "#" + graphics.FillColor;
-          backgroundOpacity = 1;
-        }
-      }
+      // let fillColor = "#FFFFFF";
+      // let backgroundOpacity = 1;
+      // if (graphics.FillColor) {
+      //   if (graphics.FillColor.toLowerCase() === "transparent") {
+      //     fillColor = "#FFFFFF";
+      //     backgroundOpacity = 0;
+      //   } else {
+      //     fillColor = "#" + graphics.FillColor;
+      //     backgroundOpacity = 1;
+      //   }
+      // }
 
 
 
-      const v = {
-        NODE_BORDER_WIDTH: borderThickness,
-        NODE_LABEL_COLOR: graphics.Color ? "#" + graphics.Color : "#000000",
-        NODE_Z_LOCATION: graphics.ZOrder,
-        NODE_BORDER_COLOR:  graphics.Color ? "#" + graphics.Color : "#000000",
-        NODE_HEIGHT: graphics.Height,
-        NODE_SHAPE: shape,
-        NODE_LABEL_FONT_FACE: {
-          FONT_FAMILY: graphics.FontFamily || "sans-serif",
-          FONT_STYLE: graphics.FontStyle || "normal",
-          FONT_WEIGHT: graphics.FontWeight || "normal",
-          FONT_NAME: labelFont || "Arial",
-        },
-        NODE_SELECTED_PAINT: "#FFFFCC",
-        NODE_LABEL_FONT_SIZE: graphics.FontSize || 12,
-        NODE_BACKGROUND_OPACITY: backgroundOpacity,
-        NODE_WIDTH: graphics.Width,
-      };
+      // const v = {
+      //   NODE_BORDER_WIDTH: borderThickness,
+      //   NODE_LABEL_COLOR: graphics.Color ? "#" + graphics.Color : "#000000",
+      //   NODE_Z_LOCATION: graphics.ZOrder,
+      //   NODE_BORDER_COLOR:  graphics.Color ? "#" + graphics.Color : "#000000",
+      //   NODE_HEIGHT: graphics.Height,
+      //   NODE_SHAPE: shapetype,
+      //   NODE_LABEL_FONT_FACE: {
+      //     FONT_FAMILY: graphics.FontFamily || "sans-serif",
+      //     FONT_STYLE: graphics.FontStyle || "normal",
+      //     FONT_WEIGHT: graphics.FontWeight || "normal",
+      //     FONT_NAME: labelFont || "Arial",
+      //   },
+      //   NODE_SELECTED_PAINT: "#FFFFCC",
+      //   NODE_LABEL_FONT_SIZE: graphics.FontSize || 12,
+      //   NODE_BACKGROUND_OPACITY: backgroundOpacity,
+      //   NODE_WIDTH: graphics.Width,
+      // };
 
-      const nodebypass = {
-        id: idCount,
-        v: v,
-      };
+      // const nodebypass = {
+      //   id: idCount,
+      //   v: v,
+      // };
 
-      cx2Data[9].nodeBypasses.push(nodebypass);
-      idCount += 1;
+      // cx2Data[9].nodeBypasses.push(nodebypass);
+      // idCount += 1;
     });
   }
   params.idCount = idCount;

@@ -4,7 +4,7 @@ const { createCanvas, Path } = canvas;
 // const Oval = 'Oval';
 class CellShapes {
     static getPath(propValue) {
-        console.log(propValue);
+        // console.log(propValue);
         switch (propValue ) {
             case 'Mitochondria':
                 return this.makeMitochondria();
@@ -61,13 +61,6 @@ class CellShapes {
         let canvas = createCanvas(w, h);
         let ctx = canvas.getContext('2d');
 
-        ctx.moveTo(x, ym);
-        ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
-        ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
-        ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
-        ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-        ctx.closePath();
-
          let commands = [];
          commands.push(` ${x} ${ym}`);
          commands.push(` ${x} ${ym - oy} ${xm - ox} ${y} ${xm} ${y}`);
@@ -95,15 +88,16 @@ class CellShapes {
         const xm = x + w / 2;
         const ym = y + h / 2;
 
-        let canvas = createCanvas(width, height);
+        let canvas = createCanvas(w, h);
         let ctx = canvas.getContext('2d');
 
-        ctx.moveTo(x, ym);
-        ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
-        ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
-        ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
-        ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-        ctx.closePath();
+        let commands = [];
+         commands.push(`${x}, ${ym}`);
+         commands.push(`${x}, ${ym - oy}, ${xm - ox}, ${y}, ${xm}, ${y}`);
+         commands.push(`${xm + ox}, ${y}, ${xe}, ${ym - oy}, ${xe}, ${ym}`);
+         commands.push(`${xe}, ${ym + oy}, ${xm + ox}, ${ye}, ${xm}, ${ye}`);
+         commands.push(`${xm - ox}, ${ye}, ${x}, ${ym + oy}, ${x}, ${ym}`);
+         commands.push('closePath');
 
         x += gap / 2;
         y += gap / 2;
@@ -117,13 +111,14 @@ class CellShapes {
         const xmInner = x + w / 2;
         const ymInner = y + h / 2;
 
-        ctx.moveTo(x, ymInner);
-        ctx.bezierCurveTo(x, ymInner - oy, xmInner - ox, y, xmInner, y);
-        ctx.bezierCurveTo(xmInner + ox, y, xeInner, ymInner - oy, xeInner, ymInner);
-        ctx.bezierCurveTo(xeInner, ymInner + oy, xmInner + ox, yeInner, xmInner, yeInner);
-        ctx.bezierCurveTo(xmInner - ox, yeInner, x, ymInner + oy, x, ymInner);
-        ctx.closePath();
-        return ctx;
+        commands.push(`${x}, ${ymInner}`);
+        commands.push(`${x}, ${ymInner - oy}, ${xmInner - ox}, ${y}, ${xmInner}, ${y}`);
+        commands.push(`${xmInner + ox}, ${y}, ${xeInner}, ${ymInner - oy}, ${xeInner}, ${ymInner}`);
+        commands.push(`${xeInner}, ${ymInner + oy}, ${xmInner + ox}, ${yeInner}, ${xmInner}, ${yeInner}`);
+        commands.push(`${xmInner - ox}, ${yeInner}, ${x}, ${ymInner + oy}, ${x}, ${ymInner}`);
+        commands.push('closePath');
+
+        return commands;
     }
 
     static makeCell() {
@@ -137,34 +132,38 @@ class CellShapes {
         let canvas = createCanvas(width, height);
         let ctx = canvas.getContext('2d');
 
-        
-        ctx.beginPath();
-        ctx.moveTo(x, curveRad);
-        ctx.bezierCurveTo(x, y, curveRad, y, x + curveRad, y);
-        ctx.lineTo(width - curveRad, y);
-        ctx.bezierCurveTo(width, y, width, curveRad, width, curveRad);
-        ctx.lineTo(width, height - curveRad);
-        ctx.bezierCurveTo(width, height, width - curveRad, height, width - curveRad, height);
-        ctx.lineTo(curveRad, height);
-        ctx.bezierCurveTo(x, height, x, height - curveRad, x, height - curveRad);
-        ctx.lineTo(x, curveRad);
-        ctx.closePath();
+
+        let commands = [];
+        commands.push('beginPath');
+        commands.push(`${x}, ${curveRad}`);
+        commands.push(`${x}, ${y}, ${curveRad}, ${y}, ${x + curveRad}, ${y}`);
+        commands.push(`${width - curveRad}, ${y}`);
+        commands.push(`${width}, ${y}, ${width}, ${curveRad}, ${width}, ${curveRad}`);
+        commands.push(`${width}, ${height - curveRad}`);
+        commands.push(`${width}, ${height}, ${width - curveRad}, ${height}, ${width - curveRad}, ${height}`);
+        commands.push(`${curveRad}, ${height}`);
+        commands.push(`${x}, ${height}, ${x}, ${height - curveRad}, ${x}, ${height - curveRad}`);
+        commands.push(`${x}, ${curveRad}`);
+        commands.push('closePath');
+
 
         width -= gap;
         height -= gap;
         x += gap;
         y += gap;
-        ctx.moveTo(x, curveRad);
-        ctx.bezierCurveTo(x, y, curveRad, y, x + curveRad, y);
-        ctx.lineTo(width - curveRad, y);
-        ctx.bezierCurveTo(width, y, width, curveRad, width, curveRad);
-        ctx.lineTo(width, height - curveRad);
-        ctx.bezierCurveTo(width, height, width - curveRad, height, width - curveRad, height);
-        ctx.lineTo(curveRad, height);
-        ctx.bezierCurveTo(x, height, x, height - curveRad, x, height - curveRad);
-        ctx.lineTo(x, curveRad);
-        ctx.closePath();
-        return ctx;
+       
+        commands.push(`${x}, ${curveRad}`);
+        commands.push(`${x}, ${y}, ${curveRad}, ${y}, ${x + curveRad}, ${y}`);
+        commands.push(`${width - curveRad}, ${y}`);
+        commands.push(`${width}, ${y}, ${width}, ${curveRad}, ${width}, ${curveRad}`);
+        commands.push(`${width}, ${height - curveRad}`);
+        commands.push(`${width}, ${height}, ${width - curveRad}, ${height}, ${width - curveRad}, ${height}`);
+        commands.push(`${curveRad}, ${height}`);
+        commands.push(`${x}, ${height}, ${x}, ${height - curveRad}, ${x}, ${height - curveRad}`);
+        commands.push(`${x}, ${curveRad}`);
+        commands.push('closePath');
+
+        return commands;
     }
 
     static makeRoundRect() {
@@ -177,18 +176,6 @@ class CellShapes {
 
         let canvas = createCanvas(width, height);
         let ctx = canvas.getContext('2d')
-
-        
-        ctx.moveTo(x, curveRad);
-        ctx.bezierCurveTo(x, y, curveRad, y, x + curveRad, y);
-        ctx.lineTo(width - curveRad, y);
-        ctx.bezierCurveTo(width, y, width, curveRad, width, curveRad);
-        ctx.lineTo(width, height - curveRad);
-        ctx.bezierCurveTo(width, height, width - curveRad, height, width - curveRad, height);
-        ctx.lineTo(curveRad, height);
-        ctx.bezierCurveTo(x, height, x, height - curveRad, x, height - curveRad);
-        ctx.lineTo(x, curveRad);
-        ctx.closePath();
 
        let commands = [];
 
@@ -205,9 +192,6 @@ class CellShapes {
 
        return commands;
       
-
-
-
     }
 
     static makeArc(startRotation) {
@@ -228,22 +212,20 @@ class CellShapes {
         let canvas = createCanvas(width, height);
         let ctx = canvas.getContext('2d')
 
-        ctx.moveTo(x, y);
-        ctx.lineTo(x + width, y);
-        ctx.lineTo(x + width, y + height);
-        ctx.lineTo(x, y + height);
-        ctx.closePath();
+        let commands = [];
+        commands.push(`${x}, ${y}`);
+        commands.push(`${x + width}, ${y}`);
+        commands.push(`${x + width}, ${y + height}`);
+        commands.push(`${x}, ${y + height}`);
+        commands.push('closePath');
 
-        
-        ctx.moveTo(x + curveRad, y + curveRad);
-        ctx.lineTo(x + width - curveRad, y + curveRad);
-        ctx.bezierCurveTo(x + width, y + curveRad, x + width, y + curveRad + 10, x + width - curveRad, y + curveRad + 10);
-        ctx.lineTo(x + curveRad, y + curveRad + 10);
-        ctx.bezierCurveTo(x, y + curveRad + 10, x, y + curveRad, x + curveRad, y + curveRad);
-        ctx.closePath();
-
-        
-        return ctx;
+        commands.push(`${x + curveRad}, ${y + curveRad}`);
+        commands.push(`${x + width - curveRad}, ${y + curveRad}`);
+        commands.push(`${x + width}, ${y + curveRad}, ${x + width}, ${y + curveRad + 10}, ${x + width - curveRad}, ${y + curveRad + 10}`);
+        commands.push(`${x + curveRad}, ${y + curveRad + 10}`);
+        commands.push(`${x}, ${y + curveRad + 10}, ${x}, ${y + curveRad}, ${x + curveRad}, ${y + curveRad}`);
+        commands.push('closePath');
+        return commands;
     }
 
     static makeSR() {
@@ -256,17 +238,20 @@ class CellShapes {
         let height = 100;
         let curveRad = 20;
 
-        ctx.moveTo(x + curveRad, y);
-        ctx.lineTo(x + width - curveRad, y);
-        ctx.bezierCurveTo(x + width, y, x + width, y + curveRad, x + width, y + curveRad);
-        ctx.lineTo(x + width, y + height - curveRad);
-        ctx.bezierCurveTo(x + width, y + height, x + width - curveRad, y + height, x + width - curveRad, y + height);
-        ctx.lineTo(x + curveRad, y + height);
-        ctx.bezierCurveTo(x, y + height, x, y + height - curveRad, x, y + height - curveRad);
-        ctx.lineTo(x, y + curveRad);
-        ctx.bezierCurveTo(x, y, x + curveRad, y, x + curveRad, y);
-        ctx.closePath();
-        return ctx;
+
+        let commands = [];
+        commands.push(`${x + curveRad}, ${y}`);
+        commands.push(`${x + width - curveRad}, ${y}`);
+        commands.push(`${x + width}, ${y}, ${x + width}, ${y + curveRad}, ${x + width}, ${y + curveRad}`);
+        commands.push(`${x + width}, ${y + height - curveRad}`);
+        commands.push(`${x + width}, ${y + height}, ${x + width - curveRad}, ${y + height}, ${x + width - curveRad}, ${y + height}`);
+        commands.push(`${x + curveRad}, ${y + height}`);
+        commands.push(`${x}, ${y + height}, ${x}, ${y + height - curveRad}, ${x}, ${y + height - curveRad}`);
+        commands.push(`${x}, ${y + curveRad}`);
+        commands.push(`${x}, ${y}, ${x + curveRad}, ${y}, ${x + curveRad}, ${y}`);
+        commands.push('closePath');
+
+        return commands;
     }
 
     static makeGolgi() {
@@ -279,31 +264,32 @@ class CellShapes {
         let height = 80;
         let curveRad = 12;
 
-        ctx.moveTo(x + curveRad, y);
-        ctx.lineTo(x + width - curveRad, y);
-        ctx.bezierCurveTo(x + width, y, x + width, y + curveRad, x + width, y + curveRad);
-        ctx.lineTo(x + width, y + height - curveRad);
-        ctx.bezierCurveTo(x + width, y + height, x + width - curveRad, y + height, x + width - curveRad, y + height);
-        ctx.lineTo(x + curveRad, y + height);
-        ctx.bezierCurveTo(x, y + height, x, y + height - curveRad, x, y + height - curveRad);
-        ctx.lineTo(x, y + curveRad);
-        ctx.bezierCurveTo(x, y, x + curveRad, y, x + curveRad, y);
-        ctx.closePath();
+        let commands = [];
+        commands.push(`${x + curveRad}, ${y}`);
+        commands.push(`${x + width - curveRad}, ${y}`);
+        commands.push(`${x + width}, ${y}, ${x + width}, ${y + curveRad}, ${x + width}, ${y + curveRad}`);
+        commands.push(`${x + width}, ${y + height - curveRad}`);
+        commands.push(`${x + width}, ${y + height}, ${x + width - curveRad}, ${y + height}, ${x + width - curveRad}, ${y + height}`);
+        commands.push(`${x + curveRad}, ${y + height}`);
+        commands.push(`${x}, ${y + height}, ${x}, ${y + height - curveRad}, ${x}, ${y + height - curveRad}`);
+        commands.push(`${x}, ${y + curveRad}`);
+        commands.push(`${x}, ${y}, ${x + curveRad}, ${y}, ${x + curveRad}, ${y}`);
+        commands.push('closePath');
+
+
+        commands.push(`${x + 20}, ${y + 20}`);
+        commands.push(`${x + width - 20}, ${y + 20}`);
+        commands.push(`${x + width - 10}, ${y + 20}, ${x + width - 10}, ${y + 30}, ${x + width - 20}, ${y + 30}`);
+        commands.push(`${x + width - 20}, ${y + height - 30}`);
+        commands.push(`${x + width - 20}, ${y + height - 20}, ${x + width - 30}, ${y + height - 20}, ${x + width - 30}, ${y + height - 30}`);
+        commands.push(`${x + 20}, ${y + height - 30}`);
+        commands.push(`${x + 10}, ${y + height - 30}, ${x + 10}, ${y + height - 20}, ${x + 20}, ${y + height - 20}`);
+        commands.push(`${x + 20}, ${y + 30}`);
+        commands.push(`${x + 20}, ${y + 20}, ${x + 30}, ${y + 20}, ${x + 30}, ${y + 20}`);
+        commands.push('closePath');
 
         
-        ctx.moveTo(x + 20, y + 20);
-        ctx.lineTo(x + width - 20, y + 20);
-        ctx.bezierCurveTo(x + width - 10, y + 20, x + width - 10, y + 30, x + width - 20, y + 30);
-        ctx.lineTo(x + width - 20, y + height - 30);
-        ctx.bezierCurveTo(x + width - 20, y + height - 20, x + width - 30, y + height - 20, x + width - 30, y + height - 30);
-        ctx.lineTo(x + 20, y + height - 30);
-        ctx.bezierCurveTo(x + 10, y + height - 30, x + 10, y + height - 20, x + 20, y + height - 20);
-        ctx.lineTo(x + 20, y + 30);
-        ctx.bezierCurveTo(x + 20, y + 20, x + 30, y + 20, x + 30, y + 20);
-        ctx.closePath();
-
-        
-        return ctx;
+        return commands;
     }
 
     static makeBrace() {
@@ -318,31 +304,34 @@ class CellShapes {
         let height = 80;
         let curveRad = 10;
 
-        ctx.moveTo(x + curveRad, y);
-        ctx.lineTo(x + width - curveRad, y);
-        ctx.bezierCurveTo(x + width, y, x + width, y + curveRad, x + width, y + curveRad);
-        ctx.lineTo(x + width, y + height - curveRad);
-        ctx.bezierCurveTo(x + width, y + height, x + width - curveRad, y + height, x + width - curveRad, y + height);
-        ctx.lineTo(x + curveRad, y + height);
-        ctx.bezierCurveTo(x, y + height, x, y + height - curveRad, x, y + height - curveRad);
-        ctx.lineTo(x, y + curveRad);
-        ctx.bezierCurveTo(x, y, x + curveRad, y, x + curveRad, y);
-        ctx.closePath();
+    
+
+
+        let commands = [];
+        commands.push(`${x + curveRad}, ${y}`);
+        commands.push(`${x + width - curveRad}, ${y}`);
+        commands.push(`${x + width}, ${y}, ${x + width}, ${y + curveRad}, ${x + width}, ${y + curveRad}`);
+        commands.push(`${x + width}, ${y + height - curveRad}`);
+        commands.push(`${x + width}, ${y + height}, ${x + width - curveRad}, ${y + height}, ${x + width - curveRad}, ${y + height}`);
+        commands.push(`${x + curveRad}, ${y + height}`);
+        commands.push(`${x}, ${y + height}, ${x}, ${y + height - curveRad}, ${x}, ${y + height - curveRad}`);
+        commands.push(`${x}, ${y + curveRad}`);
+        commands.push(`${x}, ${y}, ${x + curveRad}, ${y}, ${x + curveRad}, ${y}`);
+        commands.push('closePath');
 
         
-        ctx.moveTo(x + 10, y + 10);
-        ctx.lineTo(x + width - 10, y + 10);
-        ctx.bezierCurveTo(x + width - 5, y + 10, x + width - 5, y + 15, x + width - 10, y + 15);
-        ctx.lineTo(x + width - 10, y + height - 15);
-        ctx.bezierCurveTo(x + width - 10, y + height - 10, x + width - 15, y + height - 10, x + width - 15, y + height - 15);
-        ctx.lineTo(x + 10, y + height - 15);
-        ctx.bezierCurveTo(x + 5, y + height - 15, x + 5, y + height - 10, x + 10, y + height - 10);
-        ctx.lineTo(x + 10, y + 15);
-        ctx.bezierCurveTo(x + 10, y + 10, x + 15, y + 10, x + 15, y + 10);
-        ctx.closePath();
-
         
-        return ctx;
+        commands.push(`${x + 10}, ${y + 10}`);
+        commands.push(`${x + width - 10}, ${y + 10}`);
+        commands.push(`${x + width - 5}, ${y + 10}, ${x + width - 5}, ${y + 15}, ${x + width - 10}, ${y + 15}`);
+        commands.push(`${x + width - 10}, ${y + height - 15}`);
+        commands.push(`${x + width - 10}, ${y + height - 10}, ${x + width - 15}, ${y + height - 10}, ${x + width - 15}, ${y + height - 15}`);
+        commands.push(`${x + 10}, ${y + height - 15}`);
+        commands.push(`${x + 5}, ${y + height - 15}, ${x + 5}, ${y + height - 10}, ${x + 10}, ${y + height - 10}`);
+        commands.push(`${x + 10}, ${y + 15}`);
+        commands.push(`${x + 10}, ${y + 10}, ${x + 15}, ${y + 10}, ${x + 15}, ${y + 10}`);
+        commands.push('closePath');
+        return commands;
     }
 
     static makeTriangle() {
