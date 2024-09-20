@@ -50,7 +50,7 @@ export function processShapes(pathway, params) {
         else
         {
         
-        let shapeType = graphics.ShapeType || "Rectangle";
+        let shapeType = graphics.ShapeType ;
            if(shapeType !== "Rectangle")
             {
              name = shapeType;
