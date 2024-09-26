@@ -25,7 +25,7 @@ export function processShapes(pathway, params) {
           name: shapes.$.TextLabel
         }
       };
-      cx2Data[4].nodes.push(node);
+      // cx2Data[4].nodes.push(node);
 
 
       const attributes = shapes.Attribute || [];
@@ -38,7 +38,8 @@ export function processShapes(pathway, params) {
           name = shape;
           console.log(shape);
            shapetype = CellShapes.getPath(shape);
-          console.log(shapetype);
+           console.log(shapetype);
+          
         }
         else if (doubleLineAttr) {
           // Check if the shape has the DoubleLineProperty attribute
@@ -53,6 +54,11 @@ export function processShapes(pathway, params) {
         let shapeType = graphics.ShapeType ;
            if(shapeType !== "Rectangle")
             {
+             if (shapeType === "Arc") {
+               const startRotation = parseFloat(graphics.Rotation) || 0;
+               shapetype = CellShapes.makeArc(startRotation);
+             } 
+            
              name = shapeType;
              console.log(shapeType);
              shapetype = CellShapes.getShape(shapeType);
@@ -112,18 +118,31 @@ export function processShapes(pathway, params) {
         }
       
 
-       if (!Array.isArray(shapetype) || !shapetype.every(cmd => typeof cmd === 'string')) {
-          console.error('shapetype contains non-string elements:', shapetype);
-          return;
-      }
+      //  if (!Array.isArray(shapetype) || !shapetype.every(cmd => typeof cmd === 'string')) {
+      //     console.error('shapetype contains non-string elements:', shapetype);
+      //     return;
+      // }
+      
+    if (!Array.isArray(shapetype) && typeof shapetype !== 'string') {
+    console.error('shapetype is neither an array of strings nor a string:', shapetype);
+    return;
+    }
+
+   if (Array.isArray(shapetype) && !shapetype.every(cmd => typeof cmd === 'string')) {
+    console.error('shapetype contains non-string elements:', shapetype);
+    return;
+   }
+  
+   if (typeof shapetype === 'string') {
+    shapetype = [shapetype];
+   }
 
 
-
-
-      const customShape = 'NZ M 0.0 50.0 ' + shapetype.map(cmd => {
+      const customShape = 'NZ M 0.0' + shapetype.map(cmd => {
       const parts = cmd.split(' ');
-       return `C ${parts.slice(1).join(' ')}`;
-      }).join(' ') + ' Z';
+       return ` ${parts.slice(1).join(' ')}`;
+      }).join(' ') ;
+      // }).join(' ') + 'Z';
 
       console.log(customShape);
         let width = graphics.Width;
@@ -145,14 +164,18 @@ export function processShapes(pathway, params) {
         x: x - width/2,
         width: width,
         y: y -height/2,
-        z: 0,
+        z: 1,
         height: height
     }
    
-    const annotationString = Object.entries(newAnnotation)
+    let annotationString = Object.entries(newAnnotation)
         .map(([key, value]) => `${key}=${value}`)
         .join('|');
-    
+    // annotationString = annotationString.replace('Z|shapeType=CUSTOM', 'Z | shapeType=CUSTOM');
+    // if(name === "Nucleus") 
+    // {
+    //   annotationString = annotationString.replace('Z|shapeType=CUSTOM', 'Z | shapeType=CUSTOM');
+    // }
     annotations.push(annotationString);
 
       // console.log(shapetype);

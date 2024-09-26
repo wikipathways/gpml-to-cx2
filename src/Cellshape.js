@@ -27,7 +27,7 @@ class CellShapes {
         }
     }
 
-    static getShape(propValue) {
+    static getShape(propValue, startRotation =0) {
         switch (propValue) {
             case 'RoundedRectangle':
             case 'RoundRectangle':
@@ -37,6 +37,8 @@ class CellShapes {
             case 'Vesicle':
             case 'Ellipse':
                 return this.makeEllipse();
+            case 'Arc':
+                return this.makeArc(startRotation);    
             default:
                 return null;
         }
@@ -62,110 +64,95 @@ class CellShapes {
         let ctx = canvas.getContext('2d');
 
          let commands = [];
-         commands.push(` ${x} ${ym}`);
-         commands.push(` ${x} ${ym - oy} ${xm - ox} ${y} ${xm} ${y}`);
-         commands.push(` ${xm + ox} ${y} ${xe} ${ym - oy} ${xe} ${ym}`);
-         commands.push(` ${xe} ${ym + oy} ${xm + ox} ${ye} ${xm} ${ye}`);
-         commands.push(` ${xm - ox} ${ye} ${x} ${ym + oy} ${x} ${ym}`);
-         commands.push('closePath');
+         commands.push(` ${ym}`);
+         commands.push(`C ${x} ${ym - oy} ${xm - ox} ${y} ${xm} ${y}`);
+         commands.push(`C ${xm + ox} ${y} ${xe} ${ym - oy} ${xe} ${ym}`);
+         commands.push(`C ${xe} ${ym + oy} ${xm + ox} ${ye} ${xm} ${ye}`);
+         commands.push(`C ${xm - ox} ${ye} ${x} ${ym + oy} ${x} ${ym}`);
+         commands.push('Z');
 
         // return [ctx];
-        return commands;
+        return commands.join(' ');
+        // return commands;
     }
 
+    
     static makeNucleus() {
-         
-        let gap = 7.0;
-        let x = 0;
-        let y = 0;
-        let w = 100 + gap;
-        let h = 100 + gap;
-        const kappa = 0.5522848;
-        let ox = (w / 2) * kappa;
-        let oy = (h / 2) * kappa;
-        const xe = x + w;
-        const ye = y + h;
-        const xm = x + w / 2;
-        const ym = y + h / 2;
+    let outerRadius = 53.5; // Half of the outer circle's width/height
+    let innerRadius = 50; // Example value for inner circle's radius (you can adjust this)
 
-        let canvas = createCanvas(w, h);
-        let ctx = canvas.getContext('2d');
+    // Outer circle points and cubic Bezier curve control points
+    let x = 0.0;
+    let y = outerRadius;
+    let w = 107.0; // Width for outer circle
+    let h = 107.0; // Height for outer circle
+    const kappa = 0.5522848; // Approximation for cubic bezier curve control points for a circle
 
-        let commands = [];
-         commands.push(`${x}, ${ym}`);
-         commands.push(`${x}, ${ym - oy}, ${xm - ox}, ${y}, ${xm}, ${y}`);
-         commands.push(`${xm + ox}, ${y}, ${xe}, ${ym - oy}, ${xe}, ${ym}`);
-         commands.push(`${xe}, ${ym + oy}, ${xm + ox}, ${ye}, ${xm}, ${ye}`);
-         commands.push(`${xm - ox}, ${ye}, ${x}, ${ym + oy}, ${x}, ${ym}`);
-         commands.push('closePath');
+    // Outer circle control points
+    let commands = [];
+    commands.push(`${x} ${y}`);
+    commands.push(`C ${x} ${y - (outerRadius * kappa)} ${outerRadius * kappa} 0.0 ${outerRadius} 0.0`);
+    commands.push(`C ${outerRadius + (outerRadius * kappa)} 0.0 ${w} ${y - (outerRadius * kappa)} ${w} ${y}`);
+    commands.push(`C ${w} ${y + (outerRadius * kappa)} ${outerRadius + (outerRadius * kappa)} ${h} ${outerRadius} ${h}`);
+    commands.push(`C ${(outerRadius * kappa)} ${h} ${x} ${y + (outerRadius * kappa)} ${x} ${y}`);
+    commands.push('Z'); // Close the path for the outer circle
 
-        x += gap / 2;
-        y += gap / 2;
-        w -= gap;
-        h -= gap;
+    // Inner circle
+    x = 3.5;
+    y = outerRadius;
+    w = 103.5;
+    h = 103.5;
+    
+    // Inner circle control points
+    commands.push(`M ${x} ${y}`);
+    commands.push(`C ${x} ${y - (innerRadius * kappa)} ${(innerRadius * kappa)} 3.5 ${innerRadius} 3.5`);
+    commands.push(`C ${innerRadius + (innerRadius * kappa)} 3.5 ${w} ${y - (innerRadius * kappa)} ${w} ${y}`);
+    commands.push(`C ${w} ${y + (innerRadius * kappa)} ${innerRadius + (innerRadius * kappa)} ${h} ${innerRadius} ${h}`);
+    commands.push(`C ${(innerRadius * kappa)} ${h} ${x} ${y + (innerRadius * kappa)} ${x} ${y}`);
+    commands.push('Z'); // Close the path for the inner circle
 
-        ox = (w / 2) * kappa;
-        oy = (h / 2) * kappa;
-        const xeInner = x + w;
-        const yeInner = y + h;
-        const xmInner = x + w / 2;
-        const ymInner = y + h / 2;
-
-        commands.push(`${x}, ${ymInner}`);
-        commands.push(`${x}, ${ymInner - oy}, ${xmInner - ox}, ${y}, ${xmInner}, ${y}`);
-        commands.push(`${xmInner + ox}, ${y}, ${xeInner}, ${ymInner - oy}, ${xeInner}, ${ymInner}`);
-        commands.push(`${xeInner}, ${ymInner + oy}, ${xmInner + ox}, ${yeInner}, ${xmInner}, ${yeInner}`);
-        commands.push(`${xmInner - ox}, ${yeInner}, ${x}, ${ymInner + oy}, ${x}, ${ymInner}`);
-        commands.push('closePath');
-
-        return commands;
-    }
-
-    static makeCell() {
-        let gap = 1.0;
-        let width = 100.0 + gap;
-        let height = 80.0 + gap;
-        let x = 0.0;
-        let y = 0.0;
-        let curveRad = 2.0;
-
-        let canvas = createCanvas(width, height);
-        let ctx = canvas.getContext('2d');
+    return commands.join(' ');
+}
 
 
-        let commands = [];
-        commands.push('beginPath');
-        commands.push(`${x}, ${curveRad}`);
-        commands.push(`${x}, ${y}, ${curveRad}, ${y}, ${x + curveRad}, ${y}`);
-        commands.push(`${width - curveRad}, ${y}`);
-        commands.push(`${width}, ${y}, ${width}, ${curveRad}, ${width}, ${curveRad}`);
-        commands.push(`${width}, ${height - curveRad}`);
-        commands.push(`${width}, ${height}, ${width - curveRad}, ${height}, ${width - curveRad}, ${height}`);
-        commands.push(`${curveRad}, ${height}`);
-        commands.push(`${x}, ${height}, ${x}, ${height - curveRad}, ${x}, ${height - curveRad}`);
-        commands.push(`${x}, ${curveRad}`);
-        commands.push('closePath');
+static makeCell() {
+    let gap = 1.0;
+    let width = 100.0 + gap;
+    let height = 80.0 + gap;
+    let x = 0.0;
+    let y = 0.0;
+    let curveRad = 2.0;
 
+    // First path (outer shape)
+    let commands = [];
+    commands.push(`${x.toFixed(1)} ${curveRad.toFixed(1)}`);
+    commands.push(`C ${x.toFixed(1)} ${y.toFixed(1)} ${curveRad.toFixed(1)} ${y.toFixed(1)} ${curveRad.toFixed(1)} ${y.toFixed(1)}`);
+    commands.push(`L ${(width - curveRad - gap).toFixed(1)} ${y.toFixed(1)}`);
+    commands.push(`C ${(width + gap).toFixed(1)} ${y.toFixed(1)} ${(width + gap).toFixed(1)} ${curveRad.toFixed(1)} ${(width + gap).toFixed(1)} ${curveRad.toFixed(1)}`);
+    commands.push(`L ${(width + gap).toFixed(1)} ${(height - curveRad - gap).toFixed(1)}`);
+    commands.push(`C ${(width + gap).toFixed(1)} ${(height + gap).toFixed(1)} ${(width - curveRad - gap).toFixed(1)} ${(height + gap).toFixed(1)} ${(width - curveRad - gap).toFixed(1)} ${(height + gap).toFixed(1)}`);
+    commands.push(`L ${curveRad.toFixed(1)} ${(height + gap).toFixed(1)}`);
+    commands.push(`C ${x.toFixed(1)} ${(height + gap).toFixed(1)} ${x.toFixed(1)} ${(height - curveRad - gap).toFixed(1)} ${x.toFixed(1)} ${(height - curveRad - gap).toFixed(1)}`);
+    commands.push(`L ${x.toFixed(1)} ${curveRad.toFixed(1)} Z`);
 
-        width -= gap;
-        height -= gap;
-        x += gap;
-        y += gap;
-       
-        commands.push(`${x}, ${curveRad}`);
-        commands.push(`${x}, ${y}, ${curveRad}, ${y}, ${x + curveRad}, ${y}`);
-        commands.push(`${width - curveRad}, ${y}`);
-        commands.push(`${width}, ${y}, ${width}, ${curveRad}, ${width}, ${curveRad}`);
-        commands.push(`${width}, ${height - curveRad}`);
-        commands.push(`${width}, ${height}, ${width - curveRad}, ${height}, ${width - curveRad}, ${height}`);
-        commands.push(`${curveRad}, ${height}`);
-        commands.push(`${x}, ${height}, ${x}, ${height - curveRad}, ${x}, ${height - curveRad}`);
-        commands.push(`${x}, ${curveRad}`);
-        commands.push('closePath');
+    // Second path (inner shape with gap)
+    let innerWidth = width - gap;
+    let innerHeight = height - gap;
+    let innerX = x + gap;
+    let innerY = y + gap;
 
-        return commands;
-    }
+    commands.push(`M ${innerX.toFixed(1)} ${curveRad.toFixed(1)}`);
+    commands.push(`C ${innerX.toFixed(1)} ${innerY.toFixed(1)} ${(innerX + curveRad).toFixed(1)} ${innerY.toFixed(1)} ${(innerX + curveRad).toFixed(1)} ${innerY.toFixed(1)}`);
+    commands.push(`L ${(innerWidth - curveRad).toFixed(1)} ${innerY.toFixed(1)}`);
+    commands.push(`C ${innerWidth.toFixed(1)} ${innerY.toFixed(1)} ${innerWidth.toFixed(1)} ${curveRad.toFixed(1)} ${innerWidth.toFixed(1)} ${curveRad.toFixed(1)}`);
+    commands.push(`L ${innerWidth.toFixed(1)} ${(innerHeight - curveRad).toFixed(1)}`);
+    commands.push(`C ${innerWidth.toFixed(1)} ${innerHeight.toFixed(1)} ${(innerWidth - curveRad).toFixed(1)} ${innerHeight.toFixed(1)} ${(innerWidth - curveRad).toFixed(1)} ${innerHeight.toFixed(1)}`);
+    commands.push(`L ${(curveRad + gap).toFixed(1)} ${innerHeight.toFixed(1)}`);
+    commands.push(`C ${innerX.toFixed(1)} ${innerHeight.toFixed(1)} ${innerX.toFixed(1)} ${(innerHeight - curveRad).toFixed(1)} ${innerX.toFixed(1)} ${(innerHeight - curveRad).toFixed(1)}`);
+    commands.push(`L ${innerX.toFixed(1)} ${curveRad.toFixed(1)} Z`);
 
+    return commands.join(' ');
+}
     static makeRoundRect() {
         const width = 100.0;
         const height = 80.0;
@@ -194,12 +181,67 @@ class CellShapes {
       
     }
 
-    static makeArc(startRotation) {
-        const degrees = startRotation * 180 / Math.PI;
-        const arc = new Path2D();
-        arc.arc(50, 50, 50, -degrees * (Math.PI / 180), -180 * (Math.PI / 180), false);
-        return arc;
-    }
+
+    
+
+
+static makeArc(startRotation) {
+    const degrees = startRotation * 180 / Math.PI;
+    let commands = [];
+    let x = 0;
+    let y = 0;
+    let width = 100;
+    let height = 10;
+    let startAngle = -degrees;
+    let arcExtent = -180;
+
+    commands.push(`x=${x}`);
+    commands.push(`y=${y}`);
+    commands.push(`width=${width}`);
+    commands.push(`height=${height}`);
+    commands.push(`startAngle=${-(startRotation * 180 / Math.PI)}`);
+    commands.push(`arcExtent=${arcExtent}`);
+    console.log(commands);
+
+    return commands;
+}
+
+
+static makeMitochondria() {
+    const pathCommands = [];
+
+    // First part of the mitochondrion path
+    pathCommands.push("M 72.81 85.70");
+    pathCommands.push("C 97.59 83.01 94.55 147.38 119.28 144.29");
+    pathCommands.push("C 166.27 144.40 136.22 42.38 175.51 41.70");
+    pathCommands.push("C 215.08 41.02 188.27 150.12 227.79 148.28");
+    pathCommands.push("C 271.14 146.25 230.67 29.04 274.00 26.55");
+    pathCommands.push("C 317.72 24.05 290.58 142.55 334.36 143.22");
+    pathCommands.push("C 371.55 143.80 351.55 43.14 388.66 45.75");
+    pathCommands.push("C 429.51 48.62 392.43 153.80 432.85 160.40");
+    pathCommands.push("C 459.82 164.80 457.96 94.30 485.13 97.26");
+    pathCommands.push("C 548.33 124.69 534.13 233.75 472.75 258.89");
+    pathCommands.push("C 454.92 261.42 450.22 220.87 432.35 223.03");
+    pathCommands.push("C 400.60 226.86 409.73 303.71 377.80 301.95");
+    pathCommands.push("C 348.05 300.30 365.16 223.61 335.37 223.28");
+    pathCommands.push("C 295.83 222.85 316.30 327.99 276.78 326.44");
+    pathCommands.push("C 241.90 325.08 266.95 236.11 232.34 231.61");
+    pathCommands.push("C 200.07 227.42 201.79 311.88 169.71 306.49");
+    pathCommands.push("C 134.22 300.53 167.04 209.92 131.32 205.60");
+    pathCommands.push("C 110.14 203.04 116.28 257.74 94.95 258.26");
+    pathCommands.push("C 15.35 236.77 5.51 114.51 72.81 85.70");
+    pathCommands.push("Z"); // Close the path
+
+    // Second part of the mitochondrion path
+    pathCommands.push("M 272.82 0.84");
+    pathCommands.push("C 378.97 1.13 542.51 62.39 543.54 168.53");
+    pathCommands.push("C 544.58 275.18 381.50 342.19 274.84 342.28");
+    pathCommands.push("C 166.69 342.36 0.84 274.66 2.10 166.51");
+    pathCommands.push("C 3.33 60.72 167.03 0.56 272.82 0.84");
+    pathCommands.push("Z"); // Close the path
+
+    return pathCommands.join(' '); // Returns a string representing the path commands
+}
 
     static makeER() {
         
@@ -296,16 +338,11 @@ class CellShapes {
         
         let canvas = createCanvas(width, height);
         let ctx = canvas.getContext('2d');
-
-
         let x = 0;
         let y = 0;
         let width = 120;
         let height = 80;
         let curveRad = 10;
-
-    
-
 
         let commands = [];
         commands.push(`${x + curveRad}, ${y}`);
@@ -318,9 +355,6 @@ class CellShapes {
         commands.push(`${x}, ${y + curveRad}`);
         commands.push(`${x}, ${y}, ${x + curveRad}, ${y}, ${x + curveRad}, ${y}`);
         commands.push('closePath');
-
-        
-        
         commands.push(`${x + 10}, ${y + 10}`);
         commands.push(`${x + width - 10}, ${y + 10}`);
         commands.push(`${x + width - 5}, ${y + 10}, ${x + width - 5}, ${y + 15}, ${x + width - 10}, ${y + 15}`);
@@ -345,3 +379,7 @@ class CellShapes {
     }
 }
 export default CellShapes;
+
+
+
+
