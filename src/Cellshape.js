@@ -1,3 +1,4 @@
+
 import canvas from 'canvas';
 const { createCanvas, Path } = canvas;
 
@@ -181,10 +182,6 @@ static makeCell() {
       
     }
 
-
-    
-
-
 static makeArc(startRotation) {
     const degrees = startRotation * 180 / Math.PI;
     let commands = [];
@@ -334,39 +331,31 @@ static makeMitochondria() {
         return commands;
     }
 
-    static makeBrace() {
-        
-        let canvas = createCanvas(width, height);
-        let ctx = canvas.getContext('2d');
-        let x = 0;
-        let y = 0;
-        let width = 120;
-        let height = 80;
-        let curveRad = 10;
 
-        let commands = [];
-        commands.push(`${x + curveRad}, ${y}`);
-        commands.push(`${x + width - curveRad}, ${y}`);
-        commands.push(`${x + width}, ${y}, ${x + width}, ${y + curveRad}, ${x + width}, ${y + curveRad}`);
-        commands.push(`${x + width}, ${y + height - curveRad}`);
-        commands.push(`${x + width}, ${y + height}, ${x + width - curveRad}, ${y + height}, ${x + width - curveRad}, ${y + height}`);
-        commands.push(`${x + curveRad}, ${y + height}`);
-        commands.push(`${x}, ${y + height}, ${x}, ${y + height - curveRad}, ${x}, ${y + height - curveRad}`);
-        commands.push(`${x}, ${y + curveRad}`);
-        commands.push(`${x}, ${y}, ${x + curveRad}, ${y}, ${x + curveRad}, ${y}`);
-        commands.push('closePath');
-        commands.push(`${x + 10}, ${y + 10}`);
-        commands.push(`${x + width - 10}, ${y + 10}`);
-        commands.push(`${x + width - 5}, ${y + 10}, ${x + width - 5}, ${y + 15}, ${x + width - 10}, ${y + 15}`);
-        commands.push(`${x + width - 10}, ${y + height - 15}`);
-        commands.push(`${x + width - 10}, ${y + height - 10}, ${x + width - 15}, ${y + height - 10}, ${x + width - 15}, ${y + height - 15}`);
-        commands.push(`${x + 10}, ${y + height - 15}`);
-        commands.push(`${x + 5}, ${y + height - 15}, ${x + 5}, ${y + height - 10}, ${x + 10}, ${y + height - 10}`);
-        commands.push(`${x + 10}, ${y + 15}`);
-        commands.push(`${x + 10}, ${y + 10}, ${x + 15}, ${y + 10}, ${x + 15}, ${y + 10}`);
-        commands.push('closePath');
-        return commands;
-    }
+    static makeBrace() {
+    let commands = [];
+
+    // Move to the starting point (8, 8)
+    commands.push(`M 8.0 8.0`);
+
+    // Draw the first quadratic curve from (8, 8) to (6, 5) with control point (6, 8)
+    commands.push(`Q 6.0 8.0 6.0 5.0`);
+
+    // Draw the second quadratic curve from (6, 5) to (4, 2) with control point (6, 2)
+    commands.push(`Q 6.0 2.0 4.0 2.0`);
+
+    // Draw the third quadratic curve from (4, 2) to (6, -1) with control point (6, 2)
+    commands.push(`Q 6.0 2.0 6.0 -1.0`);
+
+    // Draw the fourth quadratic curve from (6, -1) to (8, -4) with control point (6, -4)
+    commands.push(`Q 6.0 -4.0 8.0 -4.0`);
+
+    // Close the path
+    commands.push(`Z`);
+
+    // Return the path as a string
+    return commands.join(' ');
+}
 
     static makeTriangle() {
         let canvas = createCanvas(width, height);

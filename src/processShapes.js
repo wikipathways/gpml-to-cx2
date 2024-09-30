@@ -9,7 +9,6 @@ export function processShapes(pathway, params) {
   
   const annotations = cx2Data[3].networkAttributes[0].__Annotations;
   
-
   if (pathway.Shape) {
     const shapes = pathway.Shape;
     shapes.forEach(shapes => {
@@ -25,7 +24,7 @@ export function processShapes(pathway, params) {
           name: shapes.$.TextLabel
         }
       };
-      // cx2Data[4].nodes.push(node);
+      cx2Data[4].nodes.push(node);
 
 
       const attributes = shapes.Attribute || [];
@@ -38,8 +37,7 @@ export function processShapes(pathway, params) {
           name = shape;
           console.log(shape);
            shapetype = CellShapes.getPath(shape);
-           console.log(shapetype);
-          
+          console.log(shapetype);
         }
         else if (doubleLineAttr) {
           // Check if the shape has the DoubleLineProperty attribute
@@ -54,16 +52,11 @@ export function processShapes(pathway, params) {
         let shapeType = graphics.ShapeType ;
            if(shapeType !== "Rectangle")
             {
-             if (shapeType === "Arc") {
-               const startRotation = parseFloat(graphics.Rotation) || 0;
-               shapetype = CellShapes.makeArc(startRotation);
-             } 
-            
              name = shapeType;
-             console.log(shapeType);
+            //  console.log(shapeType);
              shapetype = CellShapes.getShape(shapeType);
             }
-          else
+           else
           {    
               name = "Rectangle";
               const lineThickness = parseFloat(graphics.LineThickness) || 1;
@@ -74,7 +67,7 @@ export function processShapes(pathway, params) {
               const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
 
             let fillColor = "#FFFFFF";
-             let backgroundOpacity = 1;
+            let backgroundOpacity = 1;
             if (graphics.FillColor) {
             if (graphics.FillColor.toLowerCase() === "transparent") {
             fillColor = "#FFFFFF";
@@ -84,7 +77,7 @@ export function processShapes(pathway, params) {
              backgroundOpacity = 1;
            }
            }   
-                  const v = {
+             const v = {
              NODE_BORDER_WIDTH: borderThickness,
              NODE_LABEL_COLOR: graphics.Color ? "#" + graphics.Color : "#000000",
              NODE_Z_LOCATION: graphics.ZOrder,
@@ -111,40 +104,34 @@ export function processShapes(pathway, params) {
           cx2Data[9].nodeBypasses.push(nodebypass);
           idCount += 1;
 
-         return;
+          return;
 
 
           }
         }
+
+         if (typeof shapetype === 'string') {
+           shapetype = [shapetype];
+          }
       
 
-      //  if (!Array.isArray(shapetype) || !shapetype.every(cmd => typeof cmd === 'string')) {
-      //     console.error('shapetype contains non-string elements:', shapetype);
-      //     return;
-      // }
-      
-    if (!Array.isArray(shapetype) && typeof shapetype !== 'string') {
-    console.error('shapetype is neither an array of strings nor a string:', shapetype);
-    return;
-    }
+       if (!Array.isArray(shapetype) || !shapetype.every(cmd => typeof cmd === 'string')) {
+          console.error('shapetype contains non-string elements:', shapetype);
+          return;
+         }
 
-   if (Array.isArray(shapetype) && !shapetype.every(cmd => typeof cmd === 'string')) {
-    console.error('shapetype contains non-string elements:', shapetype);
-    return;
-   }
-  
-   if (typeof shapetype === 'string') {
-    shapetype = [shapetype];
-   }
-
+      // const customShape = 'NZ M 0.0 50.0 ' + shapetype.map(cmd => {
+      // const parts = cmd.split(' ');
+      //  return `C ${parts.slice(1).join(' ')}`;
+      // }).join(' ') + ' Z';
 
       const customShape = 'NZ M 0.0' + shapetype.map(cmd => {
       const parts = cmd.split(' ');
        return ` ${parts.slice(1).join(' ')}`;
       }).join(' ') ;
-      // }).join(' ') + 'Z';
 
-      console.log(customShape);
+
+      // console.log(customShape);
         let width = graphics.Width;
         let height = graphics.Height;
         let x = graphics.CenterX;
@@ -164,72 +151,18 @@ export function processShapes(pathway, params) {
         x: x - width/2,
         width: width,
         y: y -height/2,
-        z: 1,
+        z: 0,
         height: height
-    }
+     }
    
-    let annotationString = Object.entries(newAnnotation)
+     const annotationString = Object.entries(newAnnotation)
         .map(([key, value]) => `${key}=${value}`)
         .join('|');
-    // annotationString = annotationString.replace('Z|shapeType=CUSTOM', 'Z | shapeType=CUSTOM');
-    // if(name === "Nucleus") 
-    // {
-    //   annotationString = annotationString.replace('Z|shapeType=CUSTOM', 'Z | shapeType=CUSTOM');
-    // }
+    
     annotations.push(annotationString);
 
-      // console.log(shapetype);
-      // if(shapetype == "Oval") // cx2 uses ellipse instead of oval
-      //   shapetype = "ellipse";
-      // const lineThickness = parseFloat(graphics.LineThickness) || 1;
-      // const borderThickness = getBorderThickness(shapetype, lineThickness);
-      // const fontName = graphics.FontName || "Arial";
-      // const fontWeight = graphics.FontWeight;
-      // const fontStyle = graphics.FontStyle;
-      // const labelFont = constructLabelFont(fontName, fontWeight, fontStyle);
-
-      // let fillColor = "#FFFFFF";
-      // let backgroundOpacity = 1;
-      // if (graphics.FillColor) {
-      //   if (graphics.FillColor.toLowerCase() === "transparent") {
-      //     fillColor = "#FFFFFF";
-      //     backgroundOpacity = 0;
-      //   } else {
-      //     fillColor = "#" + graphics.FillColor;
-      //     backgroundOpacity = 1;
-      //   }
-      // }
-
-
-
-      // const v = {
-      //   NODE_BORDER_WIDTH: borderThickness,
-      //   NODE_LABEL_COLOR: graphics.Color ? "#" + graphics.Color : "#000000",
-      //   NODE_Z_LOCATION: graphics.ZOrder,
-      //   NODE_BORDER_COLOR:  graphics.Color ? "#" + graphics.Color : "#000000",
-      //   NODE_HEIGHT: graphics.Height,
-      //   NODE_SHAPE: shapetype,
-      //   NODE_LABEL_FONT_FACE: {
-      //     FONT_FAMILY: graphics.FontFamily || "sans-serif",
-      //     FONT_STYLE: graphics.FontStyle || "normal",
-      //     FONT_WEIGHT: graphics.FontWeight || "normal",
-      //     FONT_NAME: labelFont || "Arial",
-      //   },
-      //   NODE_SELECTED_PAINT: "#FFFFCC",
-      //   NODE_LABEL_FONT_SIZE: graphics.FontSize || 12,
-      //   NODE_BACKGROUND_OPACITY: backgroundOpacity,
-      //   NODE_WIDTH: graphics.Width,
-      // };
-
-      // const nodebypass = {
-      //   id: idCount,
-      //   v: v,
-      // };
-
-      // cx2Data[9].nodeBypasses.push(nodebypass);
-      // idCount += 1;
-    });
-  }
+      });
+   }
   params.idCount = idCount;
   params.cx2Data = cx2Data;
   return annotations;
@@ -239,8 +172,8 @@ export function processShapes(pathway, params) {
 
 
 
-// const shape =  CellShapes.getShape('Oval'); // or any other shape
-// console.log(shape);
+
+
 
 
 
