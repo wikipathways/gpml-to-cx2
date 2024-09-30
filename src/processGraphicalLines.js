@@ -60,14 +60,14 @@ export function processGraphicalLines(pathway, params, dataNodeCount) {
 
               v: {
                 StartArrow: "Line",
-                EndArrow: "Line",
+                EndArrow: point.$.ArrowHead ? point.$.ArrowHead : "Line",
                 ConnectorType: "Straight",
                 LineThickness: parseFloat(graphics.$.LineThickness),
                 LineStyle: graphics.$.LineStyle
                   ? graphics.$.LineStyle
                   : "Solid",
                 Color: graphics.$.Color ? graphics.$.Color : "#000000",
-                interaction: "Line",
+                interaction: point.$.ArrowHead ? point.$.ArrowHead :"Line",
               },
             };
             idCount += 1;

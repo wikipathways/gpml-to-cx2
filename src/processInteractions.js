@@ -31,7 +31,7 @@ export function processInteractions (pathway, params) {
           v: {
             StartArrow: startArrowHead === 'None' ? 'Line' : startArrowHead,
             EndArrow: endArrowHead === 'None' ? 'Line' : endArrowHead,
-            ConnectorType: "Straight",
+            ConnectorType: interaction.Graphics[0].$.ConnectorType ? interaction.Graphics[0].$.ConnectorType : "Straight",
             LineThickness: parseFloat(interaction.Graphics[0].$.LineThickness),
             LineStyle:  lineStyle,
             Color: interaction.Graphics[0].$.Color ? '#' + interaction.Graphics[0].$.Color : "#000000",
