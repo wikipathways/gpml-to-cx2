@@ -2,27 +2,21 @@
 
 This repository contains a tool to convert GPML files to CX2 format.
 
-## Clone this Repository
+## Installation
 
 ```
 git clone https://github.com/SainiAditya1/gpml-to-cx2.git
 cd gpml-to-cx2
-```
-
-## Install dependencies
-
-```
 npm install
 ```
 
-## Convert Your GPML File to CX2
+## Usage
 
-### 1.Put your GPML file in the root directory of the project.
+- Put your GPML file in the root directory of the project.
 
-### 2.Run the following command, replacing <File_Name> with the name of your GPML file:
+- Run the following command, replacing <File_Name> with the name of your GPML file:
 
 ```
 npm run convert <File_Name>.gpml
 ```
-
-### The converted file will be generated in the same directory.<File_Name>.cx2
+- The converted file will be generated in the same directory with the name <File_Name>.cx2
