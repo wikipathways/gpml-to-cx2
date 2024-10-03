@@ -4,81 +4,77 @@ const { createCanvas, Path } = canvas;
 
 // const Oval = 'Oval';
 class CellShapes {
-    static getPath(propValue) {
-        // console.log(propValue);
-        switch (propValue ) {
-            case 'Mitochondria':
-                return this.makeMitochondria();
-            case 'Endoplasmic Reticulum':
-                return this.makeER();
-            case 'Sarcoplasmic Reticulum':
-                return this.makeSR();
-            case 'Golgi Apparatus':
-                return this.makeGolgi();
-            case 'Brace':
-                return this.makeBrace();
-            case 'Triangle':
-                return this.makeTriangle();
-            case 'Cell':
-                return this.makeCell();
-            case 'Nucleus':
-                return this.makeNucleus();
-            default:
-                return null;
-        }
+  static getPath(propValue) {
+    // console.log(propValue);
+    switch (propValue) {
+      case 'Mitochondria':
+        return this.makeMitochondria();
+      case 'Endoplasmic Reticulum':
+        return this.makeER();
+      case 'Sarcoplasmic Reticulum':
+        return this.makeSR();
+      case 'Golgi Apparatus':
+        return this.makeGolgi();
+      case 'Brace':
+        return this.makeBrace();
+      case 'Triangle':
+        return this.makeTriangle();
+      case 'Cell':
+        return this.makeCell();
+      case 'Nucleus':
+        return this.makeNucleus();
+      default:
+        return null;
     }
+  }
 
-    static getShape(propValue, startRotation =0) {
-        switch (propValue) {
-            case 'RoundedRectangle':
-            case 'RoundRectangle':
-            case 'Organelle':
-                return this.makeRoundRect();
-            case 'Oval':
-            case 'Vesicle':
-            case 'Ellipse':
-                return this.makeEllipse();
-            case 'Arc':
-                return this.makeArc(startRotation);    
-            default:
-                return null;
-        }
+  static getShape(propValue, startRotation = 0) {
+    switch (propValue) {
+      case 'RoundedRectangle':
+      case 'RoundRectangle':
+      case 'Organelle':
+        return this.makeRoundRect();
+      case 'Oval':
+      case 'Vesicle':
+      case 'Ellipse':
+        return this.makeEllipse();
+      case 'Arc':
+        return this.makeArc(startRotation);
+      default:
+        return null;
     }
+  }
 
-    static makeEllipse() {
-       
-       
-        let x = 0;
-        let y = 0;
-        let w = 100;
-        let h = 100;
-        const kappa = 0.5522848;
-        let ox = (w / 2) * kappa;
-        let oy = (h / 2) * kappa;
-        let xe = x + w;
-        let ye = y + h;
-        let xm = x + w / 2;
-        let ym = y + h / 2;
+  static makeEllipse() {
+    let x = 0;
+    let y = 0;
+    let w = 100;
+    let h = 100;
+    const kappa = 0.5522848;
+    let ox = (w / 2) * kappa;
+    let oy = (h / 2) * kappa;
+    let xe = x + w;
+    let ye = y + h;
+    let xm = x + w / 2;
+    let ym = y + h / 2;
 
+    let canvas = createCanvas(w, h);
+    let ctx = canvas.getContext('2d');
 
-        let canvas = createCanvas(w, h);
-        let ctx = canvas.getContext('2d');
+    let commands = [];
+    commands.push(` ${ym}`);
+    commands.push(`C ${x} ${ym - oy} ${xm - ox} ${y} ${xm} ${y}`);
+    commands.push(`C ${xm + ox} ${y} ${xe} ${ym - oy} ${xe} ${ym}`);
+    commands.push(`C ${xe} ${ym + oy} ${xm + ox} ${ye} ${xm} ${ye}`);
+    commands.push(`C ${xm - ox} ${ye} ${x} ${ym + oy} ${x} ${ym}`);
+    commands.push('Z');
 
-         let commands = [];
-         commands.push(` ${ym}`);
-         commands.push(`C ${x} ${ym - oy} ${xm - ox} ${y} ${xm} ${y}`);
-         commands.push(`C ${xm + ox} ${y} ${xe} ${ym - oy} ${xe} ${ym}`);
-         commands.push(`C ${xe} ${ym + oy} ${xm + ox} ${ye} ${xm} ${ye}`);
-         commands.push(`C ${xm - ox} ${ye} ${x} ${ym + oy} ${x} ${ym}`);
-         commands.push('Z');
+    // return [ctx];
+    return commands.join(' ');
+    // return commands;
+  }
 
-        // return [ctx];
-        return commands.join(' ');
-        // return commands;
-    }
-
-    
-    static makeNucleus() {
+  static makeNucleus() {
     let outerRadius = 53.5; // Half of the outer circle's width/height
     let innerRadius = 50; // Example value for inner circle's radius (you can adjust this)
 
@@ -103,7 +99,7 @@ class CellShapes {
     y = outerRadius;
     w = 103.5;
     h = 103.5;
-    
+
     // Inner circle control points
     commands.push(`M ${x} ${y}`);
     commands.push(`C ${x} ${y - (innerRadius * kappa)} ${(innerRadius * kappa)} 3.5 ${innerRadius} 3.5`);
@@ -113,10 +109,9 @@ class CellShapes {
     commands.push('Z'); // Close the path for the inner circle
 
     return commands.join(' ');
-}
+  }
 
-
-static makeCell() {
+  static makeCell() {
     let gap = 1.0;
     let width = 100.0 + gap;
     let height = 80.0 + gap;
@@ -153,36 +148,34 @@ static makeCell() {
     commands.push(`L ${innerX.toFixed(1)} ${curveRad.toFixed(1)} Z`);
 
     return commands.join(' ');
-}
-    static makeRoundRect() {
-        const width = 100.0;
-        const height = 80.0;
-        const x = 0.0;
-        const y = 0.0;
-        const curveRad = 8.0;
+  }
+  static makeRoundRect() {
+    const width = 100.0;
+    const height = 80.0;
+    const x = 0.0;
+    const y = 0.0;
+    const curveRad = 8.0;
 
+    let canvas = createCanvas(width, height);
+    let ctx = canvas.getContext('2d')
 
-        let canvas = createCanvas(width, height);
-        let ctx = canvas.getContext('2d')
+    let commands = [];
 
-       let commands = [];
+    commands.push(`M ${x} ${curveRad}`);
+    commands.push(`C ${x} ${y} ${curveRad} ${y} ${x + curveRad} ${y}`);
+    commands.push(`L ${width - curveRad} ${y}`);
+    commands.push(`C ${width} ${y} ${width} ${curveRad} ${width} ${curveRad}`);
+    commands.push(`L ${width} ${height - curveRad}`);
+    commands.push(`C ${width} ${height} ${width - curveRad} ${height} ${width - curveRad} ${height}`);
+    commands.push(`L ${curveRad} ${height}`);
+    commands.push(`C ${x} ${height} ${x} ${height - curveRad} ${x} ${height - curveRad}`);
+    commands.push(`L ${x} ${curveRad}`);
+    commands.push('Z');
 
-       commands.push(`M ${x} ${curveRad}`);
-       commands.push(`C ${x} ${y} ${curveRad} ${y} ${x + curveRad} ${y}`);
-       commands.push(`L ${width - curveRad} ${y}`);
-       commands.push(`C ${width} ${y} ${width} ${curveRad} ${width} ${curveRad}`);
-       commands.push(`L ${width} ${height - curveRad}`);
-       commands.push(`C ${width} ${height} ${width - curveRad} ${height} ${width - curveRad} ${height}`);
-       commands.push(`L ${curveRad} ${height}`);
-       commands.push(`C ${x} ${height} ${x} ${height - curveRad} ${x} ${height - curveRad}`);
-       commands.push(`L ${x} ${curveRad}`);
-       commands.push('Z');
+    return commands;
+  }
 
-       return commands;
-      
-    }
-
-static makeArc(startRotation) {
+  static makeArc(startRotation) {
     const degrees = startRotation * 180 / Math.PI;
     let commands = [];
     let x = 0;
@@ -201,10 +194,9 @@ static makeArc(startRotation) {
     console.log(commands);
 
     return commands;
-}
+  }
 
-
-static makeMitochondria() {
+  static makeMitochondria() {
     const pathCommands = [];
 
     // First part of the mitochondrion path
@@ -238,101 +230,95 @@ static makeMitochondria() {
     pathCommands.push("Z"); // Close the path
 
     return pathCommands.join(' '); // Returns a string representing the path commands
-}
+  }
 
-    static makeER() {
-        
-        let x = 0;
-        let y = 0;
-        let width = 120;
-        let height = 80;
-        let curveRad = 15;
+  static makeER() {
+    let x = 0;
+    let y = 0;
+    let width = 120;
+    let height = 80;
+    let curveRad = 15;
 
-        let canvas = createCanvas(width, height);
-        let ctx = canvas.getContext('2d')
+    let canvas = createCanvas(width, height);
+    let ctx = canvas.getContext('2d')
 
-        let commands = [];
-        commands.push(`${x}, ${y}`);
-        commands.push(`${x + width}, ${y}`);
-        commands.push(`${x + width}, ${y + height}`);
-        commands.push(`${x}, ${y + height}`);
-        commands.push('closePath');
+    let commands = [];
+    commands.push(`${x}, ${y}`);
+    commands.push(`${x + width}, ${y}`);
+    commands.push(`${x + width}, ${y + height}`);
+    commands.push(`${x}, ${y + height}`);
+    commands.push('closePath');
 
-        commands.push(`${x + curveRad}, ${y + curveRad}`);
-        commands.push(`${x + width - curveRad}, ${y + curveRad}`);
-        commands.push(`${x + width}, ${y + curveRad}, ${x + width}, ${y + curveRad + 10}, ${x + width - curveRad}, ${y + curveRad + 10}`);
-        commands.push(`${x + curveRad}, ${y + curveRad + 10}`);
-        commands.push(`${x}, ${y + curveRad + 10}, ${x}, ${y + curveRad}, ${x + curveRad}, ${y + curveRad}`);
-        commands.push('closePath');
-        return commands;
-    }
+    commands.push(`${x + curveRad}, ${y + curveRad}`);
+    commands.push(`${x + width - curveRad}, ${y + curveRad}`);
+    commands.push(`${x + width}, ${y + curveRad}, ${x + width}, ${y + curveRad + 10}, ${x + width - curveRad}, ${y + curveRad + 10}`);
+    commands.push(`${x + curveRad}, ${y + curveRad + 10}`);
+    commands.push(`${x}, ${y + curveRad + 10}, ${x}, ${y + curveRad}, ${x + curveRad}, ${y + curveRad}`);
+    commands.push('closePath');
+    return commands;
+  }
 
-    static makeSR() {
-        let canvas = createCanvas(width, height);
-        let ctx = canvas.getContext('2d')
-        
-        let x = 0;
-        let y = 0;
-        let width = 100;
-        let height = 100;
-        let curveRad = 20;
+  static makeSR() {
+    let canvas = createCanvas(width, height);
+    let ctx = canvas.getContext('2d')
 
+    let x = 0;
+    let y = 0;
+    let width = 100;
+    let height = 100;
+    let curveRad = 20;
 
-        let commands = [];
-        commands.push(`${x + curveRad}, ${y}`);
-        commands.push(`${x + width - curveRad}, ${y}`);
-        commands.push(`${x + width}, ${y}, ${x + width}, ${y + curveRad}, ${x + width}, ${y + curveRad}`);
-        commands.push(`${x + width}, ${y + height - curveRad}`);
-        commands.push(`${x + width}, ${y + height}, ${x + width - curveRad}, ${y + height}, ${x + width - curveRad}, ${y + height}`);
-        commands.push(`${x + curveRad}, ${y + height}`);
-        commands.push(`${x}, ${y + height}, ${x}, ${y + height - curveRad}, ${x}, ${y + height - curveRad}`);
-        commands.push(`${x}, ${y + curveRad}`);
-        commands.push(`${x}, ${y}, ${x + curveRad}, ${y}, ${x + curveRad}, ${y}`);
-        commands.push('closePath');
+    let commands = [];
+    commands.push(`${x + curveRad}, ${y}`);
+    commands.push(`${x + width - curveRad}, ${y}`);
+    commands.push(`${x + width}, ${y}, ${x + width}, ${y + curveRad}, ${x + width}, ${y + curveRad}`);
+    commands.push(`${x + width}, ${y + height - curveRad}`);
+    commands.push(`${x + width}, ${y + height}, ${x + width - curveRad}, ${y + height}, ${x + width - curveRad}, ${y + height}`);
+    commands.push(`${x + curveRad}, ${y + height}`);
+    commands.push(`${x}, ${y + height}, ${x}, ${y + height - curveRad}, ${x}, ${y + height - curveRad}`);
+    commands.push(`${x}, ${y + curveRad}`);
+    commands.push(`${x}, ${y}, ${x + curveRad}, ${y}, ${x + curveRad}, ${y}`);
+    commands.push('closePath');
 
-        return commands;
-    }
+    return commands;
+  }
 
-    static makeGolgi() {
-        let canvas = createCanvas(width, height);
-        let ctx = canvas.getContext('2d')
+  static makeGolgi() {
+    let canvas = createCanvas(width, height);
+    let ctx = canvas.getContext('2d')
 
-        let x = 0;
-        let y = 0;
-        let width = 100;
-        let height = 80;
-        let curveRad = 12;
+    let x = 0;
+    let y = 0;
+    let width = 100;
+    let height = 80;
+    let curveRad = 12;
 
-        let commands = [];
-        commands.push(`${x + curveRad}, ${y}`);
-        commands.push(`${x + width - curveRad}, ${y}`);
-        commands.push(`${x + width}, ${y}, ${x + width}, ${y + curveRad}, ${x + width}, ${y + curveRad}`);
-        commands.push(`${x + width}, ${y + height - curveRad}`);
-        commands.push(`${x + width}, ${y + height}, ${x + width - curveRad}, ${y + height}, ${x + width - curveRad}, ${y + height}`);
-        commands.push(`${x + curveRad}, ${y + height}`);
-        commands.push(`${x}, ${y + height}, ${x}, ${y + height - curveRad}, ${x}, ${y + height - curveRad}`);
-        commands.push(`${x}, ${y + curveRad}`);
-        commands.push(`${x}, ${y}, ${x + curveRad}, ${y}, ${x + curveRad}, ${y}`);
-        commands.push('closePath');
+    let commands = [];
+    commands.push(`${x + curveRad}, ${y}`);
+    commands.push(`${x + width - curveRad}, ${y}`);
+    commands.push(`${x + width}, ${y}, ${x + width}, ${y + curveRad}, ${x + width}, ${y + curveRad}`);
+    commands.push(`${x + width}, ${y + height - curveRad}`);
+    commands.push(`${x + width}, ${y + height}, ${x + width - curveRad}, ${y + height}, ${x + width - curveRad}, ${y + height}`);
+    commands.push(`${x + curveRad}, ${y + height}`);
+    commands.push(`${x}, ${y + height}, ${x}, ${y + height - curveRad}, ${x}, ${y + height - curveRad}`);
+    commands.push(`${x}, ${y + curveRad}`);
+    commands.push(`${x}, ${y}, ${x + curveRad}, ${y}, ${x + curveRad}, ${y}`);
+    commands.push('closePath');
+    commands.push(`${x + 20}, ${y + 20}`);
+    commands.push(`${x + width - 20}, ${y + 20}`);
+    commands.push(`${x + width - 10}, ${y + 20}, ${x + width - 10}, ${y + 30}, ${x + width - 20}, ${y + 30}`);
+    commands.push(`${x + width - 20}, ${y + height - 30}`);
+    commands.push(`${x + width - 20}, ${y + height - 20}, ${x + width - 30}, ${y + height - 20}, ${x + width - 30}, ${y + height - 30}`);
+    commands.push(`${x + 20}, ${y + height - 30}`);
+    commands.push(`${x + 10}, ${y + height - 30}, ${x + 10}, ${y + height - 20}, ${x + 20}, ${y + height - 20}`);
+    commands.push(`${x + 20}, ${y + 30}`);
+    commands.push(`${x + 20}, ${y + 20}, ${x + 30}, ${y + 20}, ${x + 30}, ${y + 20}`);
+    commands.push('closePath');
 
+    return commands;
+  }
 
-        commands.push(`${x + 20}, ${y + 20}`);
-        commands.push(`${x + width - 20}, ${y + 20}`);
-        commands.push(`${x + width - 10}, ${y + 20}, ${x + width - 10}, ${y + 30}, ${x + width - 20}, ${y + 30}`);
-        commands.push(`${x + width - 20}, ${y + height - 30}`);
-        commands.push(`${x + width - 20}, ${y + height - 20}, ${x + width - 30}, ${y + height - 20}, ${x + width - 30}, ${y + height - 30}`);
-        commands.push(`${x + 20}, ${y + height - 30}`);
-        commands.push(`${x + 10}, ${y + height - 30}, ${x + 10}, ${y + height - 20}, ${x + 20}, ${y + height - 20}`);
-        commands.push(`${x + 20}, ${y + 30}`);
-        commands.push(`${x + 20}, ${y + 20}, ${x + 30}, ${y + 20}, ${x + 30}, ${y + 20}`);
-        commands.push('closePath');
-
-        
-        return commands;
-    }
-
-
-    static makeBrace() {
+  static makeBrace() {
     let commands = [];
 
     // Move to the starting point (8, 8)
@@ -355,20 +341,16 @@ static makeMitochondria() {
 
     // Return the path as a string
     return commands.join(' ');
-}
+  }
 
-    static makeTriangle() {
-        let canvas = createCanvas(width, height);
-        let ctx = canvas.getContext('2d')
-        ctx.moveTo(50, 0);
-        ctx.lineTo(100, 100);
-        ctx.lineTo(0, 100);
-        ctx.closePath();
-        return ctx;
-    }
+  static makeTriangle() {
+    let canvas = createCanvas(width, height);
+    let ctx = canvas.getContext('2d')
+    ctx.moveTo(50, 0);
+    ctx.lineTo(100, 100);
+    ctx.lineTo(0, 100);
+    ctx.closePath();
+    return ctx;
+  }
 }
 export default CellShapes;
-
-
-
-

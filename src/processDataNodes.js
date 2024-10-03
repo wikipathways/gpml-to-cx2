@@ -5,7 +5,7 @@ export function processDataNodes(pathway, params) {
   let cx2Data = params.cx2Data;
   let graphIdMapping = params.graphIdMapping;
   let cx2NodeIdCounts = params.cx2NodeIdCounts;
-  
+
   if (pathway.DataNode) {
     pathway.DataNode.forEach(dataNode => {
       const graphics = dataNode.Graphics[0].$;

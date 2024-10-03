@@ -1,4 +1,4 @@
-export function processInteractions (pathway, params) {
+export function processInteractions(pathway, params) {
   let idCount = params.idCount;
   let cx2Data = params.cx2Data;
   let graphIdMapping = params.graphIdMapping;
@@ -33,7 +33,7 @@ export function processInteractions (pathway, params) {
             EndArrow: endArrowHead === 'None' ? 'Line' : endArrowHead,
             ConnectorType: interaction.Graphics[0].$.ConnectorType ? interaction.Graphics[0].$.ConnectorType : "Straight",
             LineThickness: parseFloat(interaction.Graphics[0].$.LineThickness),
-            LineStyle:  lineStyle,
+            LineStyle: lineStyle,
             Color: interaction.Graphics[0].$.Color ? '#' + interaction.Graphics[0].$.Color : "#000000",
             interaction: endArrowHead === 'None' ? 'Line' : endArrowHead
           }

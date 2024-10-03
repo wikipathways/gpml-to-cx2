@@ -67,7 +67,7 @@ export function processGraphicalLines(pathway, params, dataNodeCount) {
                   ? graphics.$.LineStyle
                   : "Solid",
                 Color: graphics.$.Color ? graphics.$.Color : "#000000",
-                interaction: point.$.ArrowHead ? point.$.ArrowHead :"Line",
+                interaction: point.$.ArrowHead ? point.$.ArrowHead : "Line",
               },
             };
             idCount += 1;
@@ -80,4 +80,4 @@ export function processGraphicalLines(pathway, params, dataNodeCount) {
   params.idCount = idCount;
   params.cx2Data = cx2Data;
   params.graphIdMapping = graphIdMapping;
-}
+};

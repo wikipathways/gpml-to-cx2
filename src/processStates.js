@@ -21,13 +21,6 @@ export function processStates(pathway, params) {
       let width = parseFloat(graphics.Width);
       let height = parseFloat(graphics.Height);
 
-      // const commentString = state.Comment[0];
-      // const commentParts = commentString.split(";").reduce((acc, part) => {
-      //   const [key, value] = part.split("=").map((str) => str.trim());
-      //   acc[key] = value;
-      //   return acc;
-      // }, {});
-
       let commentParts = {};
       if (state.Comment && state.Comment[0]) {
         const commentString = state.Comment[0];
@@ -61,23 +54,23 @@ export function processStates(pathway, params) {
         z: z,
         v: hasAllRequiredProperties
           ? {
-              parentsymbol: commentParts.parentsymbol,
-              parentid: commentParts.parentid,
-              direction: commentParts.direction,
-              ptm: commentParts.ptm,
-              site: commentParts.site,
-              name: state.$.TextLabel,
-              position: commentParts.position,
-              sitegrpid: commentParts.sitegrpid,
-            }
+            parentsymbol: commentParts.parentsymbol,
+            parentid: commentParts.parentid,
+            direction: commentParts.direction,
+            ptm: commentParts.ptm,
+            site: commentParts.site,
+            name: state.$.TextLabel,
+            position: commentParts.position,
+            sitegrpid: commentParts.sitegrpid,
+          }
           : {
-              name: state.$.TextLabel,
-            },
+            name: state.$.TextLabel,
+          },
       };
       cx2Data[4].nodes.push(s);
 
       let shape = stateGraphics.ShapeType || "Rectangle";
-      if(shape == "Oval") // cx2 uses ellipse instead of oval
+      if (shape == "Oval") // cx2 uses ellipse instead of oval
         shape = "ellipse";
       const lineThickness = parseFloat(stateGraphics.LineThickness) || 1;
       const borderThickness = getBorderThickness(shape, lineThickness);
@@ -129,4 +122,4 @@ export function processStates(pathway, params) {
   }
   params.idCount = idCount;
   params.cx2Data = cx2Data;
-}
+};

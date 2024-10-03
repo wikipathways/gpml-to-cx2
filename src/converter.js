@@ -10,7 +10,6 @@ import { processGroups } from "./processGroups.js";
 import { processShapes } from "./processShapes.js";
 import { processStates } from "./processStates.js";
 
-
 const gpmlFilePath = process.argv[2];
 
 if (!gpmlFilePath) {
@@ -320,20 +319,6 @@ if (interactions) {
     });
   });
 }
-
-/* cx2NodeIdCounts.forEach(id => {
-
-  const v = {
-    NODE_Z_LOCATION: 32768
-  };
-
-
-  const nodebypass = {
-    id: id,
-    v: v
-  };
-  cx2Data[9].nodeBypasses.push(nodebypass);
-}); */
 
 cx2EdgeIdCounts.forEach((id) => {
   const edgebypass = {

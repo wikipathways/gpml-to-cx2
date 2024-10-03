@@ -6,37 +6,37 @@ export function processGroups(pathway, params) {
   if (pathway.Group) {
     pathway.Group.forEach(group => {
       let nodeInfo = getBounds(pathway, group.$.GroupId);
-      if(nodeInfo.elementCount > 0) {
+      if (nodeInfo.elementCount > 0) {
         const cx2Group = {
           id: idCount,
           x: parseFloat(nodeInfo.centerX),
           y: parseFloat(nodeInfo.centerY),
           z: 4096,
         };
-  
+
         if (!cx2Data.nodes) {
           cx2Data.nodes = [];
         }
-  
+
         cx2Data[4].nodes.push(cx2Group);
         graphIdMapping[group.$.GraphId] = idCount;
-  
+
         let style = group.$.Style || "None";
         let borderWidth = 0;
-        if(style != "Group")
+        if (style != "Group")
           borderWidth = 1;
         let borderStyle = "dashed";
-        if(style == "Complex")
+        if (style == "Complex")
           borderStyle = "solid";
         let backgroundColor = "#FFFFFF";
-        if(style == "Pathway")
+        if (style == "Pathway")
           backgroundColor = "#00FF00";
-        else if(style == "Complex" || style == "None")
+        else if (style == "Complex" || style == "None")
           backgroundColor = "#B4B464";
         let shape = "rectangle";
-        if(style == "Complex")
+        if (style == "Complex")
           shape = "octagon";
-  
+
         const v = {
           "NODE_BORDER_WIDTH": borderWidth,
           "NODE_LABEL_COLOR": "#AAAAAA",
@@ -54,11 +54,11 @@ export function processGroups(pathway, params) {
           id: idCount,
           v: v
         };
-  
+
         if (!cx2Data[9].nodeBypasses) {
           cx2Data[9].nodeBypasses = [];
         }
-  
+
         cx2Data[9].nodeBypasses.push(nodebypass);
         idCount += 1;
       }
@@ -70,26 +70,26 @@ export function processGroups(pathway, params) {
   params.graphIdMapping = graphIdMapping;
 }
 
-function getGroupElements (pathway, groupId) {
+function getGroupElements(pathway, groupId) {
   let groupElements = new Set();
   if (pathway.DataNode) {
     pathway.DataNode.forEach(dataNode => {
       let groupRef = dataNode.$.GroupRef;
-      if(groupRef && groupRef == groupId)
+      if (groupRef && groupRef == groupId)
         groupElements.add(dataNode);
     });
   }
   if (pathway.Label) {
     pathway.Label.forEach(label => {
       let groupRef = label.$.GroupRef;
-      if(groupRef && groupRef == groupId)
+      if (groupRef && groupRef == groupId)
         groupElements.add(label);
     });
   }
   if (pathway.Shape) {
     pathway.Shape.forEach(shape => {
       let groupRef = shape.$.GroupRef;
-      if(groupRef && groupRef == groupId)
+      if (groupRef && groupRef == groupId)
         groupElements.add(shape);
     });
   }
@@ -134,5 +134,5 @@ function getBounds(pathway, groupId) {
   let width = (right - left) + 2 * margin;
   let height = (bottom - top) + 2 * margin;
 
-  return {centerX: centerX, centerY: centerY, width: width, height: height, elementCount: groupElements.size};
-}
+  return { centerX: centerX, centerY: centerY, width: width, height: height, elementCount: groupElements.size };
+};
