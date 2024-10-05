@@ -5,7 +5,7 @@ This repository contains a tool to convert GPML files to CX2 format.
 ## Installation
 
 ```
-git clone https://github.com/SainiAditya1/gpml-to-cx2.git
+git clone https://github.com/wikipathways/gpml-to-cx2.git
 cd gpml-to-cx2
 npm install
 ```
