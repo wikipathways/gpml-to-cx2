@@ -149,6 +149,8 @@ class CellShapes {
 
     return commands.join(' ');
   }
+
+
   static makeRoundRect() {
     const width = 100.0;
     const height = 80.0;
@@ -157,23 +159,24 @@ class CellShapes {
     const curveRad = 8.0;
 
     let canvas = createCanvas(width, height);
-    let ctx = canvas.getContext('2d')
+    let ctx = canvas.getContext('2d');
 
     let commands = [];
 
-    commands.push(`M ${x} ${curveRad}`);
-    commands.push(`C ${x} ${y} ${curveRad} ${y} ${x + curveRad} ${y}`);
-    commands.push(`L ${width - curveRad} ${y}`);
-    commands.push(`C ${width} ${y} ${width} ${curveRad} ${width} ${curveRad}`);
-    commands.push(`L ${width} ${height - curveRad}`);
-    commands.push(`C ${width} ${height} ${width - curveRad} ${height} ${width - curveRad} ${height}`);
-    commands.push(`L ${curveRad} ${height}`);
-    commands.push(`C ${x} ${height} ${x} ${height - curveRad} ${x} ${height - curveRad}`);
-    commands.push(`L ${x} ${curveRad}`);
-    commands.push('Z');
+    commands.push(`M ${curveRad.toFixed(1)} ${x.toFixed(1)}`);
+    commands.push(`C ${x.toFixed(1)} ${y.toFixed(1)} ${curveRad.toFixed(1)} ${y.toFixed(1)} ${curveRad.toFixed(1)} ${y.toFixed(1)}`);
+    commands.push(`L ${(width - curveRad).toFixed(1)} ${y.toFixed(1)}`);
+    commands.push(`C ${width.toFixed(1)} ${y.toFixed(1)} ${width.toFixed(1)} ${curveRad.toFixed(1)} ${width.toFixed(1)} ${curveRad.toFixed(1)}`);
+    commands.push(`L ${width.toFixed(1)} ${(height - curveRad).toFixed(1)}`);
+    commands.push(`C ${width.toFixed(1)} ${height.toFixed(1)} ${(width - curveRad).toFixed(1)} ${height.toFixed(1)} ${(width - curveRad).toFixed(1)} ${height.toFixed(1)}`);
+    commands.push(`L ${curveRad.toFixed(1)} ${height.toFixed(1)}`);
+    commands.push(`C ${x.toFixed(1)} ${height.toFixed(1)} ${x.toFixed(1)} ${(height - curveRad).toFixed(1)} ${x.toFixed(1)} ${(height - curveRad).toFixed(1)}`);
+    commands.push(`L ${x.toFixed(1)} ${curveRad.toFixed(1)}`);
+    // commands.push('Z');
 
-    return commands;
-  }
+    return commands.join(' ');
+}
+
 
   static makeArc(startRotation) {
     const degrees = startRotation * 180 / Math.PI;
@@ -284,14 +287,14 @@ class CellShapes {
   }
 
   static makeGolgi() {
-    let canvas = createCanvas(width, height);
-    let ctx = canvas.getContext('2d')
-
+   
     let x = 0;
     let y = 0;
     let width = 100;
     let height = 80;
     let curveRad = 12;
+    let canvas = createCanvas(width, height);
+    let ctx = canvas.getContext('2d')
 
     let commands = [];
     commands.push(`${x + curveRad}, ${y}`);
@@ -315,7 +318,7 @@ class CellShapes {
     commands.push(`${x + 20}, ${y + 20}, ${x + 30}, ${y + 20}, ${x + 30}, ${y + 20}`);
     commands.push('closePath');
 
-    return commands;
+    return commands.join(' ');
   }
 
   static makeBrace() {
