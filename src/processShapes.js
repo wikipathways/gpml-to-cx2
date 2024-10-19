@@ -23,7 +23,7 @@ export function processShapes(pathway, params) {
           name: shapes.$.TextLabel
         }
       };
-      cx2Data[4].nodes.push(node);
+      // cx2Data[4].nodes.push(node);
 
       const attributes = shapes.Attribute || [];
       let shapetype;
@@ -33,6 +33,7 @@ export function processShapes(pathway, params) {
       if (cellularComponentAttr) {
         let shape = cellularComponentAttr.$.Value;
         name = shape;
+        console.log(shape);
         shapetype = CellShapes.getPath(shape);
       }
       else if (doubleLineAttr) {
@@ -116,8 +117,13 @@ export function processShapes(pathway, params) {
       let height = graphics.Height;
       let x = graphics.CenterX;
       let y = graphics.CenterY;
+
+      
+
+
+
       const newAnnotation = {
-        edgeThickness: graphics.LineThickness,
+        edgeThickness: graphics.LineThickness ? graphics.LineThickness : 1.0,
         canvas: 'background',
         fillOpacity: 100.0,
         rotation: graphics.Rotation,
@@ -125,7 +131,7 @@ export function processShapes(pathway, params) {
         uuid: uuidv4(),
         customShape: customShape,
         shapeType: 'CUSTOM',
-        edgeColor: -4144960,
+        edgeColor: -13421569,
         edgeOpacity: 100.0,
         name: name,
         x: x - width / 2,
